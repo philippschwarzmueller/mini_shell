@@ -1,3 +1,6 @@
+# fs stuff
+.ccls-cache/
+
 # Prerequisites
 *.d
 
