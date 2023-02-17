@@ -1,1 +1,1 @@
-# mini_talk
+# minishell
