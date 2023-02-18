@@ -6,7 +6,6 @@ READLINE	= lib/readline/lib
 RL_VERSION	= readline-8.1.2
 CFLAGS		= -Wall -Werror -Wextra
 RL_FLAGS	= -lreadline -L ./lib/readline/lib -I lib/readline/include
-RM			= rm -f
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
@@ -27,7 +26,7 @@ $(NAME):	$(READLINE) $(LIBFT) $(OBJ)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJD)
 			@echo "$(CYAN)Compiling $(WHITE): $<"
-			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+			@$(CC) $(CFLAGS) $(RL_FLAGS) -c $< -o $@
 
 $(OBJD):
 			@mkdir -p $(OBJ_DIR)
@@ -50,12 +49,11 @@ $(READLINE):
 readline:	$(READLINE)
 
 clean:
-			@$(RM) -rf $(OBJ_DIR)
-			@make clean -C $(LIBFT)
+			@rm -rf $(OBJ_DIR)
 			@echo "$(GREEN)minishell object files cleaned!$(WHITE)"
 
 fclean:		clean
-			@$(RM) -f $(NAME)
+			@rm -f $(NAME)
 			@echo "$(GREEN)minishell executable files cleaned!$(WHITE)"
 
 re:			fclean all
