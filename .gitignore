@@ -1,6 +1,8 @@
 # fs stuff
 .ccls-cache/
 .vscode/
+obj/
+lib/readline/
 
 # Prerequisites
 *.d
