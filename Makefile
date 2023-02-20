@@ -2,16 +2,17 @@
 NAME		= minishell
 CC			= cc
 LIBFT		= lib/libft/libft.a
-READLINE	= lib/readline/lib
+READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
 CFLAGS		= -Wall -Werror -Wextra
-RL_FLAGS	= -lreadline -L ./lib/readline/lib -I lib/readline/include
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline
+INCLUDE		= -I lib/readline/include
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
 
-SRC_FILES	=
+SRC_FILES	= main
 SRC_DIR		= src/
 OBJ_DIR		= obj/
 SRC			= $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
@@ -21,12 +22,12 @@ OBJD		= .cache_exists
 all:		$(NAME)
 
 $(NAME):	$(READLINE) $(LIBFT) $(OBJ)
-			@$(CC) $(CFLAGS) $(RL_FLAGS) $(LIBFT) $(OBJ) -o $(NAME)
+			@$(CC) $(LIBFT) $(OBJ) $(LINK_FLAGS) -o $(NAME)
 			@echo "$(GREEN)minishell compiled!$(WHITE)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJD)
 			@echo "$(CYAN)Compiling $(WHITE): $<"
-			@$(CC) $(CFLAGS) $(RL_FLAGS) -c $< -o $@
+			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(OBJD):
 			@mkdir -p $(OBJ_DIR)
@@ -34,16 +35,16 @@ $(OBJD):
 $(LIBFT):
 			@git submodule init
 			@git submodule update
-			@cd lib/libft && $(MAKE)
+			@make -C lib/libft
 
 $(READLINE):
 			@curl -s https://ftp.gnu.org/gnu/readline/$(RL_VERSION).tar.gz --output lib/$(RL_VERSION).tar.gz
 			@tar xfz lib/$(RL_VERSION).tar.gz -C lib
-			@cd lib/$(RL_VERSION); ./configure --prefix=$(PWD)/lib/readline_out;
+			@cd lib/$(RL_VERSION); ./configure --prefix=$(PWD)/lib/readline;
+			@make -C lib/$(RL_VERSION)
 			@make install -C lib/$(RL_VERSION)
 			@rm -rf lib/$(RL_VERSION)
 			@rm -f lib/$(RL_VERSION).tar.gz
-			@mv lib/readline_out lib/readline
 			@echo "$(GREEN)readline compiled$(WHITE)"
 
 readline:	$(READLINE)
