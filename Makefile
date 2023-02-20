@@ -5,7 +5,7 @@ LIBFT		= lib/libft/libft.a
 READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
 CFLAGS		= -Wall -Werror -Wextra
-LINK_FLAGS	= -L ./lib/readline/lib -lreadline
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory
 INCLUDE		= -I lib/readline/include
 
 GREEN		= \033[0;32m
