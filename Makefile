@@ -41,7 +41,6 @@ $(READLINE):
 			@curl -s https://ftp.gnu.org/gnu/readline/$(RL_VERSION).tar.gz --output lib/$(RL_VERSION).tar.gz
 			@tar xfz lib/$(RL_VERSION).tar.gz -C lib
 			@cd lib/$(RL_VERSION); ./configure --prefix=$(PWD)/lib/readline;
-			@make -C lib/$(RL_VERSION)
 			@make install -C lib/$(RL_VERSION)
 			@rm -rf lib/$(RL_VERSION)
 			@rm -f lib/$(RL_VERSION).tar.gz
