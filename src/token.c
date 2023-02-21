@@ -2,7 +2,7 @@
 
 static void	iterate_str(char *str, t_list *lst);
 static void	expand_lst(t_list *lst, char *str, int i);
-static int		check(char *str, int i);
+static int	check(char *str, int i);
 
 void	tokenize_lst(t_list **lst)
 {
