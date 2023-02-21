@@ -1,7 +1,8 @@
 #include "shell.h"
 
-static void	whitespcs_format(char *str, t_list **lst);
-static char	*str_format(char **str, int i);
+static void		whitespcs_format(char *str, t_list **lst);
+static char		*str_format(char **str, int i);
+static size_t	check_whitespcs(char *str);
 
 t_list	*lexing(char *str)
 {
@@ -15,23 +16,42 @@ t_list	*lexing(char *str)
 
 static void	whitespcs_format(char *str, t_list **lst)
 {
-	size_t	i;
+	size_t	len;
 	t_list	*del;
 
-	i = 0;
-	while (str[i])
+	len = 0;
+	while (str[len])
 	{
-		while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
-			i++;
-		while (str[i + 1] && ((str[i + 1] >= 8 && str[i + 1] <= 13)
-				|| str[i + 1] == 32))
-			i++;
-		ft_lstadd_back(lst, ft_lstnew(str_format(&str, i + 1)));
-		i = 0;
+		len = check_whitespcs(str);
+		ft_lstadd_back(lst, ft_lstnew(str_format(&str, len + 1)));
+		len = 0;
 	}
 	del = *lst;
 	*lst = (*lst)->next;
 	ft_lstdelone(del, free);
+}
+
+static size_t	check_whitespcs(char *str)
+{
+	size_t i;
+
+	i = 0;
+	while (str[i] && ((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
+		i++;
+	if (str[i] == '\"')
+	{
+		while (str[i] && str[++i] != '\"')
+		{
+			if (str[i] == '\\')
+				i++;
+		}
+		if (!str[i])
+			return (0);
+		return (++i);
+	}
+	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
+		i++;
+	return (i);
 }
 
 static char	*str_format(char **str, int i)
