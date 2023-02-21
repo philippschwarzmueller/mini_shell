@@ -1,21 +1,24 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <termios.h>
-#include "../lib/libft/libft.h"
+#include "lex.h"
 
 static void	signalhandler(int sig);
 
+void print_lst(t_list *lst)
+{
+	while (lst != NULL)
+	{
+		printf("%s\n", (char *)(lst->content));
+		lst = lst->next;
+	}
+}
+
 int	main(void)
 {
-	char				*input;
+	char	*input;
+	t_list	*lst;
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &signalhandler);
+	lst = NULL;
 	while (1)
 	{
 		input = readline("\033[0;31msigmashell \033[0;32m> \033[0;37m");
@@ -25,6 +28,9 @@ int	main(void)
 			rl_redisplay();
 			exit(EXIT_SUCCESS);
 		}
+		lst = lexing(input);
+		print_lst(lst);
+		ft_lstclear(&lst, free);
 	}
 	return (EXIT_SUCCESS);
 }

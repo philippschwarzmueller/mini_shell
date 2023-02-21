@@ -42,7 +42,7 @@ t_list	*lexing(char *str)
 
 	lst = ft_lstnew(NULL);
 	whitespcs_format(str, &lst);
-	tokenize_lst(lst);
+	tokenize_lst(&lst);
 	//free(str);
 	return (lst);
 }

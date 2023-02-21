@@ -14,25 +14,20 @@ int	check(char *str, int i)
 void	expand_lst(t_list *lst, char *str, int i)
 {
 	char	*tmp;
-	t_list	*cntn;
 
 	tmp = ft_calloc(i + 1, sizeof(char));
-	ft_strlcpy(tmp, str, i);
-	cntn = lst->next;
-	lst->next = ft_lstnew(tmp);
-	lst->next->next = cntn;
+	ft_strlcpy(tmp, str, i + 1);
+	ft_lstadd_back(&lst, ft_lstnew(tmp));
 }
 
-void	check_string(t_list *lst, t_list *prev)
+void	iterate_str(char *str, t_list *lst)
 {
-	int		i;
-	char	*str;
+	size_t i;
 
 	i = 0;
-	str = (char *)(lst->content);
+
 	while(*str)
 	{
-		printf("test\n");
 		while (str[i] && !check(str, i))
 			i++;
 		if (i != 0)
@@ -46,20 +41,25 @@ void	check_string(t_list *lst, t_list *prev)
 		str = str + i;
 		i = 0;
 	}
-	prev->next = lst->next;
-	ft_lstdelone(lst, free);
 }
 
-void	tokenize_lst(t_list *lst)
+void	tokenize_lst(t_list **lst)
 {
+	char	*str;
 	t_list	*prev;
+	size_t	max;
+	size_t	i;
 
-	prev = lst;
-	while (lst != NULL)
+	i = 0;
+	max = ft_lstsize(*lst);
+	while (i++ < max)
 	{
-		check_string(lst, prev);
-		prev = lst;
-		lst = lst->next;
+		str = (char *)((*lst)->content);
+		iterate_str(str, *lst);
+		prev = *lst;
+		*lst = (*lst)->next;
+		ft_lstdelone(prev, free);
 	}
 }
+
 
