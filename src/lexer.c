@@ -1,8 +1,8 @@
 #include "shell.h"
 
 static void		whitespcs_format(char *str, t_list **lst);
-static char		*str_format(char **str, int i);
 static size_t	check_whitespcs(char *str);
+static char		*str_format(char **str, int i);
 
 t_list	*lexing(char *str)
 {
@@ -26,6 +26,7 @@ static void	whitespcs_format(char *str, t_list **lst)
 		ft_lstadd_back(lst, ft_lstnew(str_format(&str, len + 1)));
 		len = 0;
 	}
+	free(str);
 	del = *lst;
 	*lst = (*lst)->next;
 	ft_lstdelone(del, free);
@@ -36,8 +37,6 @@ static size_t	check_whitespcs(char *str)
 	size_t i;
 
 	i = 0;
-	while (str[i] && ((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
-		i++;
 	if (str[i] == '\"')
 	{
 		while (str[i] && str[++i] != '\"')

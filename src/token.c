@@ -28,7 +28,8 @@ static void	iterate_str(char *str, t_list *lst)
 	size_t i;
 
 	i = 0;
-
+	if (str[0] == '\"')
+		return (expand_lst(lst, str, ft_strlen(str)));
 	while(*str)
 	{
 		while (str[i] && !check(str, i))
