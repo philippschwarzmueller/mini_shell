@@ -1,21 +1,19 @@
-#include "lex.h"
+#include "shell.h"
 
-char	*str_format(char **str, int i)
+static void	whitespcs_format(char *str, t_list **lst);
+static char	*str_format(char **str, int i);
+
+t_list	*lexing(char *str)
 {
-	char	*content;
-	char	*tmp;
+	t_list	*lst;
 
-	tmp = ft_calloc(i + 1, sizeof(char));
-	ft_strlcpy(tmp, *str, i);
-	content = ft_strtrim(tmp, " ");
-	free(tmp);
-	tmp = *str;
-	*str = ft_strdup(tmp + i);
-	free(tmp);
-	return (content);
+	lst = ft_lstnew(NULL);
+	whitespcs_format(str, &lst);
+	tokenize_lst(&lst);
+	return (lst);
 }
 
-void	whitespcs_format(char *str, t_list **lst)
+static void	whitespcs_format(char *str, t_list **lst)
 {
 	size_t	i;
 	t_list	*del;
@@ -36,13 +34,17 @@ void	whitespcs_format(char *str, t_list **lst)
 	ft_lstdelone(del, free);
 }
 
-t_list	*lexing(char *str)
+static char	*str_format(char **str, int i)
 {
-	t_list	*lst;
+	char	*content;
+	char	*tmp;
 
-	lst = ft_lstnew(NULL);
-	whitespcs_format(str, &lst);
-	tokenize_lst(&lst);
-	//free(str);
-	return (lst);
+	tmp = ft_calloc(i + 1, sizeof(char));
+	ft_strlcpy(tmp, *str, i);
+	content = ft_strtrim(tmp, " ");
+	free(tmp);
+	tmp = *str;
+	*str = ft_strdup(tmp + i);
+	free(tmp);
+	return (content);
 }
