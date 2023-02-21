@@ -1,5 +1,5 @@
-#ifndef LEX_H
-# define LEX_H
+#ifndef SHELL_H
+# define SHELL_H
 
 # include <stdlib.h>
 # include <stdio.h>
@@ -11,7 +11,6 @@
 # include <termios.h>
 # include "../lib/libft/libft.h"
 
-void	print_lst(t_list *lst);
 t_list	*lexing(char *str);
 void	tokenize_lst(t_list **lst);
 

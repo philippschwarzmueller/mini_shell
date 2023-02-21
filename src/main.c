@@ -1,15 +1,7 @@
-#include "lex.h"
+#include "shell.h"
 
 static void	signalhandler(int sig);
-
-void print_lst(t_list *lst)
-{
-	while (lst != NULL)
-	{
-		printf("%s\n", (char *)(lst->content));
-		lst = lst->next;
-	}
-}
+static void print_lst(t_list *lst);
 
 int	main(void)
 {
@@ -43,5 +35,14 @@ static void	signalhandler(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+	}
+}
+
+static void print_lst(t_list *lst)
+{
+	while (lst != NULL)
+	{
+		printf("%s\n", (char *)(lst->content));
+		lst = lst->next;
 	}
 }
