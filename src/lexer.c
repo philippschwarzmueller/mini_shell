@@ -20,7 +20,7 @@ char	*str_format(char **str, int i)
 
 	tmp = ft_calloc(i + 1, sizeof(char));
 	ft_strlcpy(tmp, *str, i);
-	content = ft_strtrim(tmp, ">|&< ");
+	content = ft_strtrim(tmp, " ");
 	free(tmp);
 	tmp = *str;
 	*str = ft_strdup(tmp + i);
@@ -28,26 +28,39 @@ char	*str_format(char **str, int i)
 	return (content);
 }
 
-t_list	*lexing(char *str)
+void	whitespcs_format(char *str, t_list *lst)
 {
 	size_t	i;
-	t_list	*res;
 	t_list	*del;
 
 	i = 0;
-	res = ft_lstnew(NULL);
 	while (str[i])
 	{
-		while (str[i] && !check(str, i))
+		while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
 			i++;
-		while (str[i + 1] && check(str, i + 1))
+		while (str[i + 1] && ((str[i + 1] >= 8 && str[i + 1] <= 13)
+				|| str[i + 1] == 32))
 			i++;
-		ft_lstadd_back(&res, ft_lstnew(str_format(&str, i + 1)));
+		ft_lstadd_back(&lst, ft_lstnew(str_format(&str, i + 1)));
 		i = 0;
 	}
-	free(str);
-	del = res;
-	res = res->next;
+	del = lst;
+	lst = lst->next;
 	ft_lstdelone(del, free);
-	return (res);
+}
+
+void	tokenize_lst(t_list *lst)
+{
+
+}
+
+t_list	*lexing(char *str)
+{
+	t_list	*lst;
+
+	lst = ft_lstnew(NULL);
+	witespcs_format(str, lst);
+	tokenize_list(lst);
+	free(str);
+	return (lst);
 }
