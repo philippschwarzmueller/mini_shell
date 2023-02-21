@@ -12,7 +12,7 @@ GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
 
-SRC_FILES	= main lexer
+SRC_FILES	= main lexer token
 SRC_DIR		= src/
 OBJ_DIR		= obj/
 SRC			= $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
