@@ -1,18 +1,5 @@
 #include "lex.h"
 
-int	check(char *str, int i)
-{
-	if (i > 0 && str[i - 1] == '\\')
-		return (0);
-	if (str[i] == '|' || str[i] == '&')
-		return (1);
-	if (str[i] == '<' || str[i] == '>')
-		return (1);
-	if ((str[i] >= 8 && str[i] <= 13) || str[i] == 32)
-		return (1);
-	return (0);
-}
-
 char	*str_format(char **str, int i)
 {
 	char	*content;
@@ -47,11 +34,6 @@ void	whitespcs_format(char *str, t_list *lst)
 	del = lst;
 	lst = lst->next;
 	ft_lstdelone(del, free);
-}
-
-void	tokenize_lst(t_list *lst)
-{
-
 }
 
 t_list	*lexing(char *str)
