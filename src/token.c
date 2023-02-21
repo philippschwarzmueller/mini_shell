@@ -32,6 +32,7 @@ void	check_string(t_list *lst, t_list *prev)
 	str = (char *)(lst->content);
 	while(*str)
 	{
+		printf("test\n");
 		while (str[i] && !check(str, i))
 			i++;
 		if (i != 0)
@@ -51,7 +52,6 @@ void	check_string(t_list *lst, t_list *prev)
 
 void	tokenize_lst(t_list *lst)
 {
-	char	*tmp;
 	t_list	*prev;
 
 	prev = lst;
