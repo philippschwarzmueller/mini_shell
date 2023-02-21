@@ -1,12 +1,18 @@
 #ifndef LEX_H
 # define LEX_H
 
-# include "../lib/libft/libft.h"
+# include <stdlib.h>
 # include <stdio.h>
+# include <unistd.h>
 # include <readline/readline.h>
+# include <signal.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <termios.h>
+# include "../lib/libft/libft.h"
 
 void	print_lst(t_list *lst);
 t_list	*lexing(char *str);
-void	tokenize_lst(t_list *lst);
+void	tokenize_lst(t_list **lst);
 
 #endif
