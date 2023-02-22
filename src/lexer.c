@@ -39,7 +39,7 @@ static size_t	check_whitespcs(char *str)
 
 	i = 0;
 	if (str[i] == '\"' || str[i] == '\'')
-		return (handle_quotes(str));
+		i = handle_quotes(str);
 	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
 		i++;
 	return (i);
