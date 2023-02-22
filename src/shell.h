@@ -13,5 +13,6 @@
 
 t_list	*lexing(char *str);
 void	tokenize_lst(t_list **lst);
+void	init_signalhandlers(void);
 
 #endif
