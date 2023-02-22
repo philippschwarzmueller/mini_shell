@@ -3,6 +3,7 @@
 static void		whitespcs_format(char *str, t_list **lst);
 static size_t	check_whitespcs(char *str);
 static char		*str_format(char **str, int i);
+static void		check_for_nll(t_list **lst);
 
 t_list	*lexing(char *str)
 {
@@ -10,7 +11,9 @@ t_list	*lexing(char *str)
 
 	lst = ft_lstnew(NULL);
 	whitespcs_format(str, &lst);
+	check_for_nll(&lst);
 	tokenize_lst(&lst);
+	check_for_nll(&lst);
 	return (lst);
 }
 
@@ -20,7 +23,7 @@ static void	whitespcs_format(char *str, t_list **lst)
 	t_list	*del;
 
 	len = 0;
-	while (str[len])
+	while (str && str[len])
 	{
 		len = check_whitespcs(str);
 		ft_lstadd_back(lst, ft_lstnew(str_format(&str, len + 1)));
@@ -59,11 +62,29 @@ static char	*str_format(char **str, int i)
 	char	*tmp;
 
 	tmp = ft_calloc(i + 1, sizeof(char));
-	ft_strlcpy(tmp, *str, i);
+	if (tmp != NULL)
+		ft_strlcpy(tmp, *str, i);
 	content = ft_strtrim(tmp, " \f\t\n\r\v");
 	free(tmp);
 	tmp = *str;
 	*str = ft_strdup(tmp + i);
 	free(tmp);
 	return (content);
+}
+
+static void	check_for_nll(t_list **lst)
+{
+	int		res;
+	t_list	*tmp;
+
+	res = 0;
+	tmp = *lst;
+	while (tmp != NULL)
+	{
+		if (tmp->content == NULL)
+			res = 1;
+		tmp = tmp->next;
+	}
+	if (res)
+		ft_lstclear(lst, free);
 }
