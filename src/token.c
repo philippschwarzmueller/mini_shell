@@ -25,12 +25,12 @@ void	tokenize_lst(t_list **lst)
 
 static void	iterate_str(char *str, t_list *lst)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (str[0] == '\"')
 		return (expand_lst(lst, str, ft_strlen(str)));
-	while(*str)
+	while (*str)
 	{
 		while (str[i] && !check(str, i))
 			i++;
@@ -66,9 +66,3 @@ static void	expand_lst(t_list *lst, char *str, int i)
 	ft_strlcpy(tmp, str, i + 1);
 	ft_lstadd_back(&lst, ft_lstnew(tmp));
 }
-
-
-
-
-
-

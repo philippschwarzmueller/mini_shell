@@ -1,7 +1,7 @@
 #include "shell.h"
 
 static void	signalhandler(int sig);
-static void print_lst(t_list *lst);
+static void	print_lst(t_list *lst);
 
 int	main(void)
 {
@@ -38,7 +38,7 @@ static void	signalhandler(int sig)
 	}
 }
 
-static void print_lst(t_list *lst)
+static void	print_lst(t_list *lst)
 {
 	while (lst != NULL)
 	{

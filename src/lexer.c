@@ -34,7 +34,7 @@ static void	whitespcs_format(char *str, t_list **lst)
 
 static size_t	check_whitespcs(char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (str[i] == '\"')
