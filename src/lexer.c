@@ -59,7 +59,8 @@ static size_t	handle_quotes(char *str)
 	}
 	if (!str[i])
 		return (0);
-	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
+	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32)
+		&& (str[i + 1] != token))
 		i++;
 	return (++i);
 }
@@ -75,6 +76,8 @@ static char	*str_format(char **str, size_t len)
 	content = ft_strtrim(tmp, " \f\t\n\r\v");
 	free(tmp);
 	tmp = *str;
+	if (len > ft_strlen(tmp))
+		len = ft_strlen(tmp);
 	*str = ft_strdup(tmp + len);
 	free(tmp);
 	return (content);
