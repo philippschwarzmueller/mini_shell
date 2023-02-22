@@ -60,7 +60,7 @@ static char	*str_format(char **str, int i)
 
 	tmp = ft_calloc(i + 1, sizeof(char));
 	ft_strlcpy(tmp, *str, i);
-	content = ft_strtrim(tmp, " ");
+	content = ft_strtrim(tmp, " \f\t\n\r\v");
 	free(tmp);
 	tmp = *str;
 	*str = ft_strdup(tmp + i);
