@@ -3,7 +3,6 @@
 static void		whitespcs_format(char *str, t_list **lst);
 static size_t	check_whitespcs(char *str);
 static char		*str_format(char **str, int i);
-static void		check_for_nll(t_list **lst);
 
 t_list	*lexing(char *str)
 {
