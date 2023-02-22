@@ -11,9 +11,7 @@ t_list	*lexing(char *str)
 
 	lst = ft_lstnew(NULL);
 	whitespcs_format(str, &lst);
-	check_for_nll(&lst);
 	tokenize_lst(&lst);
-	check_for_nll(&lst);
 	return (lst);
 }
 
@@ -70,21 +68,4 @@ static char	*str_format(char **str, int i)
 	*str = ft_strdup(tmp + i);
 	free(tmp);
 	return (content);
-}
-
-static void	check_for_nll(t_list **lst)
-{
-	int		res;
-	t_list	*tmp;
-
-	res = 0;
-	tmp = *lst;
-	while (tmp != NULL)
-	{
-		if (tmp->content == NULL)
-			res = 1;
-		tmp = tmp->next;
-	}
-	if (res)
-		ft_lstclear(lst, free);
 }
