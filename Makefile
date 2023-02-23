@@ -12,7 +12,7 @@ GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
 
-SRC_FILES	= main lexer token signal_handling
+SRC_FILES	= main lexer token quotes signal_handling
 SRC_DIR		= src/
 OBJ_DIR		= obj/
 SRC			= $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
@@ -44,7 +44,7 @@ $(READLINE):
 			@make install -C lib/$(RL_VERSION)
 			@rm -rf lib/$(RL_VERSION)
 			@rm -f lib/$(RL_VERSION).tar.gz
-			@echo "$(GREEN)readline compiled$(WHITE)"
+			@echo "$(GREEN)readline compiled!$(WHITE)"
 
 readline:	$(READLINE)
 

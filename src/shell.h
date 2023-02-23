@@ -16,5 +16,6 @@ t_list	*lexing(char *str);
 void	tokenize_lst(t_list **lst);
 void	print_lst(t_list *lst);
 void	init_signalhandlers(void);
+int		quote_count(char *str);
 
 #endif
