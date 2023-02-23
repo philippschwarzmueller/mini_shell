@@ -59,8 +59,7 @@ static size_t	handle_quotes(char *str)
 	}
 	if (!str[i])
 		return (0);
-	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32)
-		&& (str[i + 1] != token))
+	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
 		i++;
 	return (++i);
 }

@@ -3,6 +3,7 @@
 static void	iterate_str(char *str, t_list *lst);
 static void	expand_lst(t_list *lst, char *str, int i);
 static int	check_for_tokens(char *str, int i);
+static int	check_if_quoted(char *str, int i, char token);
 
 void	tokenize_lst(t_list **lst)
 {
@@ -28,8 +29,6 @@ static void	iterate_str(char *str, t_list *lst)
 	size_t	i;
 
 	i = 0;
-	if (str[0] == '\"')
-		return (expand_lst(lst, str, ft_strlen(str)));
 	while (*str)
 	{
 		while (str[i] && !check_for_tokens(str, i))
@@ -51,11 +50,37 @@ static int	check_for_tokens(char *str, int i)
 {
 	if (i > 0 && str[i - 1] == '\\')
 		return (0);
-	if (str[i] == '|' || str[i] == '&')
+	if (str[i] != '|' && str[i] != '&'
+		&& str[i] != '<' && str[i] != '>')
+		return (0);
+	if (!ft_strchr(str, '\"') && !ft_strchr(str, '\''))
 		return (1);
-	if (str[i] == '<' || str[i] == '>')
-		return (1);
+	if (ft_strchr(str, '\"') && !ft_strchr(str, '\''))
+		return (check_if_quoted(str, i, '\"'));
+	if (!ft_strchr(str, '\"') && ft_strchr(str, '\''))
+		return (check_if_quoted(str, i, '\''));
+	if (ft_strchr(str, '\"') && ft_strchr(str, '\''))
+		return (check_if_quoted(str, i, '\"') || check_if_quoted(str, i, '\''));
 	return (0);
+}
+
+static int check_if_quoted(char *str, int i, char token)
+{
+	int	j;
+	int	left;
+	int	right;
+
+	j = i;
+	left = 0;
+	right = 0;
+	while (str[j])
+		if (str[j++] == token)
+			right++;
+	j = i;
+	while (j >= 0)
+		if (str[j--] == token)
+			left++;
+	return ((left % 2 == 0) && (right % 2 == 0));
 }
 
 static void	expand_lst(t_list *lst, char *str, int i)
