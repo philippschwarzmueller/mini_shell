@@ -64,7 +64,7 @@ static int	check_for_tokens(char *str, int i)
 	return (0);
 }
 
-static int check_if_quoted(char *str, int i, char token)
+static int	check_if_quoted(char *str, int i, char token)
 {
 	int	j;
 	int	left;
