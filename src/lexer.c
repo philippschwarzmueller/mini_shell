@@ -3,14 +3,14 @@
 static void		whitespcs_format(char *str, t_list **lst);
 static size_t	check_whitespcs(char *str);
 static char		*str_format(char **str, size_t len);
-static size_t	handle_quotes(char *str);
+static size_t	handle_quotes(char *str, int i);
 
 t_list	*lexing(char *str)
 {
 	t_list	*lst;
 
 	if (quote_count(str))
-		return (printf("rerun cmd with closed quotes\n"), free(str), NULL);
+		return (printf("re run cmd with closed quotes\n"), free(str), NULL);
 	lst = ft_lstnew(NULL);
 	whitespcs_format(str, &lst);
 	tokenize_lst(&lst);
@@ -41,18 +41,20 @@ static size_t	check_whitespcs(char *str)
 
 	i = 0;
 	if (str[i] == '\"' || str[i] == '\'')
-		return (handle_quotes(str));
+		return (handle_quotes(str, i));
 	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
+	{
 		i++;
+		if (str[i] == '\"' || str[i] == '\'')
+			i += handle_quotes(str, i);
+	}
 	return (i);
 }
 
-static size_t	handle_quotes(char *str)
+static size_t	handle_quotes(char *str, int i)
 {
-	size_t	i;
 	char	token;
 
-	i = 0;
 	token = str[i];
 	while (str[i] && str[++i] != token)
 	{

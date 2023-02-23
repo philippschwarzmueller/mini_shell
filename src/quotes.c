@@ -14,6 +14,7 @@ int	quote_count(char *str)
 	while (str[i])
 		if (is_unquoted(str, i++, '\"'))
 			dquote_cnt++;
+	i = 0;
 	while (str[i])
 		if (is_unquoted(str, i++, '\''))
 			quote_cnt++;
