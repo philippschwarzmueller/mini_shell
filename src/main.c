@@ -1,7 +1,5 @@
 #include "shell.h"
 
-static void	print_lst(t_list *lst);
-
 int	main(void)
 {
 	char	*input;
@@ -25,7 +23,7 @@ int	main(void)
 	return (EXIT_SUCCESS);
 }
 
-static void	print_lst(t_list *lst)
+void	print_lst(t_list *lst)
 {
 	while (lst != NULL)
 	{
