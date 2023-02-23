@@ -9,6 +9,8 @@ t_list	*lexing(char *str)
 {
 	t_list	*lst;
 
+	if (quote_count(str))
+		return (printf("rerun cmd with closed quotes\n"), free(str), NULL);
 	lst = ft_lstnew(NULL);
 	whitespcs_format(str, &lst);
 	tokenize_lst(&lst);
@@ -61,7 +63,7 @@ static size_t	handle_quotes(char *str)
 		return (0);
 	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
 		i++;
-	return (++i);
+	return (i);
 }
 
 static char	*str_format(char **str, size_t len)
