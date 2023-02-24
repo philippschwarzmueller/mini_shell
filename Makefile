@@ -64,10 +64,13 @@ $(READLINE):
 
 readline:	$(READLINE)
 
-libclean:
+cleanlib:
 			@rm -rf lib/readline
-			@rm -rf lib/libft
-			@echo "libft and readline removed!"
+			@rm -rf lib/libft/*
+			@rm -rf lib/libft/.git
+			@rm -rf lib/libft/.gitignore
+			@rm -rf lib/libft/.github
+			@echo "$(GREEN)minishell lib directory cleaned!$(WHITE)"
 
 clean:
 			@rm -rf $(OBJ_DIR)
