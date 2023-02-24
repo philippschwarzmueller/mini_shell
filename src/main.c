@@ -33,11 +33,14 @@ void	print_lst(t_list *command_table)
 
 	while (command_table != NULL)
 	{
-		temp = (t_command *)command_table;
-		printf("%s\n", temp->command);
-		printf("%s\n", temp->path);
-		printf("%s\n", temp->in);
-		printf("%s\n", temp->out);
+		temp = (t_command *)command_table->content;
+		ft_printf("------------------\n");
+		ft_printf("%p\n", temp);
+		ft_printf("Command: %s\n", (char *)temp->command);
+		ft_printf("Path: %s\n", (char *)temp->path);
+		ft_printf("In: %s\n", (char *)temp->in);
+		ft_printf("Out: %s\n", (char *)temp->out);
+		ft_printf("------------------\n");
 		command_table = command_table->next;
 	}
 }
