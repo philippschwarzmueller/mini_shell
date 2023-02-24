@@ -1,87 +1,81 @@
 #include "shell.h"
 
-static void		whitespcs_format(char *str, t_list **lst);
-static size_t	check_whitespcs(char *str);
-static char		*str_format(char **str, size_t len);
-static size_t	handle_quotes(char *str, int i);
-
-t_list	*lexing(char *str)
+t_list	*analyzer(char *str)
 {
+	size_t	i;
+	size_t	len;
+	t_state	state;
 	t_list	*lst;
 
-	if (quote_count(str))
-		return (printf("re run cmd with closed quotes\n"), free(str), NULL);
+	i = 0;
+	len = 0;
+	state.is_word = 0;
+	state.is_squoted = 0;
+	state.is_dquoted = 0;
+	state.is_escaped = 0;
+	state.is_operator = 0;
 	lst = ft_lstnew(NULL);
-	whitespcs_format(str, &lst);
-	tokenize_lst(&lst);
+	while(str[i])
+	{
+		if (is_token(str[i], state))
+		{
+			ft_lstadd_back(&lst, ft_lstnew(tokenize(str, i, len)));
+			len = 0;
+		}
+		len++;
+		i++;
+	}
 	return (lst);
 }
 
-static void	whitespcs_format(char *str, t_list **lst)
+static int	is_token(char c, t_state state)
 {
-	size_t	len;
-	t_list	*del;
+	int	cmp_word;
+	int	cmp_operator;
 
-	len = 0;
-	while (str && str[len])
-	{
-		len = check_whitespcs(str);
-		ft_lstadd_back(lst, ft_lstnew(str_format(&str, len + 1)));
-		len = 0;
-	}
-	free(str);
-	del = *lst;
-	*lst = (*lst)->next;
-	ft_lstdelone(del, free);
+	cmp_word = state.is_word;
+	cmp_operator = state.is_operator;
+	analyse_char(c, state);
+	if (state.is_word != cmp_word || state.is_operator != cmp_operator)
+		return (1);
+	return (0);
 }
 
-static size_t	check_whitespcs(char *str)
+static void	analyse_char(char c, t_state state)
 {
-	size_t	i;
-
-	i = 0;
-	if (str[i] == '\"' || str[i] == '\'')
-		return (handle_quotes(str, i));
-	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
-	{
-		i++;
-		if (str[i] == '\"' || str[i] == '\'')
-			i += handle_quotes(str, i);
-	}
-	return (i);
+	if (state.is_escaped = 1)
+		state.is_escaped = 0;
+	if (c == '\\')
+		state.is_escaped = 1;
+	if ((c == '\"' && !(state.is_escaped) && !(state.is_squoted)))
+		state.is_dquoted = 1;
+	if ((c == '\"' && !(state.is_escaped) && state.is_dquoted))
+		state.is_dquoted = 0;
+	if ((c == '\'' && !(state.is_escaped) && !(state.is_dquoted)))
+		state.is_squoted = 1;
+	if ((c == '\'' && !(state.is_escaped) && state.is_squoted))
+		state.is_squoted = 0;
+	if ((c == '|' || c == '<' || c == '>') && !(state.is_escaped)
+		&& !(state.is_squoted || state.is_dquoted))
+		state.is_operator = 1;
+	if (!(c == 32 || (c >= 8 && c <= 13)) && !(state.is_operator))
+		state.is_word = 1;
+	if (c == 32 || (c >= 8 && c <= 13) && state.is_operator)
+		state.is_operator = 0;
+	if (((c == 32 || (c >= 8 && c <= 13)) || state.is_operator)
+		&& !(state.is_dquoted) && !(state.is_squoted))
+		state.is_word = 0;
 }
 
-static size_t	handle_quotes(char *str, int i)
+static t_token	*tokenize(char *str, size_t i, size_t len)
 {
-	char	token;
+	t_token	*new;
+	char	*pre_token;
 
-	token = str[i];
-	while (str[i] && str[++i] != token)
-	{
-		if (str[i] == '\\')
-			i++;
-	}
-	if (!str[i])
-		return (0);
-	while (str[i] && !((str[i] >= 8 && str[i] <= 13) || str[i] == 32))
-		i++;
-	return (i);
-}
-
-static char	*str_format(char **str, size_t len)
-{
-	char	*content;
-	char	*tmp;
-
-	tmp = ft_calloc(len + 1, sizeof(char));
-	if (tmp != NULL)
-		ft_strlcpy(tmp, *str, len);
-	content = ft_strtrim(tmp, " \f\t\n\r\v");
-	free(tmp);
-	tmp = *str;
-	if (len > ft_strlen(tmp))
-		len = ft_strlen(tmp);
-	*str = ft_strdup(tmp + len);
-	free(tmp);
-	return (content);
+	new = malloc(sizeof(t_token));
+	if (new == NULL)
+		return (NULL);
+	pre_token = ft_substr(str, (i - len), len);
+	new->token = ft_strtrim(str, " \t\v\n\")
+	if ()
 }

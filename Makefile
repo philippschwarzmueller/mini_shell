@@ -14,7 +14,7 @@ WHITE		= \033[0m
 
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
-LEXER_SRC	= lexer token quotes
+LEXER_SRC	= lexer
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## SIGNAL ############

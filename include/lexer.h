@@ -4,16 +4,16 @@
 typedef enum e_type
 {
 	word,
-	specifier,
-	operation
+	operation,
 }	t_type;
 
 typedef struct s_state
 {
 	int	is_word;
-	int	is_quoted;
+	int	is_squoted;
+	int	is_dquoted;
+	int	is_escaped;
 	int	is_operator;
-	int	is_specifier;
 }		t_state;
 
 typedef struct s_token
