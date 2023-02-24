@@ -64,7 +64,7 @@ $(READLINE):
 
 readline:	$(READLINE)
 
-cleanlib:
+libclean:
 			@rm -rf lib/readline
 			@rm -rf lib/libft/*
 			@rm -rf lib/libft/.git

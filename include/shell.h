@@ -11,6 +11,7 @@
 # include <errno.h>
 # include <termios.h>
 # include "../lib/libft/libft.h"
+# include "lexer.h"
 
 t_list	*lexing(char *str);
 void	tokenize_lst(t_list **lst);
