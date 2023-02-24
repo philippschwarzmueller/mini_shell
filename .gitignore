@@ -1,5 +1,6 @@
 # fs stuff
 .ccls-cache/
+.ccls
 .vscode/
 obj/
 lib/readline/

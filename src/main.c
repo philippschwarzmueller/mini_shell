@@ -3,9 +3,10 @@
 int	main(void)
 {
 	char	*input;
-	t_list	*lst;
+	t_list	*command_table;
+	t_list	*lexed_args;
 
-	lst = NULL;
+	command_table = NULL;
 	while (1)
 	{
 		init_signalhandlers();
@@ -18,18 +19,25 @@ int	main(void)
 			clear_history();
 			exit(EXIT_SUCCESS);
 		}
-		lst = lexing(input);
-		print_lst(lst);
-		ft_lstclear(&lst, free);
+		lexed_args = lexing(input);
+		command_table = parse(lexed_args);
+		print_lst(command_table);
+		ft_lstclear(&command_table, free);
 	}
 	return (EXIT_SUCCESS);
 }
 
-void	print_lst(t_list *lst)
+void	print_lst(t_list *command_table)
 {
-	while (lst != NULL)
+	t_command	*temp;
+
+	while (command_table != NULL)
 	{
-		printf("%s\n", (char *)(lst->content));
-		lst = lst->next;
+		temp = (t_command *)command_table;
+		printf("%s\n", temp->command);
+		printf("%s\n", temp->path);
+		printf("%s\n", temp->in);
+		printf("%s\n", temp->out);
+		command_table = command_table->next;
 	}
 }
