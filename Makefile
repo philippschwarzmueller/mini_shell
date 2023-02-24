@@ -12,7 +12,6 @@ GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
 
-######## LEXER #############
 LEXER_SRC	= lexer token quotes
 LEXER_DIR	= src/lexer/
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
