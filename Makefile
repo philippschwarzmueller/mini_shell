@@ -13,13 +13,13 @@ CYAN		= \033[0;36m
 WHITE		= \033[0m
 
 ######## LEXER #############
-LEXER_SRC	= lexer token quotes
 LEXER_DIR	= src/lexer/
+LEXER_SRC	= lexer token quotes
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## SIGNAL ############
-SIGNAL_SRC	= signal_handling
 SIGNAL_DIR	= src/signal/
+SIGNAL_SRC	= signal_handling
 SIGNAL		= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
 
 ######## MAIN ##############
@@ -36,15 +36,15 @@ OBJD		= .cache_exists
 
 all:		$(NAME)
 
-$(NAME):	$(READLINE) $(LIBFT) $(OBJ)
+$(NAME):	$(READLINE) $(LIBFT) $(OBJ_DIR) $(OBJ)
 			@$(CC) $(LIBFT) $(OBJ) $(LINK_FLAGS) -o $(NAME)
 			@echo "$(GREEN)minishell compiled!$(WHITE)"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJD)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
 			@echo "$(CYAN)Compiling $(WHITE): $<"
 			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-$(OBJD):
+$(OBJ_DIR):
 			@mkdir -p $(dir $(OBJ))
 
 $(LIBFT):
