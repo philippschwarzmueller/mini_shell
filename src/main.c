@@ -35,11 +35,12 @@ void	print_lst(t_list *command_table)
 	{
 		temp = (t_command *)command_table->content;
 		ft_printf("------------------\n");
-		ft_printf("%p\n", temp);
-		ft_printf("Command: %s\n", (char *)temp->command);
-		ft_printf("Path: %s\n", (char *)temp->path);
-		ft_printf("In: %s\n", (char *)temp->in);
-		ft_printf("Out: %s\n", (char *)temp->out);
+		ft_printf("%p\n", command_table);
+		ft_printf("Command: %s\n", temp->command);
+		ft_printf("Path: %s\n", temp->path);
+		ft_printf("In: %s\n", temp->in);
+		ft_printf("Out: %s\n", temp->out);
+		ft_printf("next: %p\n", command_table->next);
 		ft_printf("------------------\n");
 		command_table = command_table->next;
 	}
