@@ -66,7 +66,8 @@ readline:	$(READLINE)
 
 libclean:
 			@rm -rf lib/readline
-			@rm -rf lib/libft/*
+			@rm -rf lib/libft
+			@echo "libft and readline removed!"
 
 clean:
 			@rm -rf $(OBJ_DIR)
