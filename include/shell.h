@@ -13,10 +13,8 @@
 # include "../lib/libft/libft.h"
 # include "lexer.h"
 
-t_list	*lexing(char *str);
-void	tokenize_lst(t_list **lst);
+t_list	*analyzer(char *str);
 void	print_lst(t_list *lst);
 void	init_signalhandlers(void);
-int		quote_count(char *str);
 
 #endif

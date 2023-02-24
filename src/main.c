@@ -18,9 +18,9 @@ int	main(void)
 			clear_history();
 			exit(EXIT_SUCCESS);
 		}
-		lst = lexing(input);
+		lst = analyzer(input);
 		print_lst(lst);
-		ft_lstclear(&lst, free);
+		ft_lstclear(&lst, delete_token);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -29,7 +29,7 @@ void	print_lst(t_list *lst)
 {
 	while (lst != NULL)
 	{
-		printf("%s\n", (char *)(lst->content));
+		printf("%s\n", ((t_token *)(lst->content))->token);
 		lst = lst->next;
 	}
 }

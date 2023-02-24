@@ -22,4 +22,6 @@ typedef struct s_token
 	t_type	type;
 }			t_token;
 
+void	delete_token(void *content);
+
 #endif

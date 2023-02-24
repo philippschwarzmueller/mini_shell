@@ -14,7 +14,7 @@ WHITE		= \033[0m
 
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
-LEXER_SRC	= lexer
+LEXER_SRC	= lexer lexer_utils
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## SIGNAL ############
@@ -23,8 +23,8 @@ SIGNAL_SRC	= signal_handling
 SIGNAL		= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
 
 ######## MAIN ##############
-MAIN_SRC	= main
 MAIN_DIR	= src/
+MAIN_SRC	= main
 MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 
 ######## OBJ ###############
