@@ -23,6 +23,6 @@ typedef struct s_token
 }			t_token;
 
 void	del_token(void *content);
-void	set_lst_start(t_list **lst);
+void	remove_val(t_list **lst, void *content);
 
 #endif

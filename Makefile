@@ -14,7 +14,7 @@ WHITE		= \033[0m
 
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
-LEXER_SRC	= lexer lexer_utils
+LEXER_SRC	= analyzer lexer_utils
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## SIGNAL ############
@@ -32,7 +32,6 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 SRC			= $(MAIN) $(LEXER) $(SIGNAL)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
-OBJD		= .cache_exists
 
 all:		$(NAME)
 

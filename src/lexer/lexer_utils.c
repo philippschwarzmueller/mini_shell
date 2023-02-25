@@ -11,11 +11,30 @@ void	del_token(void *content)
 	free(del);
 }
 
-void	set_lst_start(t_list **lst)
+void	remove_val(t_list **lst, void *content)
 {
-	t_list	*del;
+	t_list	*tmp;
+	t_list	*prev;
 
-	del = *lst;
-	*lst = (*lst)->next;
-	ft_lstdelone(del, free);
+	prev = NULL;
+	if (!lst || !(*lst))
+		return ;
+	while (((t_token *)((*lst)->content)) == (t_token *)content)
+	{
+		prev = (*lst)->next;
+		free(*lst);
+		*lst = prev;
+	}
+	tmp = *lst;
+	while (tmp != NULL)
+	{
+		if (((t_token *)((tmp)->content)) == (t_token *)content)
+		{
+			prev->next = (tmp)->next;
+			free(tmp);
+		}
+		prev = tmp;
+		tmp = (tmp)->next;
+	}
 }
+
