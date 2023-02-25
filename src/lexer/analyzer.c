@@ -74,7 +74,7 @@ static void	word_or_operator(char c, t_state *state)
 		state->is_word = 0;
 	}
 	if (!(c == 32 || (c >= 8 && c <= 13))
-	&& (c != '|' && c != '<' && c != '>'))
+		&& (c != '|' && c != '<' && c != '>'))
 	{
 		state->is_operator = 0;
 		state->is_word = 1;
@@ -101,9 +101,12 @@ static t_token	*tokenize(char *str, size_t i, size_t *len)
 	free(pre_token);
 	if (!(new->token)[0])
 		return (free(new->token), free(new), NULL);
-	if ((ft_strchr(str, '|') || ft_strchr(str, '<') || ft_strchr(str, '>'))
-		&& (!ft_strchr(str, '\"') && !ft_strchr(str, '\'')))
-		new->type = operation;
+	if (ft_strchr(new->token, '|')
+		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
+		new->type = piping;
+	else if ((ft_strchr(new->token, '>') || ft_strchr(new->token, '>'))
+		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
+		new->type = redirect;
 	else
 		new->type = word;
 	*len = 0;

@@ -19,17 +19,8 @@ int	main(void)
 			exit(EXIT_SUCCESS);
 		}
 		lst = analyzer(input);
-		print_lst(lst);
+		print_lexed_lst(lst);
 		ft_lstclear(&lst, del_token);
 	}
 	return (EXIT_SUCCESS);
-}
-
-void	print_lst(t_list *lst)
-{
-	while (lst != NULL)
-	{
-		printf("%s\n", ((t_token *)(lst->content))->token);
-		lst = lst->next;
-	}
 }

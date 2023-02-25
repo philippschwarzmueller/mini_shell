@@ -1,16 +1,5 @@
 #include "shell.h"
 
-void	del_token(void *content)
-{
-	t_token	*del;
-
-	if (content == NULL)
-		return ;
-	del = (t_token *)content;
-	free(del->token);
-	free(del);
-}
-
 void	remove_val(t_list **lst, void *content)
 {
 	t_list	*tmp;
@@ -38,3 +27,28 @@ void	remove_val(t_list **lst, void *content)
 	}
 }
 
+void	del_token(void *content)
+{
+	t_token	*del;
+
+	if (content == NULL)
+		return ;
+	del = (t_token *)content;
+	free(del->token);
+	free(del);
+}
+
+void	print_lexed_lst(t_list *lst)
+{
+	while (lst != NULL)
+	{
+		if (((t_token *)(lst->content))->type == word)
+			printf("\033[0;94mword\033[0m\t");
+		if (((t_token *)(lst->content))->type == piping)
+			printf("\033[0;94mpipe\033[0m\t");
+		if (((t_token *)(lst->content))->type == redirect)
+			printf("\033[0;94mrdirect\033[0m\t");
+		printf("%s\n", ((t_token *)(lst->content))->token);
+		lst = lst->next;
+	}
+}

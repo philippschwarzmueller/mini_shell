@@ -4,7 +4,8 @@
 typedef enum e_type
 {
 	word,
-	operation,
+	piping,
+	redirect,
 }	t_type;
 
 typedef struct s_state
@@ -24,5 +25,6 @@ typedef struct s_token
 
 void	del_token(void *content);
 void	remove_val(t_list **lst, void *content);
+void	print_lexed_lst(t_list *lst);
 
 #endif

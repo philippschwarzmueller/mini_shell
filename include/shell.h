@@ -14,7 +14,6 @@
 # include "lexer.h"
 
 t_list	*analyzer(char *str);
-void	print_lst(t_list *lst);
 void	init_signalhandlers(void);
 
 #endif
