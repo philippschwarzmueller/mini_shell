@@ -9,7 +9,6 @@ t_list	*analyzer(char *str)
 	size_t	i;
 	size_t	len;
 	t_list	*lst;
-	t_list	*del;
 	t_state	state;
 
 	i = 0;
@@ -25,11 +24,13 @@ t_list	*analyzer(char *str)
 		len++;
 		i++;
 	}
-	free(str);
-	del = lst;
-	lst = lst->next;
-	ft_lstdelone(del, free);
-	return (lst);
+	if (state.is_dquoted || state.is_squoted)
+	{
+		ft_lstclear(&lst, del_token);
+		ft_putendl_fd("error: unclosed quote", 2);
+		return (free(str), NULL);
+	}
+	return (free(str), set_lst_start(&lst), lst);
 }
 
 static int	is_token(char c, t_state *state)

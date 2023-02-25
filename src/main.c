@@ -20,7 +20,7 @@ int	main(void)
 		}
 		lst = analyzer(input);
 		print_lst(lst);
-		ft_lstclear(&lst, delete_token);
+		ft_lstclear(&lst, del_token);
 	}
 	return (EXIT_SUCCESS);
 }
