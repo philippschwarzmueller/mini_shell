@@ -1,5 +1,6 @@
 #include "shell.h"
 
+//following does not free all the struct properties of command_table properly
 int	main(void)
 {
 	char	*input;

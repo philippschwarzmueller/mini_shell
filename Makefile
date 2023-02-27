@@ -18,7 +18,7 @@ LEXER_DIR	= src/lexer/
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## PARSER ############
-PARSER_SRC	= parser
+PARSER_SRC	= parser parser_utils
 PARSER_DIR	= src/parser/
 PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
