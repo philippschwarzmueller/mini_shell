@@ -5,15 +5,6 @@ void			parse_token(char *str, struct s_state *state,
 					t_list *command_table);
 t_command		*create_cmd(char *command, char *options, int in, int out);
 
-struct s_state
-{
-	t_bool	pipe;
-	t_bool	option;
-	t_bool	command;
-	t_bool	redirect;
-	t_bool	last;
-};
-
 t_list	*parse(t_list *lexed_arg)
 {
 	t_list			*command_table;
@@ -45,6 +36,25 @@ void	update_state(char *str, struct s_state *state)
 		state->command = true;
 }
 
+char	*append_options(char *options, char *str)
+{
+	options = ft_strjoin(options, " ");
+	options = ft_strjoin(options, str);
+	return (options);
+}
+
+void	set_in_out(struct s_state *state, int *in, int *out)
+{
+	if (state->pipe == true)
+		*out = -2;
+	else
+		*out = STDOUT_FILENO;
+	if (state->redirect == true)
+		*in = -2;
+	else
+		*in = STDIN_FILENO;
+}
+
 void	parse_token(char *str, struct s_state *state,
 				t_list *command_table)
 {
@@ -59,56 +69,18 @@ void	parse_token(char *str, struct s_state *state,
 		if (options == NULL)
 			options = ft_strdup(str);
 		else
-		{
-			options = ft_strjoin(options, " ");
-			options = ft_strjoin(options, str);
-		}
+			options = append_options(options, str);
 	}
 	if (state->command == true && state->option == false
 		&& state->pipe == false)
 		command = ft_strdup(str);
 	if (state->pipe == true || state->last == true)
 	{
-		if (state->pipe == true)
-			out = -2;
-		else
-			out = STDOUT_FILENO;
-		if (state->redirect == true)
-			in = -2;
+		set_in_out(state, &in, &out);
 		ft_lstadd_back(&command_table,
 			ft_lstnew(create_cmd(command, options, in, out)));
-		command = NULL;
-		options = NULL;
-		in = 0;
-		out = 0;
+		reset_cmd(&command, &options, &in, &out);
 		*state = init_state();
 		state->redirect = true;
 	}
-}
-
-t_command	*create_cmd(char *command, char *options, int in, int out)
-{
-	t_command	*cmd;
-
-	cmd = malloc(sizeof(*cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->command = command;
-	cmd->options = options;
-	cmd->path = NULL;
-	cmd->in = in;
-	cmd->out = out;
-	return (cmd);
-}
-
-struct s_state	init_state(void)
-{
-	struct s_state	state;
-
-	state.pipe = false;
-	state.option = false;
-	state.command = false;
-	state.redirect = false;
-	state.last = false;
-	return (state);
 }
