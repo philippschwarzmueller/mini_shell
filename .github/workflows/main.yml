@@ -7,4 +7,4 @@ jobs:
     steps:
       - uses: alexandregv/norminette-action@v3
         with:
-          flags: src | grep -B 1 INVALID_HEADER 2>&1
+          flags: lib/libft
