@@ -74,8 +74,8 @@ t_token	*tokenize(char *str, size_t i, size_t *len)
 	else
 		new->type = word;
 	if ((new->type == piping && (ft_strchr(new->token, '<')
-		|| ft_strchr(new->token, '>'))) || (ft_strchr(new->token, '<')
-		&& ft_strchr(new->token, '>')))
+				|| ft_strchr(new->token, '>'))) || (ft_strchr(new->token, '<')
+			&& ft_strchr(new->token, '>')))
 		new->type = syntax;
 	return (*len = 0, new);
 }

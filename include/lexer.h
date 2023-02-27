@@ -9,14 +9,14 @@ typedef enum e_type
 	syntax
 }	t_type;
 
-typedef struct s_state
+typedef struct s_state_lex
 {
 	int	is_word;
 	int	is_squoted;
 	int	is_dquoted;
 	int	is_escaped;
 	int	is_operator;
-}		t_state;
+}		t_state_lex;
 
 typedef struct s_token
 {

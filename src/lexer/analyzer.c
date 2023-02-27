@@ -1,20 +1,20 @@
 #include "shell.h"
 
-static int	is_token(char *str, size_t i, t_state *state, size_t *len);
-static void	check_if_quoted(char c, t_state *state);
-static void	change_state(char c, t_state *state);
-static int	check_next_char(char c, t_state *state);
+static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len);
+static void	check_if_quoted(char c, t_state_lex *state);
+static void	change_state(char c, t_state_lex *state);
+static int	check_next_char(char c, t_state_lex *state);
 
 t_list	*analyzer(char *str)
 {
-	size_t	i;
-	size_t	len;
-	t_list	*lst;
-	t_state	state;
+	size_t		i;
+	size_t		len;
+	t_list		*lst;
+	t_state_lex	state;
 
 	i = 0;
 	len = 0;
-	state = (t_state){0, 0, 0, 0, 0};
+	state = (t_state_lex){0, 0, 0, 0, 0};
 	lst = ft_lstnew(NULL);
 	while (str[i])
 	{
@@ -31,7 +31,7 @@ t_list	*analyzer(char *str)
 	return (free(str), remove_val(&lst, NULL), lst);
 }
 
-static int	is_token(char *str, size_t i, t_state *state, size_t *len)
+static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
 {
 	check_if_quoted(str[i], state);
 	change_state(str[i], state);
@@ -41,7 +41,7 @@ static int	is_token(char *str, size_t i, t_state *state, size_t *len)
 	return (check_next_char(str[i + 1], state));
 }
 
-static void	check_if_quoted(char c, t_state *state)
+static void	check_if_quoted(char c, t_state_lex *state)
 {
 	if (c == '\"' && !(state->is_escaped)
 		&& !(state->is_squoted) && !(state->is_dquoted))
@@ -55,7 +55,7 @@ static void	check_if_quoted(char c, t_state *state)
 		state->is_dquoted = 0;
 }
 
-static void	change_state(char c, t_state *state)
+static void	change_state(char c, t_state_lex *state)
 {
 	if ((c == '|' || c == '<' || c == '>'))
 	{
@@ -75,7 +75,7 @@ static void	change_state(char c, t_state *state)
 	}
 }
 
-static int	check_next_char(char c, t_state *state)
+static int	check_next_char(char c, t_state_lex *state)
 {
 	if (c == 0)
 		return (1);
@@ -86,7 +86,8 @@ static int	check_next_char(char c, t_state *state)
 	if (!(c == 32 || (c >= 8 && c <= 13))
 		&& !(c == '|' || c == '<' || c == '>') && state->is_operator)
 		return (1);
-	if ((c == 32 || (c >= 8 && c <= 13)) && (state->is_word || state->is_operator))
+	if ((c == 32 || (c >= 8 && c <= 13))
+		&& (state->is_word || state->is_operator))
 		return (1);
 	return (0);
 }
