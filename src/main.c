@@ -1,11 +1,13 @@
 #include "shell.h"
 
+//following does not free all the struct properties of command_table properly
 int	main(void)
 {
 	char	*input;
-	t_list	*lst;
+	t_list	*command_table;
+	t_list	*lexed_args;
 
-	lst = NULL;
+	command_table = NULL;
 	while (1)
 	{
 		init_signalhandlers();
@@ -18,9 +20,30 @@ int	main(void)
 			clear_history();
 			exit(EXIT_SUCCESS);
 		}
-		lst = analyzer(input);
-		print_lexed_lst(lst);
-		ft_lstclear(&lst, del_token);
+		lexed_args = analyzer(input);
+		command_table = parse(lexed_args);
+		print_lst(command_table);
+		ft_lstclear(&command_table, free);
 	}
 	return (EXIT_SUCCESS);
+}
+
+void	print_lst(t_list *command_table)
+{
+	t_command	*temp;
+
+	while (command_table != NULL)
+	{
+		temp = (t_command *)command_table->content;
+		ft_printf("------------------\n");
+		ft_printf("%p\n", command_table);
+		ft_printf("Command: %s\n", temp->command);
+		ft_printf("Path: %s\n", temp->path);
+		ft_printf("Option: %s\n", temp->options);
+		ft_printf("In: %d\n", temp->in);
+		ft_printf("Out: %d\n", temp->out);
+		ft_printf("next: %p\n", command_table->next);
+		ft_printf("------------------\n");
+		command_table = command_table->next;
+	}
 }

@@ -17,6 +17,11 @@ LEXER_DIR	= src/lexer/
 LEXER_SRC	= analyzer lexer_utils
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
+######## PARSER ############
+PARSER_SRC	= parser parser_utils
+PARSER_DIR	= src/parser/
+PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
+
 ######## SIGNAL ############
 SIGNAL_DIR	= src/signal/
 SIGNAL_SRC	= signal_handling
@@ -30,7 +35,7 @@ MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 ######## OBJ ###############
 SRC_DIR		= src/
 OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL)
+SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)
