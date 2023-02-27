@@ -29,7 +29,7 @@ t_list	*analyzer(char *str)
 		return (free(str), NULL);
 	}
 	remove_val(&lst, NULL);
-	return (free(str), syntax_error(&lst), lst);
+	return (free(str), lst);
 }
 
 static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
@@ -39,6 +39,8 @@ static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
 	if (!(str[i] == 32 || (str[i] >= 8 && str[i] <= 13))
 		|| (state->is_squoted) || (state->is_dquoted))
 		*len += 1;
+	if (state->is_escaped)
+		str[i] = ' ';
 	return (check_next_char(str[i + 1], state));
 }
 
@@ -46,7 +48,7 @@ static void	check_if_quoted(char c, t_state_lex *state)
 {
 	if (state->is_escaped)
 		state->is_escaped = 0;
-	if (c == '\\')
+	else if (c == '\\')
 		state->is_escaped = 1;
 	if (c == '\"' && !(state->is_escaped)
 		&& !(state->is_squoted) && !(state->is_dquoted))

@@ -79,22 +79,3 @@ t_token	*tokenize(char *str, size_t i, size_t *len)
 		new->type = syntax;
 	return (*len = 0, new);
 }
-
-void	syntax_error(t_list **lst)
-{
-	t_list	*tmp;
-
-	if (!lst || !(*lst))
-		return ;
-	tmp = *lst;
-	while (tmp != NULL)
-	{
-		if (((t_state_lex)(tmp->content))->type == syntax)
-		{
-			ft_lstclear(lst, delete_token);
-			printf("minishell: syntax error");
-			return ;
-		}
-		tmp = tmp->next;
-	}
-}
