@@ -16,9 +16,16 @@ typedef struct s_command
 {
 	char	*path;
 	char	*command;
-	char	*in;
-	char	*out;
+	char	*options;
+	int		in;
+	int		out;
 }	t_command;
+
+typedef enum s_bool
+{
+	false,
+	true,
+}	t_bool;
 
 t_list	*lexing(char *str);
 void	tokenize_lst(t_list **lst);
