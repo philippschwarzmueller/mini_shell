@@ -73,22 +73,3 @@ t_token	*tokenize(char *str, size_t i, size_t *len)
 		new->type = word;
 	return (*len = 0, new);
 }
-
-t_state	*init_state(char c)
-{
-	t_state	*new;
-
-	new = malloc(sizeof(t_state));
-	if (new == NULL)
-		return (NULL);
-	*new = (t_state){1, 0, 0, 0, 0};
-	if (c == 0 || (c == 32 || (c >= 8 && c <= 13)))
-		*new = (t_state){0, 0, 0, 0, 0};
-	if (c =='\'')
-		*new = (t_state){1, 1, 0, 0, 0};
-	if (c == '\"')
-		*new = (t_state){1, 0, 1, 0, 0};
-	if (c == '|' || c == '>' || c == '<')
-		*new = (t_state){0, 0, 0, 0, 1};
-	return (new);
-}
