@@ -50,6 +50,8 @@ void	print_lexed_lst(t_list *lst)
 			printf("\033[0;94mpipe\033[0m\t");
 		if (((t_token *)(lst->content))->type == redirect)
 			printf("\033[0;94mrdirect\033[0m\t");
+		if (((t_token *)(lst->content))->type == syntax)
+			printf("\033[0;94msyntax\033[0m\t");
 		printf("%s\n", ((t_token *)(lst->content))->token);
 		lst = lst->next;
 	}
@@ -71,5 +73,9 @@ t_token	*tokenize(char *str, size_t i, size_t *len)
 		new->type = redirect;
 	else
 		new->type = word;
+	if ((new->type == piping && (ft_strchr(new->token, '<')
+		|| ft_strchr(new->token, '>'))) || (ft_strchr(new->token, '<')
+		&& ft_strchr(new->token, '>')))
+		new->type = syntax;
 	return (*len = 0, new);
 }

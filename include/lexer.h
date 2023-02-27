@@ -6,6 +6,7 @@ typedef enum e_type
 	word,
 	piping,
 	redirect,
+	syntax
 }	t_type;
 
 typedef struct s_state
@@ -25,7 +26,6 @@ typedef struct s_token
 
 void	del_token(void *content);
 void	remove_val(t_list **lst, void *content);
-t_state	*init_state(char c);
 t_token	*tokenize(char *str, size_t i, size_t *len);
 void	print_lexed_lst(t_list *lst);
 

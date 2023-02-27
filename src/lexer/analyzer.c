@@ -83,7 +83,8 @@ static int	check_next_char(char c, t_state *state)
 		return (0);
 	if ((c == '|' || c == '<' || c == '>') && state->is_word)
 		return (1);
-	if (!(c == 32 || (c >= 8 && c <= 13)) && state->is_operator)
+	if (!(c == 32 || (c >= 8 && c <= 13))
+		&& !(c == '|' || c == '<' || c == '>') && state->is_operator)
 		return (1);
 	if ((c == 32 || (c >= 8 && c <= 13)) && (state->is_word || state->is_operator))
 		return (1);
