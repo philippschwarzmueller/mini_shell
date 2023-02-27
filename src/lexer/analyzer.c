@@ -28,7 +28,8 @@ t_list	*analyzer(char *str)
 		ft_putendl_fd("error: unclosed quote", 2);
 		return (free(str), NULL);
 	}
-	return (free(str), remove_val(&lst, NULL), lst);
+	remove_val(&lst, NULL);
+	return (free(str), syntax_error(&lst), lst);
 }
 
 static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
@@ -43,6 +44,10 @@ static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
 
 static void	check_if_quoted(char c, t_state_lex *state)
 {
+	if (state->is_escaped)
+		state->is_escaped = 0;
+	if (c == '\\')
+		state->is_escaped = 1;
 	if (c == '\"' && !(state->is_escaped)
 		&& !(state->is_squoted) && !(state->is_dquoted))
 		return ((void)(state->is_dquoted = 1));
@@ -57,7 +62,7 @@ static void	check_if_quoted(char c, t_state_lex *state)
 
 static void	change_state(char c, t_state_lex *state)
 {
-	if ((c == '|' || c == '<' || c == '>'))
+	if ((c == '|' || c == '<' || c == '>' && !(state->is_escaped)))
 	{
 		state->is_operator = 1;
 		state->is_word = 0;

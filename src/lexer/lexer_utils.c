@@ -73,9 +73,28 @@ t_token	*tokenize(char *str, size_t i, size_t *len)
 		new->type = redirect;
 	else
 		new->type = word;
-	if ((new->type == piping && (ft_strchr(new->token, '<')
-				|| ft_strchr(new->token, '>'))) || (ft_strchr(new->token, '<')
-			&& ft_strchr(new->token, '>')))
+	if ((new->type == piping
+			&& (ft_strchr(new->token, '<') || ft_strchr(new->token, '>')))
+		|| (ft_strchr(new->token, '<') && ft_strchr(new->token, '>')))
 		new->type = syntax;
 	return (*len = 0, new);
+}
+
+void	syntax_error(t_list **lst)
+{
+	t_list	*tmp;
+
+	if (!lst || !(*lst))
+		return ;
+	tmp = *lst;
+	while (tmp != NULL)
+	{
+		if (((t_state_lex)(tmp->content))->type == syntax)
+		{
+			ft_lstclear(lst, delete_token);
+			printf("minishell: syntax error");
+			return ;
+		}
+		tmp = tmp->next;
+	}
 }
