@@ -13,6 +13,8 @@ void	remove_val(t_list **lst, void *content)
 		prev = (*lst)->next;
 		free(*lst);
 		*lst = prev;
+		if (*lst == NULL)
+			break ;
 	}
 	tmp = *lst;
 	while (tmp != NULL)
@@ -51,4 +53,42 @@ void	print_lexed_lst(t_list *lst)
 		printf("%s\n", ((t_token *)(lst->content))->token);
 		lst = lst->next;
 	}
+}
+
+t_token	*tokenize(char *str, size_t i, size_t *len)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (new == NULL)
+		return (NULL);
+	new->token = ft_substr(str, ((i + 1) - *len), *len);
+	if (ft_strchr(new->token, '|')
+		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
+		new->type = piping;
+	else if ((ft_strchr(new->token, '>') || ft_strchr(new->token, '<'))
+		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
+		new->type = redirect;
+	else
+		new->type = word;
+	return (*len = 0, new);
+}
+
+t_state	*init_state(char c)
+{
+	t_state	*new;
+
+	new = malloc(sizeof(t_state));
+	if (new == NULL)
+		return (NULL);
+	*new = (t_state){1, 0, 0, 0, 0};
+	if (c == 0 || (c == 32 || (c >= 8 && c <= 13)))
+		*new = (t_state){0, 0, 0, 0, 0};
+	if (c =='\'')
+		*new = (t_state){1, 1, 0, 0, 0};
+	if (c == '\"')
+		*new = (t_state){1, 0, 1, 0, 0};
+	if (c == '|' || c == '>' || c == '<')
+		*new = (t_state){0, 0, 0, 0, 1};
+	return (new);
 }
