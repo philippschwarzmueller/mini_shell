@@ -100,18 +100,7 @@ static t_token	*tokenize(char *str, size_t i, size_t *len)
 	if (new == NULL)
 		return (NULL);
 	new->token = ft_substr(str, ((i + 1) - *len), *len);
-	if (ft_strchr(new->token, '|')
-		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
-		new->type = piping;
-	else if ((ft_strchr(new->token, '>') || ft_strchr(new->token, '<'))
-		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\''))
-		new->type = redirect;
-	else
-		new->type = word;
-	if ((new->type == piping
-			&& (ft_strchr(new->token, '<') || ft_strchr(new->token, '>')))
-		|| (ft_strchr(new->token, '<') && ft_strchr(new->token, '>')))
-		new->type = syntax;
+	set_type(new);
 	if (ft_strchr(new->token, '\"') || ft_strchr(new->token, '\'')
 		|| ft_strchr(new->token, '\\'))
 		new->token = ft_decrustify_str(new->token);

@@ -40,21 +40,29 @@ void	del_token(void *content)
 	free(del);
 }
 
-void	reverse_str(char *str)
+void	set_type(t_token *new)
 {
 	size_t	i;
-	size_t	len;
-	char	tmp;
+	char	*str;
 
 	i = 0;
-	len = ft_strlen(str);
-	while (i < (len / 2))
+	str = new->token;
+	new->type = word;
+	while (str[i])
 	{
-		tmp = str[i];
-		str[i] = str[len - 1 - i];
-		str[len - 1 - i] = tmp;
+		if (str[i] != '|' && str[i] != '<' && str[i] != '>')
+			return ;
 		i++;
 	}
+	if (ft_strchr(str, '|') && !ft_strchr(str, '<') && !ft_strchr(str, '>'))
+		return ((void)(new->type = piping));
+	if (ft_strchr(str, '<') && !ft_strchr(str, '|') && !ft_strchr(str, '>')
+		&& ft_strlen(str) < 3)
+		return ((void)(new->type = redirect));
+	if (ft_strchr(str, '>') && !ft_strchr(str, '|') && !ft_strchr(str, '<')
+		&& ft_strlen(str) < 3)
+		return ((void)(new->type = redirect));
+	new->type = syntax;
 }
 
 int	is_quoted(char *str, size_t i, char token)

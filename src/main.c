@@ -22,8 +22,8 @@ int	main(void)
 		}
 		lexed_args = analyzer(input);
 		print_lexed_lst(lexed_args);
-		// command_table = parse(lexed_args);
-		// print_lst(command_table);
+		command_table = parse(lexed_args);
+		print_parsed_lst(command_table);
 		ft_lstclear(&command_table, free);
 	}
 	return (EXIT_SUCCESS);
