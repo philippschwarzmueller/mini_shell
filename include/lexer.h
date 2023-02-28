@@ -5,7 +5,10 @@ typedef enum e_type
 {
 	word,
 	piping,
-	redirect,
+	infile,
+	outfile,
+	here_doc,
+	append,
 	syntax
 }	t_type;
 
