@@ -39,7 +39,8 @@ typedef struct s_command
 
 t_list			*lexing(char *str);
 void			tokenize_lst(t_list **lst);
-void			print_lst(t_list *lst);
+void			print_parsed_lst(t_list *lst);
+void			print_lexed_lst(t_list *lst);
 void			init_signalhandlers(void);
 t_list			*parse(t_list *lexed_args);
 struct s_state	init_state(void);

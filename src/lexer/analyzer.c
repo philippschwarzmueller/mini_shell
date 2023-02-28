@@ -1,9 +1,9 @@
 #include "shell.h"
 
-static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len);
-static void	check_if_quoted(char c, t_state_lex *state);
-static void	change_state(char c, t_state_lex *state);
-static int	check_next_char(char c, t_state_lex *state);
+static int		is_token(char *str, size_t i, t_state_lex *state, size_t *len);
+static void		change_state(char c, t_state_lex *state);
+static int		check_next_char(char c, t_state_lex *state);
+static t_token	*tokenize(char *str, size_t i, size_t *len);
 
 t_list	*analyzer(char *str)
 {
@@ -34,22 +34,19 @@ t_list	*analyzer(char *str)
 
 static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
 {
-	check_if_quoted(str[i], state);
 	change_state(str[i], state);
+	if (state->is_escaped)
+		state->is_escaped = 0;
+	else if (str[i] == '\\')
+		state->is_escaped = 1;
 	if (!(str[i] == 32 || (str[i] >= 8 && str[i] <= 13))
 		|| (state->is_squoted) || (state->is_dquoted))
 		*len += 1;
-	if (state->is_escaped)
-		str[i] = ' ';
 	return (check_next_char(str[i + 1], state));
 }
 
-static void	check_if_quoted(char c, t_state_lex *state)
+static void	change_state(char c, t_state_lex *state)
 {
-	if (state->is_escaped)
-		state->is_escaped = 0;
-	else if (c == '\\')
-		state->is_escaped = 1;
 	if (c == '\"' && !(state->is_escaped)
 		&& !(state->is_squoted) && !(state->is_dquoted))
 		return ((void)(state->is_dquoted = 1));
@@ -60,17 +57,12 @@ static void	check_if_quoted(char c, t_state_lex *state)
 		state->is_squoted = 0;
 	if ((c == '\"' && !(state->is_escaped) && !(state->is_squoted)))
 		state->is_dquoted = 0;
-}
-
-static void	change_state(char c, t_state_lex *state)
-{
-	if ((c == '|' || c == '<' || c == '>' && !(state->is_escaped)))
+	if ((c == '|' || c == '<' || c == '>') && !(state->is_escaped))
 	{
 		state->is_operator = 1;
 		state->is_word = 0;
 	}
-	if (!(c == 32 || (c >= 8 && c <= 13))
-		&& (c != '|' && c != '<' && c != '>'))
+	if (!(c == 32 || (c >= 8 && c <= 13)) && (c != '|' && c != '<' && c != '>'))
 	{
 		state->is_operator = 0;
 		state->is_word = 1;
@@ -88,7 +80,8 @@ static int	check_next_char(char c, t_state_lex *state)
 		return (1);
 	if (state->is_dquoted || state->is_squoted)
 		return (0);
-	if ((c == '|' || c == '<' || c == '>') && state->is_word)
+	if ((c == '|' || c == '<' || c == '>') && state->is_word
+		&& !(state->is_escaped))
 		return (1);
 	if (!(c == 32 || (c >= 8 && c <= 13))
 		&& !(c == '|' || c == '<' || c == '>') && state->is_operator)
@@ -97,4 +90,30 @@ static int	check_next_char(char c, t_state_lex *state)
 		&& (state->is_word || state->is_operator))
 		return (1);
 	return (0);
+}
+
+static t_token	*tokenize(char *str, size_t i, size_t *len)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (new == NULL)
+		return (NULL);
+	new->token = ft_substr(str, ((i + 1) - *len), *len);
+	if (ft_strchr(new->token, '|')
+		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
+		new->type = piping;
+	else if ((ft_strchr(new->token, '>') || ft_strchr(new->token, '<'))
+		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\''))
+		new->type = redirect;
+	else
+		new->type = word;
+	if ((new->type == piping
+			&& (ft_strchr(new->token, '<') || ft_strchr(new->token, '>')))
+		|| (ft_strchr(new->token, '<') && ft_strchr(new->token, '>')))
+		new->type = syntax;
+	if (ft_strchr(new->token, '\"') || ft_strchr(new->token, '\'')
+		|| ft_strchr(new->token, '\\'))
+		new->token = ft_decrustify_str(new->token);
+	return (*len = 0, new);
 }

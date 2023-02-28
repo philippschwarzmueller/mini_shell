@@ -40,42 +40,65 @@ void	del_token(void *content)
 	free(del);
 }
 
-void	print_lexed_lst(t_list *lst)
+void	reverse_str(char *str)
 {
-	while (lst != NULL)
+	size_t	i;
+	size_t	len;
+	char	tmp;
+
+	i = 0;
+	len = ft_strlen(str);
+	while (i < (len / 2))
 	{
-		if (((t_token *)(lst->content))->type == word)
-			printf("\033[0;94mword\033[0m\t");
-		if (((t_token *)(lst->content))->type == piping)
-			printf("\033[0;94mpipe\033[0m\t");
-		if (((t_token *)(lst->content))->type == redirect)
-			printf("\033[0;94mrdirect\033[0m\t");
-		if (((t_token *)(lst->content))->type == syntax)
-			printf("\033[0;94msyntax\033[0m\t");
-		printf("%s\n", ((t_token *)(lst->content))->token);
-		lst = lst->next;
+		tmp = str[i];
+		str[i] = str[len - 1 - i];
+		str[len - 1 - i] = tmp;
+		i++;
 	}
 }
 
-t_token	*tokenize(char *str, size_t i, size_t *len)
+int	is_quoted(char *str, size_t i, char token)
 {
-	t_token	*new;
+	char	cmp;
+	size_t	j;
+	int		sv;
 
-	new = malloc(sizeof(t_token));
-	if (new == NULL)
-		return (NULL);
-	new->token = ft_substr(str, ((i + 1) - *len), *len);
-	if (ft_strchr(new->token, '|')
-		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
-		new->type = piping;
-	else if ((ft_strchr(new->token, '>') || ft_strchr(new->token, '<'))
-		&& !ft_strchr(new->token, '\"') && !ft_strchr(new->token, '\"'))
-		new->type = redirect;
+	j = i;
+	sv = 0;
+	if (token == '\"')
+		cmp = '\'';
 	else
-		new->type = word;
-	if ((new->type == piping
-			&& (ft_strchr(new->token, '<') || ft_strchr(new->token, '>')))
-		|| (ft_strchr(new->token, '<') && ft_strchr(new->token, '>')))
-		new->type = syntax;
-	return (*len = 0, new);
+		cmp = '\"';
+	while (str[j] && str[j] != cmp)
+		if (str[++j] == cmp)
+			sv = 1;
+	j = i;
+	while (j && str[j] != cmp)
+		if (str[--j] == cmp && sv)
+			return (1);
+	return (0);
+}
+
+char	*ft_decrustify_str(char *str)
+{
+	size_t	i;
+	size_t	j;
+	char	*res;
+	char	*tmp;
+
+	i = 0;
+	j = 0;
+	tmp = ft_calloc(ft_strlen(str) + 1, sizeof(char *));
+	while (str[j])
+	{
+		if (str[j] != '\"' && str[j] != '\'' && str[j] != '\\')
+			tmp[i++] = str[j++];
+		else if (j > 0 && (str[j - 1] == '\\' || is_quoted(str, j, str[j])))
+			tmp[i++] = str[j++];
+		else
+			j++;
+	}
+	res = ft_calloc(i + 1, sizeof(char));
+	ft_strlcpy(res, tmp, i + 1);
+	return (free(str), free(tmp), res);
 }
