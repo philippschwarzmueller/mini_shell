@@ -30,29 +30,54 @@ void	update_state(t_token *token, struct s_state *state)
 {
 	if (token->type == piping)
 		state->pipe = true;
-	else if (state->command == true)
+	else if (token->type == redirect)
+	{
+		if (ft_strncmp(token->token, "<", 1) == 0)
+		{
+			state->redirect_in = true;
+			state->option = false;
+		}
+		else if (ft_strncmp(token->token, ">", 1) == 0)
+		{
+			state->redirect_out = true;
+			state->option = false;
+		}
+	}
+	else if ((state->command == true || state->option == true) && (state->redirect_out == false || state->redirect_in == false))
+	{
 		state->option = true;
+		state->command = false;
+	}
 	else
 		state->command = true;
 }
 
 char	*append_options(char *options, char *str)
 {
-	options = ft_strjoin(options, " ");
-	options = ft_strjoin(options, str);
+	options = ft_strjoin_f(options, " ");
+	options = ft_strjoin_f(options, str);
 	return (options);
 }
 
-void	set_in_out(struct s_state *state, int *in, int *out)
+void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 {
-	if (state->pipe == true)
-		*out = -2;
+	int	fd;
+
+	if (state->redirect_in == true)
+	{
+		fd = open(path, O_RDONLY);
+		*in = fd;
+	}
+	else if (state->redirect_out == true)
+	{
+		fd = open(path, O_RDWR);
+		*out = fd;
+	}
 	else
+	{
 		*out = STDOUT_FILENO;
-	if (state->redirect == true)
-		*in = -2;
-	else
 		*in = STDIN_FILENO;
+	}
 }
 
 void	parse_token(t_token *token, struct s_state *state,
@@ -64,23 +89,21 @@ void	parse_token(t_token *token, struct s_state *state,
 	static int	out;
 
 	update_state(token, state);
-	if (state->option == true && state->pipe == false)
+	if (state->command == true && state->pipe == false)
+		command = ft_strdup(token->token);
+	if (state->option == true && (state->redirect_in == false || state->redirect_out == false))
 	{
 		if (options == NULL)
 			options = ft_strdup(token->token);
 		else
 			options = append_options(options, token->token);
 	}
-	if (state->command == true && state->option == false
-		&& state->pipe == false)
-		command = ft_strdup(token->token);
+	update_in_out(&in, &out, state, token->token);
 	if (state->pipe == true || state->last == true)
 	{
-		set_in_out(state, &in, &out);
 		ft_lstadd_back(&command_table,
 			ft_lstnew(create_cmd(command, options, in, out)));
 		reset_cmd(&command, &options, &in, &out);
 		*state = init_state();
-		state->redirect = true;
 	}
 }

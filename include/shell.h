@@ -24,7 +24,8 @@ struct s_state
 	t_bool	pipe;
 	t_bool	option;
 	t_bool	command;
-	t_bool	redirect;
+	t_bool	redirect_out;
+	t_bool	redirect_in;
 	t_bool	last;
 };
 
