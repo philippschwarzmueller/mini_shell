@@ -73,9 +73,10 @@ int	is_quoted(char *str, size_t i, char token)
 
 	j = i;
 	sv = 0;
-	if (token == '\"')
-		cmp = '\'';
-	else
+	cmp = '\'';
+	if (token == '\\')
+		return (0);
+	if (token == '\'')
 		cmp = '\"';
 	while (str[j] && str[j] != cmp)
 		if (str[++j] == cmp)
@@ -101,8 +102,7 @@ char	*ft_decrustify_str(char *str)
 	{
 		if (str[j] != '\"' && str[j] != '\'' && str[j] != '\\')
 			tmp[i++] = str[j++];
-		else if (j > 0 && (str[j - 1] == '\\'
-				|| (is_quoted(str, j, str[j]) && str[j] != '\\')))
+		else if (j > 0 && (str[j - 1] == '\\' || is_quoted(str, j, str[j])))
 			tmp[i++] = str[j++];
 		else
 			j++;
