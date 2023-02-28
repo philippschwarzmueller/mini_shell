@@ -18,14 +18,15 @@ int	main(void)
 			rl_replace_line("TEST", 0);
 			rl_redisplay();
 			clear_history();
+			system("leaks minishell");
 			exit(EXIT_SUCCESS);
 		}
 		lexed_args = analyzer(input);
 		print_lexed_lst(lexed_args);
 		command_table = parse(lexed_args);
 		print_parsed_lst(command_table);
-		ft_lstclear(&command_table, free);
 		ft_lstclear(&lexed_args, del_token);
+		ft_lstclear(&command_table, &free_cmd);
 	}
 	return (EXIT_SUCCESS);
 }

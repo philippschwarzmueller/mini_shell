@@ -49,5 +49,6 @@ int				quote_count(char *str);
 t_command		*create_cmd(char *command, char *options, int in, int out);
 void			reset_cmd(char **command, char **options, int *in, int *out);
 t_list			*analyzer(char *str);
+void			free_cmd(void *pointer);
 
 #endif
