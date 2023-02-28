@@ -1,7 +1,7 @@
 #include "shell.h"
 
 struct s_state	init_state(void);
-void			parse_token(char *str, struct s_state *state,
+void			parse_token(t_token *token, struct s_state *state,
 					t_list *command_table);
 t_command		*create_cmd(char *command, char *options, int in, int out);
 
@@ -17,7 +17,7 @@ t_list	*parse(t_list *lexed_arg)
 	{
 		if (lexed_arg->next == NULL)
 			state.last = true;
-		parse_token((char *)lexed_arg->content, &state, command_table);
+		parse_token((t_token *)lexed_arg->content, &state, command_table);
 		lexed_arg = lexed_arg->next;
 	}
 	del = command_table;
@@ -26,11 +26,11 @@ t_list	*parse(t_list *lexed_arg)
 	return (command_table);
 }
 
-void	update_state(char *str, struct s_state *state)
+void	update_state(t_token *token, struct s_state *state)
 {
-	if (ft_strncmp(str, "|", 1) == 0)
+	if (token->type == piping)
 		state->pipe = true;
-	else if (str[0] == '-' || state->command == true)
+	else if (state->command == true)
 		state->option = true;
 	else
 		state->command = true;
@@ -55,7 +55,7 @@ void	set_in_out(struct s_state *state, int *in, int *out)
 		*in = STDIN_FILENO;
 }
 
-void	parse_token(char *str, struct s_state *state,
+void	parse_token(t_token *token, struct s_state *state,
 				t_list *command_table)
 {
 	static char	*command;
@@ -63,17 +63,17 @@ void	parse_token(char *str, struct s_state *state,
 	static int	in;
 	static int	out;
 
-	update_state(str, state);
+	update_state(token, state);
 	if (state->option == true && state->pipe == false)
 	{
 		if (options == NULL)
-			options = ft_strdup(str);
+			options = ft_strdup(token->token);
 		else
-			options = append_options(options, str);
+			options = append_options(options, token->token);
 	}
 	if (state->command == true && state->option == false
 		&& state->pipe == false)
-		command = ft_strdup(str);
+		command = ft_strdup(token->token);
 	if (state->pipe == true || state->last == true)
 	{
 		set_in_out(state, &in, &out);
