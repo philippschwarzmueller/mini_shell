@@ -35,3 +35,13 @@ struct s_state	init_state(void)
 	state.last = false;
 	return (state);
 }
+
+void	free_cmd(void *pointer)
+{
+	t_command	*command;
+
+	command = (t_command *)pointer;
+	free(command->command);
+	free(command->options);
+	free(command);
+}
