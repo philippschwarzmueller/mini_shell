@@ -1,4 +1,4 @@
-name: Code still makes
+name: Code builds
 
 on: [push, workflow_dispatch]
 
