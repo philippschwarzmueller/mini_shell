@@ -45,23 +45,25 @@ void	set_type(t_token *new)
 	size_t	i;
 	char	*str;
 
-	i = 0;
+	i = -1;
 	str = new->token;
-	new->type = word;
-	while (str[i])
-	{
+	while (str[++i])
 		if (str[i] != '|' && str[i] != '<' && str[i] != '>')
 			return ;
-		i++;
-	}
 	if (ft_strchr(str, '|') && !ft_strchr(str, '<') && !ft_strchr(str, '>'))
 		return ((void)(new->type = piping));
 	if (ft_strchr(str, '<') && !ft_strchr(str, '|') && !ft_strchr(str, '>')
-		&& ft_strlen(str) < 3)
-		return ((void)(new->type = redirect));
+		&& ft_strlen(str) == 1)
+		return ((void)(new->type = infile));
+	if (ft_strchr(str, '<') && !ft_strchr(str, '|') && !ft_strchr(str, '>')
+		&& ft_strlen(str) == 2)
+		return ((void)(new->type = here_doc));
 	if (ft_strchr(str, '>') && !ft_strchr(str, '|') && !ft_strchr(str, '<')
-		&& ft_strlen(str) < 3)
-		return ((void)(new->type = redirect));
+		&& ft_strlen(str) == 1)
+		return ((void)(new->type = outfile));
+	if (ft_strchr(str, '>') && !ft_strchr(str, '|') && !ft_strchr(str, '<')
+		&& ft_strlen(str) == 2)
+		return ((void)(new->type = append));
 	new->type = syntax;
 }
 
@@ -73,9 +75,10 @@ int	is_quoted(char *str, size_t i, char token)
 
 	j = i;
 	sv = 0;
-	if (token == '\"')
-		cmp = '\'';
-	else
+	cmp = '\'';
+	if (token == '\\')
+		return (0);
+	if (token == '\'')
 		cmp = '\"';
 	while (str[j] && str[j] != cmp)
 		if (str[++j] == cmp)

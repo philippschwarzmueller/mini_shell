@@ -25,6 +25,7 @@ int	main(void)
 		command_table = parse(lexed_args);
 		print_parsed_lst(command_table);
 		ft_lstclear(&command_table, free);
+		ft_lstclear(&lexed_args, del_token);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -57,8 +58,14 @@ void	print_lexed_lst(t_list *lst)
 			printf("\033[0;94mword\033[0m\t");
 		if (((t_token *)(lst->content))->type == piping)
 			printf("\033[0;94mpipe\033[0m\t");
-		if (((t_token *)(lst->content))->type == redirect)
-			printf("\033[0;94mrdirect\033[0m\t");
+		if (((t_token *)(lst->content))->type == infile)
+			printf("\033[0;94minfile\033[0m\t");
+		if (((t_token *)(lst->content))->type == outfile)
+			printf("\033[0;94moutfile\033[0m\t");
+		if (((t_token *)(lst->content))->type == here_doc)
+			printf("\033[0;94mheredoc\033[0m\t");
+		if (((t_token *)(lst->content))->type == append)
+			printf("\033[0;94mappend\033[0m\t");
 		if (((t_token *)(lst->content))->type == syntax)
 			printf("\033[0;94msyntax\033[0m\t");
 		printf("%s\n", ((t_token *)(lst->content))->token);
