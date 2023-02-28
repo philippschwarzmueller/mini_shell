@@ -32,8 +32,8 @@ void	update_state(t_token *token, struct s_state *state)
 		state->pipe = true;
 	else if (token->type == infile)
 	{
-			state->redirect_in = true;
-			state->option = false;
+		state->redirect_in = true;
+		state->option = false;
 	}
 	else if (token->type == outfile)
 	{
