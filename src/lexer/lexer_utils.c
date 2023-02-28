@@ -47,7 +47,6 @@ void	set_type(t_token *new)
 
 	i = -1;
 	str = new->token;
-	new->type = word;
 	while (str[++i])
 		if (str[i] != '|' && str[i] != '<' && str[i] != '>')
 			return ;

@@ -100,6 +100,7 @@ static t_token	*tokenize(char *str, size_t i, size_t *len)
 	if (new == NULL)
 		return (NULL);
 	new->token = ft_substr(str, ((i + 1) - *len), *len);
+	new->type = word;
 	set_type(new);
 	if (ft_strchr(new->token, '\"') || ft_strchr(new->token, '\'')
 		|| ft_strchr(new->token, '\\'))
