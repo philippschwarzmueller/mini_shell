@@ -104,5 +104,8 @@ static t_token	*tokenize(char *str, size_t i, size_t *len)
 	if (ft_strchr(new->token, '\"') || ft_strchr(new->token, '\'')
 		|| ft_strchr(new->token, '\\'))
 		new->token = ft_decrustify_str(new->token);
-	return (*len = 0, new);
+	*len = 0;
+	if (new->token[0] == 0)
+		return (del_token(new), NULL);
+	return (new);
 }

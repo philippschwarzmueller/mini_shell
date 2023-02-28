@@ -101,7 +101,8 @@ char	*ft_decrustify_str(char *str)
 	{
 		if (str[j] != '\"' && str[j] != '\'' && str[j] != '\\')
 			tmp[i++] = str[j++];
-		else if (j > 0 && (str[j - 1] == '\\' || is_quoted(str, j, str[j])))
+		else if (j > 0 && (str[j - 1] == '\\'
+				|| (is_quoted(str, j, str[j]) && str[j] != '\\')))
 			tmp[i++] = str[j++];
 		else
 			j++;
