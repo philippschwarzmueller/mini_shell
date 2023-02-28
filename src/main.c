@@ -1,6 +1,5 @@
 #include "shell.h"
 
-//following does not free all the struct properties of command_table properly
 int	main(void)
 {
 	char	*input;
@@ -18,7 +17,6 @@ int	main(void)
 			rl_replace_line("TEST", 0);
 			rl_redisplay();
 			clear_history();
-			system("leaks minishell");
 			exit(EXIT_SUCCESS);
 		}
 		lexed_args = analyzer(input);
