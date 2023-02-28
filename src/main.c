@@ -20,15 +20,16 @@ int	main(void)
 			clear_history();
 			exit(EXIT_SUCCESS);
 		}
-		lexed_args = lexing(input);
+		lexed_args = analyzer(input);
+		print_lexed_lst(lexed_args);
 		command_table = parse(lexed_args);
-		print_lst(command_table);
+		print_parsed_lst(command_table);
 		ft_lstclear(&command_table, free);
 	}
 	return (EXIT_SUCCESS);
 }
 
-void	print_lst(t_list *command_table)
+void	print_parsed_lst(t_list *command_table)
 {
 	t_command	*temp;
 
@@ -45,5 +46,22 @@ void	print_lst(t_list *command_table)
 		ft_printf("next: %p\n", command_table->next);
 		ft_printf("------------------\n");
 		command_table = command_table->next;
+	}
+}
+
+void	print_lexed_lst(t_list *lst)
+{
+	while (lst != NULL)
+	{
+		if (((t_token *)(lst->content))->type == word)
+			printf("\033[0;94mword\033[0m\t");
+		if (((t_token *)(lst->content))->type == piping)
+			printf("\033[0;94mpipe\033[0m\t");
+		if (((t_token *)(lst->content))->type == redirect)
+			printf("\033[0;94mrdirect\033[0m\t");
+		if (((t_token *)(lst->content))->type == syntax)
+			printf("\033[0;94msyntax\033[0m\t");
+		printf("%s\n", ((t_token *)(lst->content))->token);
+		lst = lst->next;
 	}
 }

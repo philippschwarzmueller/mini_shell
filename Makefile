@@ -12,9 +12,9 @@ GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
 
-######## LEXER ############
-LEXER_SRC	= lexer token quotes
+######## LEXER #############
 LEXER_DIR	= src/lexer/
+LEXER_SRC	= analyzer lexer_utils
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## PARSER ############
@@ -23,13 +23,13 @@ PARSER_DIR	= src/parser/
 PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## SIGNAL ############
-SIGNAL_SRC	= signal_handling
 SIGNAL_DIR	= src/signal/
+SIGNAL_SRC	= signal_handling
 SIGNAL		= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
 
 ######## MAIN ##############
-MAIN_SRC	= main
 MAIN_DIR	= src/
+MAIN_SRC	= main
 MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 
 ######## OBJ ###############
@@ -37,19 +37,18 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
-OBJD		= .cache_exists
 
 all:		$(NAME)
 
-$(NAME):	$(READLINE) $(LIBFT) $(OBJ)
+$(NAME):	$(READLINE) $(LIBFT) $(OBJ_DIR) $(OBJ)
 			@$(CC) $(LIBFT) $(OBJ) $(LINK_FLAGS) -o $(NAME)
 			@echo "$(GREEN)minishell compiled!$(WHITE)"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJD)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
 			@echo "$(CYAN)Compiling $(WHITE): $<"
 			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-$(OBJD):
+$(OBJ_DIR):
 			@mkdir -p $(dir $(OBJ))
 
 $(LIBFT):
@@ -71,8 +70,11 @@ readline:	$(READLINE)
 
 libclean:
 			@rm -rf lib/readline
-			@rm -rf lib/libft
-			@echo "libft and readline removed!"
+			@rm -rf lib/libft/*
+			@rm -rf lib/libft/.git
+			@rm -rf lib/libft/.gitignore
+			@rm -rf lib/libft/.github
+			@echo "$(GREEN)minishell lib directory cleaned!$(WHITE)"
 
 clean:
 			@rm -rf $(OBJ_DIR)
