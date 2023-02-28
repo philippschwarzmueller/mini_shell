@@ -1,4 +1,4 @@
-name: '42 Norminette without header check'
+name: 'Code complies to 42-Norm'
 on: [push, workflow_dispatch]
 
 jobs:

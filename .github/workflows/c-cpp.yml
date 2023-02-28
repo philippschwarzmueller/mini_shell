@@ -1,0 +1,16 @@
+name: Code builds
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+
+    runs-on: macos-11
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: make
+      run: make
+    - name: make fclean
+      run: make fclean
+
