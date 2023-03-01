@@ -45,6 +45,7 @@ void	print_parsed_lst(t_list *command_table)
 		ft_printf("Options: ");
 		while (temp && temp->options != NULL && temp->options[i] != NULL)
 		{
+			ft_printf("%d: ", i);
 			ft_printf("%s ", temp->options[i]);
 			i++;
 		}
