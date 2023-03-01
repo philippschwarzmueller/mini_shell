@@ -30,5 +30,6 @@ void			free_cmd(void *pointer);
 void			ft_freestra(char **str_arr);
 t_command		*create_cmd(char *command, char **options, int in, int out);
 void			reset_cmd(char **command, char ***options, int *in, int *out);
+struct s_state	init_state(void);
 
 #endif
