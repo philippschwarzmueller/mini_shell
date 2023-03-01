@@ -60,7 +60,6 @@ char	**append_options(char **options, char *str)
 	old_len = 0;
 	i = 0;
 	old_options = options;
-	ft_printf("appending options\n");
 	while (old_options && old_options[old_len] != NULL)
 		old_len++;
 	new_options = malloc(sizeof(char *) * (old_len + 2));
@@ -71,15 +70,13 @@ char	**append_options(char **options, char *str)
 		while (i < old_len)
 		{
 			new_options[i] = ft_strdup(old_options[i]);
-			ft_printf("adding old %s\n", old_options[i]);
+			free(old_options[i]);
 			i++;
 		}
 	}
 	new_options[i] = ft_strdup(str);
-	ft_printf("adding new %s\n----------\n", str);
-	i++;
-	new_options[i] = NULL;
-	return (new_options);
+	new_options[++i] = NULL;
+	return (free(old_options), new_options);
 }
 
 void	update_in_out(int *in, int *out, struct s_state *state, char *path)
@@ -117,22 +114,14 @@ void	parse_token(t_token *token, struct s_state *state,
 		command = ft_strdup(token->token);
 	else if (state->option == true && !state->redirect_in
 		&& !state->redirect_out && !state->pipe)
-	{
 		*options = append_options(*options, token->token);
-		ft_printf("opt set\n");
-	}
 	if (options == NULL)
-	{
 		options = malloc(sizeof(char *));
-		*options = NULL;
-	}
 	update_in_out(&in, &out, state, token->token);
 	if (state->pipe == true || state->last == true)
 	{
-		ft_printf("adding command to command_table\n");
 		ft_lstadd_back(&command_table,
 			ft_lstnew(create_cmd(command, *options, in, out)));
-		ft_printf("cmd added to table\n");
 		reset_cmd(&command, options, &in, &out);
 		options = NULL;
 		*state = init_state();
