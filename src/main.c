@@ -42,7 +42,6 @@ void	print_parsed_lst(t_list *command_table)
 		temp = (t_command *)command_table->content;
 		ft_printf("------------------\n");
 		ft_printf("Command: %s\n", temp->command);
-		ft_printf("Path: %s\n", temp->path);
 		ft_printf("Options: ");
 		while (temp && temp->options != NULL && temp->options[i] != NULL)
 		{

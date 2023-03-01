@@ -21,7 +21,6 @@ t_command	*create_cmd(char *command, char **options, int in, int out)
 		return (NULL);
 	cmd->command = command;
 	cmd->options = options;
-	cmd->path = NULL;
 	cmd->in = in;
 	cmd->out = out;
 	return (cmd);
@@ -36,6 +35,7 @@ struct s_state	init_state(void)
 	state.command = false;
 	state.redirect_in = false;
 	state.redirect_out = false;
+	state.append = false;
 	state.last = false;
 	return (state);
 }

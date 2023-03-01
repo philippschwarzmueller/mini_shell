@@ -14,12 +14,12 @@ struct s_state
 	t_bool	command;
 	t_bool	redirect_out;
 	t_bool	redirect_in;
+	t_bool	append;
 	t_bool	last;
 };
 
 typedef struct s_command
 {
-	char	*path;
 	char	*command;
 	char	**options;
 	int		in;
