@@ -4,7 +4,10 @@ void	reset_cmd(char **command, char ***options, int *in, int *out)
 {
 	command[0] = NULL;
 	if (options != NULL)
+	{
+		free(options);
 		options = NULL;
+	}
 	*in = 0;
 	*out = 0;
 }
@@ -13,7 +16,6 @@ t_command	*create_cmd(char *command, char **options, int in, int out)
 {
 	t_command	*cmd;
 
-	ft_printf("creating cmd\n");
 	cmd = malloc(sizeof(*cmd));
 	if (!cmd)
 		return (NULL);
@@ -22,7 +24,6 @@ t_command	*create_cmd(char *command, char **options, int in, int out)
 	cmd->path = NULL;
 	cmd->in = in;
 	cmd->out = out;
-	ft_printf("created cmd\n");
 	return (cmd);
 }
 
