@@ -1,9 +1,11 @@
 #include "shell.h"
 
-struct s_state	init_state(void);
-void			parse_token(t_token *token, struct s_state *state,
+static void		parse_token(t_token *token, struct s_state *state,
 					t_list *command_table);
-t_command		*create_cmd(char *command, char **options, int in, int out);
+static void		update_state(t_token *token, struct s_state *state);
+static char		**append_options(char **options, char *str);
+static void		update_in_out(int *in, int *out, struct s_state *state,
+					char *path);
 
 t_list	*parse(t_list *lexed_arg)
 {
@@ -26,7 +28,35 @@ t_list	*parse(t_list *lexed_arg)
 	return (command_table);
 }
 
-void	update_state(t_token *token, struct s_state *state)
+static void	parse_token(t_token *token, struct s_state *state,
+		t_list *command_table)
+{
+	static char	*command;
+	static char	***options;
+	static int	in;
+	static int	out;
+
+	update_state(token, state);
+	if (state->command == true && state->pipe == false
+		&& state->option == false && !state->pipe)
+		command = ft_strdup(token->token);
+	else if (state->option == true && !state->redirect_in
+		&& !state->redirect_out && !state->pipe)
+		*options = append_options(*options, token->token);
+	if (options == NULL)
+		options = malloc(sizeof(char *));
+	update_in_out(&in, &out, state, token->token);
+	if (state->pipe == true || state->last == true)
+	{
+		ft_lstadd_back(&command_table,
+			ft_lstnew(create_cmd(command, *options, in, out)));
+		reset_cmd(&command, options, &in, &out);
+		options = NULL;
+		*state = init_state();
+	}
+}
+
+static void	update_state(t_token *token, struct s_state *state)
 {
 	if (token->type == piping)
 		state->pipe = true;
@@ -50,7 +80,7 @@ void	update_state(t_token *token, struct s_state *state)
 		state->command = true;
 }
 
-char	**append_options(char **options, char *str)
+static char	**append_options(char **options, char *str)
 {
 	int		old_len;
 	int		i;
@@ -79,7 +109,7 @@ char	**append_options(char **options, char *str)
 	return (free(old_options), new_options);
 }
 
-void	update_in_out(int *in, int *out, struct s_state *state, char *path)
+static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 {
 	int	fd;
 
@@ -97,33 +127,5 @@ void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 	{
 		*out = STDOUT_FILENO;
 		*in = STDIN_FILENO;
-	}
-}
-
-void	parse_token(t_token *token, struct s_state *state,
-				t_list *command_table)
-{
-	static char	*command;
-	static char	***options;
-	static int	in;
-	static int	out;
-
-	update_state(token, state);
-	if (state->command == true && state->pipe == false
-		&& state->option == false && !state->pipe)
-		command = ft_strdup(token->token);
-	else if (state->option == true && !state->redirect_in
-		&& !state->redirect_out && !state->pipe)
-		*options = append_options(*options, token->token);
-	if (options == NULL)
-		options = malloc(sizeof(char *));
-	update_in_out(&in, &out, state, token->token);
-	if (state->pipe == true || state->last == true)
-	{
-		ft_lstadd_back(&command_table,
-			ft_lstnew(create_cmd(command, *options, in, out)));
-		reset_cmd(&command, options, &in, &out);
-		options = NULL;
-		*state = init_state();
 	}
 }
