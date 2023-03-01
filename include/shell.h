@@ -12,31 +12,7 @@
 # include <termios.h>
 # include "../lib/libft/libft.h"
 # include "lexer.h"
-
-typedef enum s_bool
-{
-	false,
-	true,
-}	t_bool;
-
-struct s_state
-{
-	t_bool	pipe;
-	t_bool	option;
-	t_bool	command;
-	t_bool	redirect_out;
-	t_bool	redirect_in;
-	t_bool	last;
-};
-
-typedef struct s_command
-{
-	char	*path;
-	char	*command;
-	char	**options;
-	int		in;
-	int		out;
-}	t_command;
+# include "parser.h"
 
 t_list			*lexing(char *str);
 void			tokenize_lst(t_list **lst);
@@ -46,10 +22,6 @@ void			init_signalhandlers(void);
 t_list			*parse(t_list *lexed_args);
 struct s_state	init_state(void);
 int				quote_count(char *str);
-t_command		*create_cmd(char *command, char **options, int in, int out);
-void			reset_cmd(char **command, char ***options, int *in, int *out);
 t_list			*analyzer(char *str);
-void			free_cmd(void *pointer);
-void			ft_freestra(char **str_arr);
 
 #endif
