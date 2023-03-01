@@ -36,6 +36,7 @@ struct s_state	init_state(void)
 	state.command = false;
 	state.redirect_in = false;
 	state.redirect_out = false;
+	state.append = false;
 	state.last = false;
 	return (state);
 }

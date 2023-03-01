@@ -37,14 +37,14 @@ static void	parse_token(t_token *token, struct s_state *state,
 	static int	out;
 
 	update_state(token, state);
-	if (state->command == true && state->pipe == false
-		&& state->option == false && !state->pipe)
+	if (state->command && !state->pipe && !state->option && !state->pipe)
 		command = ft_strdup(token->token);
-	else if (state->option == true && !state->redirect_in
-		&& !state->redirect_out && !state->pipe)
+	else if (state->option && !state->redirect_in && !state->redirect_out
+		&& !state->pipe && !state->append)
 		*options = append_options(*options, token->token);
 	if (options == NULL)
 		options = malloc(sizeof(char *));
+	// somehow creates file even for > or >>
 	update_in_out(&in, &out, state, token->token);
 	if (state->pipe == true || state->last == true)
 	{
@@ -73,7 +73,10 @@ static void	update_state(t_token *token, struct s_state *state)
 	else if (token->type == here_doc)
 		ft_printf("heredoc found\n");
 	else if (token->type == append)
-		ft_printf("heredoc found\n");
+	{
+		state->append = true;
+		state->option = false;
+	}
 	if (state->command == true)
 		state->option = true;
 	else
@@ -113,6 +116,9 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 {
 	int	fd;
 
+	if (ft_strncmp(path, "<<", 2) == 0 || ft_strncmp(path, ">>", 2) == 0
+		|| ft_strncmp(path, "<", 1) == 0 || ft_strncmp(path, ">", 1) == 0)
+		return ;
 	if (state->redirect_in == true)
 	{
 		fd = open(path, O_RDONLY);
@@ -120,7 +126,12 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 	}
 	else if (state->redirect_out == true)
 	{
-		fd = open(path, O_RDWR);
+		fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		*out = fd;
+	}
+	else if (state->append == true)
+	{
+		fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		*out = fd;
 	}
 	else
