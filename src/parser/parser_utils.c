@@ -21,7 +21,6 @@ t_command	*create_cmd(char *command, char **options, int in, int out)
 		return (NULL);
 	cmd->command = command;
 	cmd->options = options;
-	cmd->path = NULL;
 	cmd->in = in;
 	cmd->out = out;
 	return (cmd);

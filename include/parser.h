@@ -20,7 +20,6 @@ struct s_state
 
 typedef struct s_command
 {
-	char	*path;
 	char	*command;
 	char	**options;
 	int		in;
