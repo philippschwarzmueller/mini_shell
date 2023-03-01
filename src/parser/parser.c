@@ -3,7 +3,7 @@
 struct s_state	init_state(void);
 void			parse_token(t_token *token, struct s_state *state,
 					t_list *command_table);
-t_command		*create_cmd(char *command, char *options, int in, int out);
+t_command		*create_cmd(char *command, char **options, int in, int out);
 
 t_list	*parse(t_list *lexed_arg)
 {
@@ -50,11 +50,37 @@ void	update_state(t_token *token, struct s_state *state)
 		state->command = true;
 }
 
-char	*append_options(char *options, char *str)
+char	**append_options(char **options, char *str)
 {
-	options = ft_strjoin_f(options, " ");
-	options = ft_strjoin_f(options, str);
-	return (options);
+	int		old_len;
+	int		i;
+	char	**old_options;
+	char	**new_options;
+
+	old_len = 0;
+	i = 0;
+	old_options = options;
+	ft_printf("appending options\n");
+	while (old_options && old_options[old_len] != NULL && old_options[old_len][0])
+		old_len++;
+	new_options = malloc(sizeof(char *) * (old_len + 2));
+	if (!new_options)
+		return (NULL);
+	if (old_options != NULL && old_options[0])
+	{
+		while (i < old_len)
+		{
+			new_options[i] = ft_strdup(old_options[i]);
+			ft_printf("adding old %s\n", old_options[i]);
+			i++;
+		}
+		i++;
+	}
+	new_options[i] = ft_strdup(str);
+	ft_printf("adding new %s\n----------\n", str);
+	i++;
+	new_options[i] = NULL;
+	return (new_options);
 }
 
 void	update_in_out(int *in, int *out, struct s_state *state, char *path)
@@ -82,7 +108,7 @@ void	parse_token(t_token *token, struct s_state *state,
 				t_list *command_table)
 {
 	static char	*command;
-	static char	*options;
+	static char	***options;
 	static int	in;
 	static int	out;
 
@@ -93,17 +119,23 @@ void	parse_token(t_token *token, struct s_state *state,
 	else if (state->option == true && !state->redirect_in
 		&& !state->redirect_out && !state->pipe)
 	{
-		if (options == NULL)
-			options = ft_strdup(token->token);
-		else
-			options = append_options(options, token->token);
+		*options = append_options(*options, token->token);
+		ft_printf("opt set\n");
+	}
+	if (options == NULL)
+	{
+		options = malloc(sizeof(char *));
+		*options = NULL;
 	}
 	update_in_out(&in, &out, state, token->token);
 	if (state->pipe == true || state->last == true)
 	{
+		ft_printf("adding command to command_table\n");
 		ft_lstadd_back(&command_table,
-			ft_lstnew(create_cmd(command, options, in, out)));
-		reset_cmd(&command, &options, &in, &out);
+			ft_lstnew(create_cmd(command, *options, in, out)));
+		ft_printf("cmd added to table\n");
+		reset_cmd(&command, options, &in, &out);
+		options = NULL;
 		*state = init_state();
 	}
 }

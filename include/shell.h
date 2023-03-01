@@ -33,7 +33,7 @@ typedef struct s_command
 {
 	char	*path;
 	char	*command;
-	char	*options;
+	char	**options;
 	int		in;
 	int		out;
 }	t_command;
@@ -46,9 +46,10 @@ void			init_signalhandlers(void);
 t_list			*parse(t_list *lexed_args);
 struct s_state	init_state(void);
 int				quote_count(char *str);
-t_command		*create_cmd(char *command, char *options, int in, int out);
-void			reset_cmd(char **command, char **options, int *in, int *out);
+t_command		*create_cmd(char *command, char **options, int in, int out);
+void			reset_cmd(char **command, char ***options, int *in, int *out);
 t_list			*analyzer(char *str);
 void			free_cmd(void *pointer);
+void			ft_freestra(char **str_arr);
 
 #endif
