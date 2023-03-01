@@ -13,30 +13,71 @@ void	err(char *mess, int exit_code, char **cmd)
 	exit(exit_code);
 }
 
-char	*format_cmd(char *cmd)
-{
-	if (ft_strncmp(cmd, "awk ", 4))
-		return (ft_swap(cmd, '\"', ' '), ft_swap(cmd, '\'', ' '), cmd);
-	cmd[4] = ' ';
-	cmd[ft_strlen(cmd) - 1] = ' ';
-	return (ft_swap(cmd, '\\', ' '), cmd);
-}
-
-char	**join_cmd(char **cmd)
+char	**join_cmd(char *command, char **cmd)
 {
 	char	**res;
-	char	*tmp;
 	size_t	i;
+	size_t	len;
 
-	if (cmd == NULL)
-		return (NULL);
+
 	i = 1;
-	res = malloc(3 * sizeof(char *));
-	res[0] = ft_strdup(cmd[0]);
-	tmp = ft_strjoin_alt(ft_strdup(""), cmd[i++]);
-	while (cmd[i] != NULL)
-		tmp = ft_strjoin_alt(ft_strjoin_alt(tmp, " "), cmd[i++]);
-	res[1] = tmp;
-	res[2] = NULL;
-	return (ft_free_arr(cmd), res);
+	len = ft_arr_len(cmd);
+	res = ft_calloc((len + 2), sizeof(char *));
+	res[0] = command;
+	while (i < len)
+		res[i] = cmd[i - 1];
+	return (res);
+}
+
+void	ft_free_arr(char **ptr)
+{
+	int	i;
+
+	if (ptr == NULL)
+		return ;
+	i = 0;
+	while (ptr[i] != NULL)
+		free(ptr[i++]);
+	free(ptr);
+	ptr = NULL;
+}
+
+size_t	ft_arr_len(char **arr)
+{
+	int	i;
+
+	if (arr == NULL)
+		return (0);
+	i = 0;
+	while (arr[i] != NULL)
+		i++;
+	return (i);
+}
+
+char	*ft_strjoin_alt(char *s1, char *s2)
+{
+	char	*res;
+	size_t	i;
+	size_t	len;
+	size_t	len_s1;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	len_s1 = ft_strlen(s1);
+	len = len_s1 + ft_strlen(s2) + 1;
+	res = malloc(len * sizeof(char));
+	if (!res)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < len)
+	{
+		if (i < len_s1)
+			res[i] = s1[i];
+		else
+			res[i] = s2[j++];
+		i++;
+	}
+	return (free(s1), res);
 }

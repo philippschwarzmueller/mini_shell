@@ -22,9 +22,10 @@ int	main(int args, char **argv, char **env)
 			exit(EXIT_SUCCESS);
 		}
 		lexed_args = analyzer(input);
-		print_lexed_lst(lexed_args);
+		//print_lexed_lst(lexed_args);
 		command_table = parse(lexed_args);
-		print_parsed_lst(command_table);
+		//print_parsed_lst(command_table);
+		executor(command_table, env);
 		ft_lstclear(&lexed_args, del_token);
 		ft_lstclear(&command_table, &free_cmd);
 	}
