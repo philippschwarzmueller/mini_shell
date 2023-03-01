@@ -1,11 +1,13 @@
 #include "shell.h"
 
-int	main(void)
+int	main(int args, char **argv, char **env)
 {
 	char	*input;
 	t_list	*command_table;
 	t_list	*lexed_args;
 
+	(void)args;
+	(void)argv;
 	command_table = NULL;
 	while (1)
 	{

@@ -12,6 +12,7 @@
 # include <termios.h>
 # include "../lib/libft/libft.h"
 # include "lexer.h"
+# include "executor.h"
 
 typedef enum s_bool
 {
