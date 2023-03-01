@@ -51,7 +51,7 @@ void	ft_freestra(char **str_arr)
 		free(str_arr[i]);
 		i++;
 	}
-	//free(str_arr);
+	free(str_arr);
 }
 
 void	free_cmd(void *pointer)

@@ -61,7 +61,7 @@ char	**append_options(char **options, char *str)
 	i = 0;
 	old_options = options;
 	ft_printf("appending options\n");
-	while (old_options && old_options[old_len] != NULL && old_options[old_len][0])
+	while (old_options && old_options[old_len] != NULL)
 		old_len++;
 	new_options = malloc(sizeof(char *) * (old_len + 2));
 	if (!new_options)
@@ -74,7 +74,6 @@ char	**append_options(char **options, char *str)
 			ft_printf("adding old %s\n", old_options[i]);
 			i++;
 		}
-		i++;
 	}
 	new_options[i] = ft_strdup(str);
 	ft_printf("adding new %s\n----------\n", str);
