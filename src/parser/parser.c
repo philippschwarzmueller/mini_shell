@@ -44,7 +44,6 @@ static void	parse_token(t_token *token, struct s_state *state,
 		*options = append_options(*options, token->token);
 	if (options == NULL)
 		options = malloc(sizeof(char *));
-	// somehow creates file even for > or >>
 	update_in_out(&in, &out, state, token->token);
 	if (state->pipe == true || state->last == true)
 	{
