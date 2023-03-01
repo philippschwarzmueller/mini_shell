@@ -1,17 +1,19 @@
 #include "shell.h"
 
-void	reset_cmd(char **command, char **options, int *in, int *out)
+void	reset_cmd(char **command, char ***options, int *in, int *out)
 {
 	command[0] = NULL;
-	options[0] = NULL;
+	if (options != NULL)
+		options = NULL;
 	*in = 0;
 	*out = 0;
 }
 
-t_command	*create_cmd(char *command, char *options, int in, int out)
+t_command	*create_cmd(char *command, char **options, int in, int out)
 {
 	t_command	*cmd;
 
+	ft_printf("creating cmd\n");
 	cmd = malloc(sizeof(*cmd));
 	if (!cmd)
 		return (NULL);
@@ -20,6 +22,7 @@ t_command	*create_cmd(char *command, char *options, int in, int out)
 	cmd->path = NULL;
 	cmd->in = in;
 	cmd->out = out;
+	ft_printf("created cmd\n");
 	return (cmd);
 }
 
@@ -36,12 +39,27 @@ struct s_state	init_state(void)
 	return (state);
 }
 
+void	ft_freestra(char **str_arr)
+{
+	int	i;
+
+	if (str_arr == NULL)
+		return ;
+	i = 0;
+	while (str_arr[i] != NULL)
+	{
+		free(str_arr[i]);
+		i++;
+	}
+	//free(str_arr);
+}
+
 void	free_cmd(void *pointer)
 {
 	t_command	*command;
 
 	command = (t_command *)pointer;
 	free(command->command);
-	free(command->options);
+	ft_freestra(command->options);
 	free(command);
 }
