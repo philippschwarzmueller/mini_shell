@@ -4,43 +4,32 @@ static void	change_src(int fd, int src);
 static void	exec_cmd(t_command *current, char **env, int *pip, t_list *c);
 static char	*get_path(char **env, char *arg);
 
-int	executor(t_list	*commands, char **env)
+void	executor(t_list	*commands, char **env)
 {
 	t_command	*current;
-	t_command	*next_cmd;
 	pid_t		pid;
 	int			pip[2];
 	int			in;
 
 	in = dup(0);
-	current = (t_command *)commands->content;
-	next_cmd = NULL;
-	if (commands->next != NULL)
-		next_cmd = (t_command *)commands->next->content;
-	change_src(current->in, 0);
 	while (commands != NULL)
 	{
+		current = (t_command *)commands->content;
 		pipe(pip);
+		if (current->in == 0 && commands->next)
+			dup2(pip[0], 0);
+		else if (commands->next)
+			change_src(current->in, 0);
+		else
+			change_src(in, 0);
 		pid = fork();
 		if (pid == 0)
 			exec_cmd(current, env, pip, commands);
-		if (next_cmd != NULL && next_cmd->in == 0)
-			dup2(pip[0], 0);
-		else if (next_cmd)
-			change_src(next_cmd->in, 0);
-		else
-			change_src(in, 0);
+		waitpid(0, NULL, WNOHANG);
 		close(pip[0]);
 		close(pip[1]);
-		waitpid(0, NULL, WNOHANG);
 		commands = commands->next;
-		if (commands != NULL)
-			current = (t_command *)commands->content;
-		next_cmd = NULL;
-		if (commands != NULL && commands->next != NULL)
-			next_cmd = (t_command *)commands->next->content;
 	}
-	return (0);
 }
 
 static void	change_src(int fd, int src)
@@ -93,5 +82,3 @@ static char	*get_path(char **env, char *arg)
 	}
 	return (ft_free_arr(paths), NULL);
 }
-
-

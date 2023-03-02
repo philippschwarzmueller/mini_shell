@@ -19,7 +19,6 @@ char	**join_cmd(char *command, char **cmd)
 	size_t	i;
 	size_t	len;
 
-
 	i = 1;
 	len = ft_arr_len(cmd);
 	res = ft_calloc((len + 2), sizeof(char *));

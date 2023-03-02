@@ -21,6 +21,6 @@ void			print_lexed_lst(t_list *lst);
 void			init_signalhandlers(void);
 t_list			*parse(t_list *lexed_args);
 t_list			*analyzer(char *str);
-int				executor(t_list	*commands, char **env);
+void			executor(t_list	*commands, char **env);
 
 #endif
