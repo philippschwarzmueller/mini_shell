@@ -29,6 +29,8 @@ void	executor(t_list	*commands, char **env)
 		close(pip[1]);
 		commands = commands->next;
 	}
+	dup2(orig_in, 0);
+	dup2(orig_out, 1);
 }
 
 static void	dup_input(t_list *commands, int in, int *pip)
@@ -37,7 +39,7 @@ static void	dup_input(t_list *commands, int in, int *pip)
 
 	current = (t_command *)commands->content;
 	if (current->in == 0 && commands->next)
-			dup2(pip[0], 0);
+		dup2(pip[0], 0);
 	else if (commands->next)
 		dup2(current->in, 0);
 	else
