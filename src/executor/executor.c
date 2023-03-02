@@ -1,30 +1,29 @@
 #include "shell.h"
 
-static void	change_src(int fd, int src);
-static void	exec_cmd(t_command *current, char **env, int *pip, t_list *c);
+static void	dup_input(t_list *commands, int in, int *pip);
+static void	dup_output(t_list *commands, int out, int *pip);
+static void	exec_cmd(t_command *current, char **env);
 static char	*get_path(char **env, char *arg);
 
 void	executor(t_list	*commands, char **env)
 {
-	t_command	*current;
 	pid_t		pid;
 	int			pip[2];
-	int			in;
+	int			orig_in;
+	int			orig_out;
 
-	in = dup(0);
+	orig_in = dup(0);
+	orig_out = dup(1);
 	while (commands != NULL)
 	{
-		current = (t_command *)commands->content;
 		pipe(pip);
-		if (current->in == 0 && commands->next)
-			dup2(pip[0], 0);
-		else if (commands->next)
-			change_src(current->in, 0);
-		else
-			change_src(in, 0);
+		dup_input(commands, orig_in, pip);
 		pid = fork();
 		if (pid == 0)
-			exec_cmd(current, env, pip, commands);
+		{
+			dup_output(commands, orig_out, pip);
+			exec_cmd((t_command *)commands->content, env);
+		}
 		waitpid(0, NULL, WNOHANG);
 		close(pip[0]);
 		close(pip[1]);
@@ -32,26 +31,44 @@ void	executor(t_list	*commands, char **env)
 	}
 }
 
-static void	change_src(int fd, int src)
+static void	dup_input(t_list *commands, int in, int *pip)
 {
-	if (fd == src)
-		return ;
-	dup2(fd, src);
-	close(fd);
+	t_command	*current;
+
+	current = (t_command *)commands->content;
+	if (current->in == 0 && commands->next)
+			dup2(pip[0], 0);
+	else if (commands->next)
+		dup2(current->in, 0);
+	else
+		dup2(in, 0);
+	if (current->in > 1)
+		close(current->in);
 }
 
-static void	exec_cmd(t_command *current, char **env, int *pip, t_list *c)
+static void	dup_output(t_list *commands, int out, int *pip)
+{
+	t_command	*current;
+
+	current = (t_command *)commands->content;
+	if (current->out == 1 && commands->next)
+		dup2(pip[1], 1);
+	else if (current->out == 1 && !commands->next)
+		dup2(out, 1);
+	else
+		dup2(current->out, 0);
+	if (current->in > 1)
+		close(current->out);
+	close(pip[0]);
+	close(pip[1]);
+}
+
+static void	exec_cmd(t_command *current, char **env)
 {
 	char	**cmd;
 	char	*path;
 
 	path = current->command;
-	if (current->out == 1 && c->next != NULL)
-		dup2(pip[1], 1);
-	else
-		change_src(current->out, 1);
-	close(pip[1]);
-	close(pip[0]);
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0)
 		path = get_path(env, path);
