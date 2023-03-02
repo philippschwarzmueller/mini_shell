@@ -37,27 +37,12 @@ struct s_state	init_state(void)
 	return (state);
 }
 
-void	ft_freestra(char **str_arr)
-{
-	int	i;
-
-	if (str_arr == NULL)
-		return ;
-	i = 0;
-	while (str_arr[i] != NULL)
-	{
-		free(str_arr[i]);
-		i++;
-	}
-	free(str_arr);
-}
-
 void	free_cmd(void *pointer)
 {
 	t_command	*command;
 
 	command = (t_command *)pointer;
 	free(command->command);
-	ft_freestra(command->options);
+	ft_free_stra(command->options);
 	free(command);
 }
