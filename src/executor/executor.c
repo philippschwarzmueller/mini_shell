@@ -7,45 +7,49 @@ static char	*get_path(char **env, char *arg);
 
 void	executor(t_list	*commands, char **env)
 {
-	pid_t		pid;
-	int			pip[2];
-	int			orig_in;
-	int			orig_out;
+	pid_t	pid;
+	int		pip[2];
+	int		orig_in;
+	int		orig_out;
 
 	orig_in = dup(0);
 	orig_out = dup(1);
 	while (commands != NULL)
 	{
-		pipe(pip);
 		dup_input(commands, orig_in, pip);
+		pipe(pip);
 		pid = fork();
 		if (pid == 0)
 		{
 			dup_output(commands, orig_out, pip);
 			exec_cmd((t_command *)commands->content, env);
 		}
-		waitpid(0, NULL, WNOHANG);
-		close(pip[0]);
-		close(pip[1]);
+		waitpid(0, NULL, 0);
 		commands = commands->next;
 	}
 	dup2(orig_in, 0);
 	dup2(orig_out, 1);
+	close(orig_in);
+	close(orig_out);
 }
 
 static void	dup_input(t_list *commands, int in, int *pip)
 {
 	t_command	*current;
+	static int	first = 1;
 
 	current = (t_command *)commands->content;
-	if (current->in == 0 && commands->next)
+	if (current->in == 0 && !first)
 		dup2(pip[0], 0);
-	else if (commands->next)
-		dup2(current->in, 0);
-	else
+	else if (current->in == 0 && first)
 		dup2(in, 0);
+	else
+		dup2(current->in, 0);
 	if (current->in > 1)
 		close(current->in);
+	close(pip[0]);
+	close(pip[1]);
+	first = 0;
 }
 
 static void	dup_output(t_list *commands, int out, int *pip)
@@ -56,9 +60,12 @@ static void	dup_output(t_list *commands, int out, int *pip)
 	if (current->out == 1 && commands->next)
 		dup2(pip[1], 1);
 	else if (current->out == 1 && !commands->next)
+	{
 		dup2(out, 1);
+		close(out);
+	}
 	else
-		dup2(current->out, 0);
+		dup2(current->out, 1);
 	if (current->in > 1)
 		close(current->out);
 	close(pip[0]);
