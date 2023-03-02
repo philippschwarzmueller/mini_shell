@@ -19,25 +19,12 @@ char	**join_cmd(char *command, char **cmd)
 	size_t	len;
 
 	i = 0;
-	len = ft_arr_len(cmd);
+	len = ft_stra_len(cmd);
 	res = ft_calloc((len + 2), sizeof(char *));
 	res[0] = command;
-	while (i++ < (len))
+	while (i++ < len)
 		res[i] = cmd[i - 1];
-	return (ft_freestra(cmd), res);
-}
-
-void	ft_free_arr(char **ptr)
-{
-	int	i;
-
-	if (ptr == NULL)
-		return ;
-	i = 0;
-	while (ptr[i] != NULL)
-		free(ptr[i++]);
-	free(ptr);
-	ptr = NULL;
+	return (ft_free_stra(cmd), res);
 }
 
 void	dup_back(int orig_in, int orig_out)
@@ -46,16 +33,4 @@ void	dup_back(int orig_in, int orig_out)
 	dup2(orig_out, 1);
 	close(orig_in);
 	close(orig_out);
-}
-
-size_t	ft_arr_len(char **arr)
-{
-	int	i;
-
-	if (arr == NULL)
-		return (0);
-	i = 0;
-	while (arr[i] != NULL)
-		i++;
-	return (i);
 }

@@ -104,8 +104,8 @@ static char	*get_path(char **env, char *arg)
 		res = ft_strjoin(paths[i++], "/");
 		res = ft_strjoin_f(res, arg);
 		if (!access(res, X_OK | F_OK))
-			return (ft_freestra(paths), res);
+			return (ft_free_stra(paths), res);
 		free(res);
 	}
-	return (ft_freestra(paths), NULL);
+	return (ft_free_stra(paths), NULL);
 }
