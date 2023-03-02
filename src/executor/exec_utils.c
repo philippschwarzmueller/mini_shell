@@ -1,11 +1,10 @@
 #include "shell.h"
 
-void	err(char *mess, int exit_code, char **cmd)
+void	err(char *mess, int exit_code, t_list *commands)
 {
 	char	*err;
 
-	if (cmd != NULL)
-		ft_free_arr(cmd);
+	ft_lstclear(&commands, free_cmd);
 	err = ft_strjoin("sigmashell: ", mess);
 	ft_putendl_fd(err, 2);
 	free(mess);
@@ -25,7 +24,7 @@ char	**join_cmd(char *command, char **cmd)
 	res[0] = command;
 	while (i++ < (len))
 		res[i] = cmd[i - 1];
-	return (res);
+	return (ft_freestra(cmd), res);
 }
 
 void	ft_free_arr(char **ptr)
@@ -41,6 +40,14 @@ void	ft_free_arr(char **ptr)
 	ptr = NULL;
 }
 
+void	dup_back(int orig_in, int orig_out)
+{
+	dup2(orig_in, 0);
+	dup2(orig_out, 1);
+	close(orig_in);
+	close(orig_out);
+}
+
 size_t	ft_arr_len(char **arr)
 {
 	int	i;
@@ -51,32 +58,4 @@ size_t	ft_arr_len(char **arr)
 	while (arr[i] != NULL)
 		i++;
 	return (i);
-}
-
-char	*ft_strjoin_alt(char *s1, char *s2)
-{
-	char	*res;
-	size_t	i;
-	size_t	len;
-	size_t	len_s1;
-	size_t	j;
-
-	if (!s1 || !s2)
-		return (NULL);
-	len_s1 = ft_strlen(s1);
-	len = len_s1 + ft_strlen(s2) + 1;
-	res = malloc(len * sizeof(char));
-	if (!res)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (i < len)
-	{
-		if (i < len_s1)
-			res[i] = s1[i];
-		else
-			res[i] = s2[j++];
-		i++;
-	}
-	return (free(s1), res);
 }

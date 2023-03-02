@@ -1,11 +1,9 @@
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
 
-void	err(char *mess, int exit_code, char **cmd);
-char	*format_cmd(char *cmd);
+void	err(char *mess, int exit_code, t_list *commands);
 char	**join_cmd(char *command, char **cmd);
 size_t	ft_arr_len(char **arr);
-void	ft_free_arr(char **ptr);
-char	*ft_strjoin_alt(char *s1, char *s2);
+void	dup_back(int orig_in, int orig_out);
 
 #endif

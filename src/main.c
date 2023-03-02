@@ -33,9 +33,9 @@ void	logic(char *input, char **env)
 	lexed_args = analyzer(input);
 	print_lexed_lst(lexed_args);
 	command_table = parse(lexed_args);
+	ft_lstclear(&lexed_args, del_token);
 	print_parsed_lst(command_table);
 	executor(command_table, env);
-	ft_lstclear(&lexed_args, del_token);
 	ft_lstclear(&command_table, &free_cmd);
 }
 
