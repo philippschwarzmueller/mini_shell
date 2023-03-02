@@ -1,12 +1,13 @@
 #include "shell.h"
 
-int	main(void)
+void	logic(char *input, char **env);
+
+int	main(int args, char **argv, char **env)
 {
 	char	*input;
-	t_list	*command_table;
-	t_list	*lexed_args;
 
-	command_table = NULL;
+	(void)args;
+	(void)argv;
 	while (1)
 	{
 		init_signalhandlers();
@@ -19,14 +20,23 @@ int	main(void)
 			clear_history();
 			exit(EXIT_SUCCESS);
 		}
-		lexed_args = analyzer(input);
-		print_lexed_lst(lexed_args);
-		command_table = parse(lexed_args);
-		print_parsed_lst(command_table);
-		ft_lstclear(&lexed_args, del_token);
-		ft_lstclear(&command_table, &free_cmd);
+		logic(input, env);
 	}
 	return (EXIT_SUCCESS);
+}
+
+void	logic(char *input, char **env)
+{
+	t_list	*command_table;
+	t_list	*lexed_args;
+
+	lexed_args = analyzer(input);
+	print_lexed_lst(lexed_args);
+	command_table = parse(lexed_args);
+	ft_lstclear(&lexed_args, del_token);
+	print_parsed_lst(command_table);
+	executor(command_table, env);
+	ft_lstclear(&command_table, &free_cmd);
 }
 
 void	print_parsed_lst(t_list *command_table)

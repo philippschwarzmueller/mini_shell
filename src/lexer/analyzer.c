@@ -25,7 +25,7 @@ t_list	*analyzer(char *str)
 	if (state.is_dquoted || state.is_squoted)
 	{
 		ft_lstclear(&lst, del_token);
-		ft_putendl_fd("error: unclosed quote", 2);
+		ft_putendl_fd("sigmashell: unclosed quote", 2);
 		return (free(str), NULL);
 	}
 	remove_val(&lst, NULL);
