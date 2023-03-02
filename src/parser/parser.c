@@ -29,28 +29,31 @@ t_list	*parse(t_list *lexed_arg)
 }
 
 static void	parse_token(t_token *token, struct s_state *state,
-		t_list *command_table)
+		t_list *cmd_table)
 {
-	static char	*command;
-	static char	***options;
+	static char	*cmd;
+	static char	***opt;
 	static int	in;
 	static int	out;
+	char		**helper;
 
 	update_state(token, state);
 	if (state->command && !state->pipe && !state->option && !state->pipe)
-		command = ft_strdup(token->token);
+		cmd = ft_strdup(token->token);
 	else if (state->option && !state->redirect_in && !state->redirect_out
 		&& !state->pipe && !state->append)
-		*options = append_options(*options, token->token);
-	if (options == NULL)
-		options = malloc(sizeof(char *));
+		*opt = append_options(*opt, token->token);
+	if (!opt)
+	{
+		helper = NULL;
+		opt = &helper;
+	}
 	update_in_out(&in, &out, state, token->token);
 	if (state->pipe == true || state->last == true)
 	{
-		ft_lstadd_back(&command_table,
-			ft_lstnew(create_cmd(command, *options, in, out)));
-		reset_cmd(&command, options, &in, &out);
-		options = NULL;
+		ft_lstadd_back(&cmd_table, ft_lstnew(create_cmd(cmd, *opt, in, out)));
+		reset_cmd(&cmd, opt, &in, &out);
+		opt = NULL;
 		*state = init_state();
 	}
 }
@@ -92,7 +95,7 @@ static char	**append_options(char **options, char *str)
 	old_len = 0;
 	i = 0;
 	old_options = options;
-	while (old_options && old_options[old_len] != NULL)
+	while (old_options && old_options[old_len])
 		old_len++;
 	new_options = malloc(sizeof(char *) * (old_len + 2));
 	if (!new_options)
