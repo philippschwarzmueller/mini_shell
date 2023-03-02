@@ -76,7 +76,9 @@ static void	exec_cmd(t_command *current, char **env)
 {
 	char	**cmd;
 	char	*path;
+	int		i;
 
+	i = 0;
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0)
