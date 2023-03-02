@@ -73,7 +73,11 @@ static void	update_state(t_token *token, struct s_state *state)
 		state->option = false;
 	}
 	else if (token->type == here_doc)
+	{
+		state->here_doc = true;
+		state->option = false;
 		ft_printf("heredoc found\n");
+	}
 	else if (token->type == append)
 	{
 		state->append = true;
@@ -121,6 +125,8 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 	if (ft_strncmp(path, "<<", 2) == 0 || ft_strncmp(path, ">>", 2) == 0
 		|| ft_strncmp(path, "<", 1) == 0 || ft_strncmp(path, ">", 1) == 0)
 		return ;
+	if (state->here_doc)
+		ft_here_doc(path);
 	if (state->redirect_in == true)
 	{
 		fd = open(path, O_RDONLY);
