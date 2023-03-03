@@ -12,16 +12,13 @@ void	executor(t_list	*commands, char **env)
 	int		pip[2];
 	int		orig_in;
 	int		orig_out;
-	int		first;
 
 	orig_in = dup(0);
 	orig_out = dup(1);
-	first = 0;
 	tmp = commands;
 	while (tmp != NULL)
 	{
 		dup_input(tmp, pip);
-		first = 1;
 		pipe(pip);
 		pid = fork();
 		if (pid == 0)
@@ -33,9 +30,7 @@ void	executor(t_list	*commands, char **env)
 		waitpid(0, NULL, 0);
 		tmp = tmp->next;
 	}
-	close(pip[0]);
-	close(pip[1]);
-	dup_back(orig_in, orig_out);
+	dup_back(orig_in, orig_out, pip);
 }
 
 static void	dup_input(t_list *commands, int *pip)
