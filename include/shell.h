@@ -13,14 +13,15 @@
 # include "../lib/libft/libft.h"
 # include "lexer.h"
 # include "parser.h"
+# include "buildins.h"
 # include "executor.h"
 
-t_list			*lexing(char *str);
-void			print_parsed_lst(t_list *lst);
-void			print_lexed_lst(t_list *lst);
-void			init_signalhandlers(void);
-t_list			*parse(t_list *lexed_args);
-t_list			*analyzer(char *str);
-void			executor(t_list	*commands, char **env);
+void	print_parsed_lst(t_list *lst);
+void	print_lexed_lst(t_list *lst);
+void	init_signalhandlers(void);
+t_list	*analyzer(char *str);
+t_list	*parse(t_list *lexed_args);
+int		buildin_controller(t_command *cmd, char **env);
+void	executor(t_list	*commands, char **env);
 
 #endif
