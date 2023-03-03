@@ -30,6 +30,8 @@ void	executor(t_list	*commands, char **env)
 		waitpid(0, NULL, 0);
 		tmp = tmp->next;
 	}
+	close(pip[0]);
+	close(pip[1]);
 	dup_back(orig_in, orig_out);
 }
 
@@ -64,7 +66,7 @@ static void	dup_output(t_list *commands, int out, int *pip)
 		dup2(current->out, 1);
 	if (current->out > 1)
 		close(current->out);
-	close(pip[0]);
+	//close(pip[0]);
 	close(pip[1]);
 }
 
