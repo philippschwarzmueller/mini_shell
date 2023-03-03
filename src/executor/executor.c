@@ -75,12 +75,17 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	int		i;
 
 	i = 0;
+	if (buildin_controller(current, env))
+		exit_buildin(commands);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0)
 		path = get_path(env, path);
 	if (execve(path, cmd, env) == -1)
+	{
+		free(cmd);
 		err(ft_strjoin(current->command, ": command not found"), 127, commands);
+	}
 }
 
 static char	*get_path(char **env, char *arg)
