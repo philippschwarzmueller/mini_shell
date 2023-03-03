@@ -1,6 +1,6 @@
 #ifndef BUILDINS_H
 # define BUILDINS_H
 
-int	echo(char **stra);
+int	ft_echo(char **stra);
 
 #endif

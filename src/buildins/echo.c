@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int	echo(char **stra)
+int	ft_echo(char **stra)
 {
 	size_t	i;
 	int		is_flagged;
