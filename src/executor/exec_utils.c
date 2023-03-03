@@ -30,7 +30,7 @@ char	**join_cmd(char *command, char **cmd)
 	res[0] = command;
 	while (i++ < len)
 		res[i] = cmd[i - 1];
-	return (ft_free_stra(cmd), res);
+	return (res);
 }
 
 void	dup_back(int orig_in, int orig_out)
