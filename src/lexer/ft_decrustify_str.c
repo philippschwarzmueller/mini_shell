@@ -1,76 +1,47 @@
 #include "shell.h"
 
-static int	is_quoted(char *str, size_t i, char c);
-static int	count_quotes(char *str, size_t i, char c);
+static void	state_change(char c, t_state_lex *state);
 
 char	*ft_decrustify_str(char *str)
 {
-	size_t	i;
-	size_t	j;
-	char	*res;
-	char	*tmp;
+	size_t		i;
+	size_t		j;
+	t_state_lex	state;
+	char		*res;
 
 	i = 0;
 	j = 0;
-	tmp = ft_calloc(ft_strlen(str) + 1, sizeof(char *));
-	while (str[j])
+	state = (t_state_lex){0, 0, 0, 0, 0};
+	res = ft_calloc(ft_strlen(str), sizeof(char));
+	while (str[i])
 	{
-		if (str[j] != '\"' && str[j] != '\'' && str[j] != '\\')
-			tmp[i++] = str[j++];
-		else if (j > 0 && (str[j - 1] == '\\' || is_quoted(str, j, str[j])))
-			tmp[i++] = str[j++];
-		else
-			j++;
+		if ((str[i] != '\"' || state.is_squoted || state.is_escaped)
+			&& (str[i] != '\'' || state.is_dquoted || state.is_escaped)
+			&& (str[i] != '\\' || state.is_escaped))
+			res[j++] = str[i];
+		state_change(str[i], &state);
+		i++;
 	}
-	res = ft_calloc(i + 1, sizeof(char));
-	ft_strlcpy(res, tmp, i + 1);
-	return (free(str), free(tmp), res);
+	free(str);
+	str = res;
+	res = ft_strdup(str);
+	return (free(str), res);
 }
 
-static int	is_quoted(char *str, size_t i, char c)
+static void	state_change(char c, t_state_lex *state)
 {
-	char	cmp;
-	size_t	j;
-	int		sv;
-
-	j = i;
-	sv = 0;
-	cmp = '\'';
-	if (c == '\\')
-		return (0);
-	if (c == '\'')
-		cmp = '\"';
-	while (str[j] && str[j] != cmp)
-		if (str[++j] == cmp)
-			sv = 1;
-	j = i;
-	while (j && str[j] != cmp)
-		if (str[--j] == cmp && sv && count_quotes(str, i, cmp))
-			return (1);
-	return (0);
-}
-
-static int	count_quotes(char *str, size_t i, char c)
-{
-	size_t	j;
-	int		sv_left;
-	int		sv_right;
-
-	j = i;
-	sv_left = 0;
-	sv_right = 0;
-	while(str[j])
-	{
-		if (str[j] == c && str[j - 1] != '\\')
-			sv_right++;
-		j++;
-	}
-	j = i;
-	while(j)
-	{
-		if (str[j] == c && j > 0 && str[j - 1] != '\\')
-			sv_left++;
-		j--;
-	}
-	return (sv_left % 2 == 0 && sv_right % 2 == 0);
+	if (c == '\"' && !(state->is_escaped)
+		&& !(state->is_squoted) && !(state->is_dquoted))
+		return ((void)(state->is_dquoted = 1));
+	if (c == '\'' && !(state->is_escaped)
+		&& !(state->is_dquoted) && !(state->is_squoted))
+		return ((void)(state->is_squoted = 1));
+	if ((c == '\'' && !(state->is_escaped) && !(state->is_dquoted)))
+		state->is_squoted = 0;
+	if ((c == '\"' && !(state->is_escaped) && !(state->is_squoted)))
+		state->is_dquoted = 0;
+	if (state->is_escaped)
+		state->is_escaped = 0;
+	else if (c == '\\')
+		state->is_escaped = 1;
 }

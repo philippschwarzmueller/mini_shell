@@ -66,5 +66,3 @@ void	set_type(t_token *new)
 		return ((void)(new->type = append));
 	new->type = syntax;
 }
-
-
