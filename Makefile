@@ -14,7 +14,7 @@ WHITE		= \033[0m
 
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
-LEXER_SRC	= analyzer lexer_utils
+LEXER_SRC	= analyzer lexer_utils ft_decrustify_str
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## PARSER ############
