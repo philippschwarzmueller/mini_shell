@@ -22,7 +22,12 @@ PARSER_DIR	= src/parser/
 PARSER_SRC	= parser parser_utils
 PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
-######## PARSER ############
+######## BUILDINS ############
+BUILDINS_DIR	= src/buildins/
+BUILDINS_SRC	= buildin_controller echo
+BUILDINS		= $(addprefix $(BUILDINS_DIR), $(addsuffix .c, $(BUILDINS_SRC)))
+
+######## EXECUTOR ############
 EXECUTOR_DIR	= src/executor/
 EXECUTOR_SRC	= executor exec_utils
 EXECUTOR		= $(addprefix $(EXECUTOR_DIR), $(addsuffix .c, $(EXECUTOR_SRC)))
@@ -40,7 +45,7 @@ MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 ######## OBJ ###############
 SRC_DIR		= src/
 OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR)
+SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILDINS)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)

@@ -12,6 +12,12 @@ void	err(char *mess, int exit_code, t_list *commands)
 	exit(exit_code);
 }
 
+void	exit_buildin(t_list *commands)
+{
+	ft_lstclear(&commands, free_cmd);
+	exit(1);
+}
+
 char	**join_cmd(char *command, char **cmd)
 {
 	char	**res;
@@ -27,8 +33,10 @@ char	**join_cmd(char *command, char **cmd)
 	return (res);
 }
 
-void	dup_back(int orig_in, int orig_out)
+void	dup_back(int orig_in, int orig_out, int *pip)
 {
+	close(pip[0]);
+	close(pip[1]);
 	dup2(orig_in, 0);
 	dup2(orig_out, 1);
 	close(orig_in);
