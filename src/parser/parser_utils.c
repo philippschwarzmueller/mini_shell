@@ -45,10 +45,14 @@ void	free_cmd(void *pointer)
 	command = (t_command *)pointer;
 	free(command->command);
 	ft_free_stra(command->options);
+	if (command->in > 2)
+		close(command->in);
+	if (command->out > 2)
+		close(command->out);
 	free(command);
 }
 
-void	ft_here_doc(char *delimiter)
+int	ft_here_doc(char *delimiter)
 {
 	char	*str;
 	char	*delimit_signal;
@@ -67,7 +71,6 @@ void	ft_here_doc(char *delimiter)
 	free(delimit_signal);
 	if (str != NULL)
 		free(str);
-	dup2(src[0], 0);
-	close(src[0]);
 	close(src[1]);
+	return (src[0]);
 }

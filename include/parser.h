@@ -32,6 +32,6 @@ void			ft_freestra(char **str_arr);
 t_command		*create_cmd(char *command, char **options, int in, int out);
 void			reset_cmd(char **command, char ***options, int *in, int *out);
 struct s_state	init_state(void);
-void			ft_here_doc(char *delimiter);
+int				ft_here_doc(char *delimiter);
 
 #endif
