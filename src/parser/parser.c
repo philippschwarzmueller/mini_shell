@@ -41,7 +41,7 @@ static void	parse_token(t_token *token, struct s_state *state,
 	if (state->command && !state->pipe && !state->option && !state->pipe)
 		cmd = ft_strdup(token->token);
 	else if (state->option && !state->redirect_in && !state->redirect_out
-		&& !state->pipe && !state->append)
+		&& !state->pipe && !state->append && !state->here_doc)
 		*opt = append_options(*opt, token->token);
 	if (!opt)
 	{
@@ -126,8 +126,11 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 		|| ft_strncmp(path, "<", 1) == 0 || ft_strncmp(path, ">", 1) == 0)
 		return ;
 	if (state->here_doc)
-		ft_here_doc(path);
-	if (state->redirect_in == true)
+	{
+		fd = ft_here_doc(path);
+		*in = fd;
+	}
+	else if (state->redirect_in == true)
 	{
 		fd = open(path, O_RDONLY);
 		*in = fd;
