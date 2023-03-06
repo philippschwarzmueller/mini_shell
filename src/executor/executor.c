@@ -74,8 +74,8 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	int		i;
 
 	i = 0;
-	if (buildin_controller(current, env))
-		exit_buildin(commands);
+	if (builtin_controller(current, env))
+		exit_builtin(commands);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0)

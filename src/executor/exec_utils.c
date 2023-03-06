@@ -12,7 +12,7 @@ void	err(char *mess, int exit_code, t_list *commands)
 	exit(exit_code);
 }
 
-void	exit_buildin(t_list *commands)
+void	exit_builtin(t_list *commands)
 {
 	ft_lstclear(&commands, free_cmd);
 	exit(1);

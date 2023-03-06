@@ -23,9 +23,9 @@ PARSER_SRC	= parser parser_utils
 PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## BUILDINS ############
-BUILDINS_DIR	= src/buildins/
-BUILDINS_SRC	= buildin_controller echo pwd
-BUILDINS		= $(addprefix $(BUILDINS_DIR), $(addsuffix .c, $(BUILDINS_SRC)))
+BUILTINS_DIR	= src/builtins/
+BUILTINS_SRC	= builtin_controller echo pwd
+BUILTINS		= $(addprefix $(BUILTINS_DIR), $(addsuffix .c, $(BUILTINS_SRC)))
 
 ######## EXECUTOR ############
 EXECUTOR_DIR	= src/executor/
@@ -45,7 +45,7 @@ MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 ######## OBJ ###############
 SRC_DIR		= src/
 OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILDINS)
+SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)
