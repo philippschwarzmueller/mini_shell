@@ -13,7 +13,7 @@
 # include "../lib/libft/libft.h"
 # include "lexer.h"
 # include "parser.h"
-# include "buildins.h"
+# include "builtins.h"
 # include "executor.h"
 
 void	print_parsed_lst(t_list *lst);
