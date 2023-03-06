@@ -15,7 +15,7 @@ int	builtin_controller_child(t_command *cmd, char **env)
 	if (!ft_strncmp(str, "pwd", 4))
 		return (free(str), ft_pwd(cmd->options), 1);
 	if (!ft_strncmp(str, "env", 4))
-		return (free(str), 1);
+		return (free(str), ft_env(env), 1);
 	return (free(str), 0);
 }
 
