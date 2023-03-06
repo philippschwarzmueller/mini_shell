@@ -23,12 +23,11 @@ int	builtin_controller_parent(t_command *cmd, char **env)
 {
 	char	*str;
 
-	(void)env;
 	str = lower_str(cmd->command);
 	if (str == NULL)
 		return (0);
 	if (!ft_strncmp(str, "cd", 3))
-		return (free(str), ft_cd(cmd->options), 1);
+		return (free(str), ft_cd(cmd->options, env), 1);
 	if (!ft_strncmp(str, "export", 7))
 		return (free(str), 1);
 	if (!ft_strncmp(str, "unset", 6))
