@@ -31,7 +31,7 @@ int	update_env(char **env, char *varname, char *value)
 		i++;
 	}
 	if (env && env[i] && ft_strncmp(varname, env[i], ft_strlen(varname)))
-			env = add_to_environment(env, varname, value);
+		env = add_to_environment(env, varname, value);
 	return (EXIT_SUCCESS);
 }
 
