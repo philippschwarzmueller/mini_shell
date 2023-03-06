@@ -1,13 +1,14 @@
 #include "shell.h"
 
-void	logic(char *input, char **env);
+static char	**get_enviroment(void);
+static void	logic(char *input, char **env);
 
-int	main(int args, char **argv, char **env)
+int	main(void)
 {
 	char	*input;
+	char	**env;
 
-	(void)args;
-	(void)argv;
+	env = get_enviroment();
 	while (1)
 	{
 		init_signalhandlers();
@@ -18,14 +19,35 @@ int	main(int args, char **argv, char **env)
 			rl_replace_line("TEST", 0);
 			rl_redisplay();
 			clear_history();
+			ft_free_stra(env);
 			exit(EXIT_SUCCESS);
 		}
 		logic(input, env);
 	}
+	ft_free_stra(env);
 	return (EXIT_SUCCESS);
 }
 
-void	logic(char *input, char **env)
+static char	**get_enviroment(void)
+{
+	size_t		i;
+	char		**res;
+	extern char	**environ;
+
+	i = 0;
+	if (environ == NULL)
+		return (NULL);
+	res = malloc((ft_stra_len(environ) + 1) * sizeof(char *));
+	while (environ[i] != NULL)
+	{
+		res[i] = ft_strdup(environ[i]);
+		i++;
+	}
+	res[i] = NULL;
+	return (res);
+}
+
+static void	logic(char *input, char **env)
 {
 	t_list	*command_table;
 	t_list	*lexed_args;
