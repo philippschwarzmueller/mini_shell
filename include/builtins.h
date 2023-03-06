@@ -1,5 +1,5 @@
-#ifndef BUILDINS_H
-# define BUILDINS_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
 int	ft_echo(char **stra);
 int	ft_cd(char **options);
