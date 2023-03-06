@@ -20,7 +20,8 @@ void	executor(t_list	*commands, char **env)
 	{
 		dup_input(tmp, pip);
 		pipe(pip);
-		pid = fork();
+		if (!builtin_controller_parent(tmp->content, env))
+			pid = fork();
 		if (pid == 0)
 		{
 			close(orig_in);
@@ -72,7 +73,7 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	char	**cmd;
 	char	*path;
 
-	if (builtin_controller(current, env))
+	if (builtin_controller_child(current, env))
 		exit_builtin(commands);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
