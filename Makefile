@@ -24,7 +24,7 @@ PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## BUILDINS ############
 BUILDINS_DIR	= src/buildins/
-BUILDINS_SRC	= buildin_controller echo cd
+BUILDINS_SRC	= buildin_controller echo pwd cd
 BUILDINS		= $(addprefix $(BUILDINS_DIR), $(addsuffix .c, $(BUILDINS_SRC)))
 
 ######## EXECUTOR ############

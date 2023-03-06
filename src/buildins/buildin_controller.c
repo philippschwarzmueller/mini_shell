@@ -15,7 +15,7 @@ int	buildin_controller(t_command *cmd, char **env)
 	if (!ft_strncmp(str, "cd", 3))
 		return (free(str), ft_cd(cmd->options), 1);
 	if (!ft_strncmp(str, "pwd", 4))
-		return (free(str), ft_printf("at: %s\n", getcwd(NULL, 1)), 1);
+		return (free(str), ft_pwd(cmd->options), 1);
 	if (!ft_strncmp(str, "export", 7))
 		return (free(str), 1);
 	if (!ft_strncmp(str, "unset", 6))
