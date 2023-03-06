@@ -4,9 +4,9 @@ CC			= cc
 LIBFT		= lib/libft/libft.a
 READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
-LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory -fsanitize=address
 INCLUDE		= -I ./lib/readline/include -I include/
-CFLAGS		= -g -Wall -Werror -Wextra
+CFLAGS		= -g -Wall -Werror -Wextra -fsanitize=address
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
@@ -24,7 +24,7 @@ PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## BUILDINS ############
 BUILDINS_DIR	= src/buildins/
-BUILDINS_SRC	= buildin_controller echo
+BUILDINS_SRC	= buildin_controller echo pwd
 BUILDINS		= $(addprefix $(BUILDINS_DIR), $(addsuffix .c, $(BUILDINS_SRC)))
 
 ######## EXECUTOR ############

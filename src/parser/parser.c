@@ -41,7 +41,7 @@ static void	parse_token(t_token *token, struct s_state *state,
 	if (state->command && !state->pipe && !state->option && !state->pipe)
 		cmd = ft_strdup(token->token);
 	else if (state->option && !state->redirect_in && !state->redirect_out
-		&& !state->pipe && !state->append)
+		&& !state->pipe && !state->append && !state->here_doc)
 		*opt = append_options(*opt, token->token);
 	if (!opt)
 	{
@@ -63,22 +63,14 @@ static void	update_state(t_token *token, struct s_state *state)
 	if (token->type == piping)
 		state->pipe = true;
 	else if (token->type == infile)
-	{
 		state->redirect_in = true;
-		state->option = false;
-	}
 	else if (token->type == outfile)
-	{
 		state->redirect_out = true;
-		state->option = false;
-	}
 	else if (token->type == here_doc)
-		ft_printf("heredoc found\n");
+		state->here_doc = true;
 	else if (token->type == append)
-	{
 		state->append = true;
-		state->option = false;
-	}
+	state->option = false;
 	if (state->command == true)
 		state->option = true;
 	else
@@ -116,26 +108,17 @@ static char	**append_options(char **options, char *str)
 
 static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 {
-	int	fd;
-
 	if (ft_strncmp(path, "<<", 2) == 0 || ft_strncmp(path, ">>", 2) == 0
 		|| ft_strncmp(path, "<", 1) == 0 || ft_strncmp(path, ">", 1) == 0)
 		return ;
-	if (state->redirect_in == true)
-	{
-		fd = open(path, O_RDONLY);
-		*in = fd;
-	}
+	if (state->here_doc)
+		*in = ft_here_doc(path);
+	else if (state->redirect_in == true)
+		*in = open(path, O_RDONLY);
 	else if (state->redirect_out == true)
-	{
-		fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		*out = fd;
-	}
+		*out = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (state->append == true)
-	{
-		fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		*out = fd;
-	}
+		*out = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 	{
 		*out = STDOUT_FILENO;
