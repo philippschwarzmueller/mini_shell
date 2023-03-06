@@ -71,9 +71,7 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 {
 	char	**cmd;
 	char	*path;
-	int		i;
 
-	i = 0;
 	if (builtin_controller(current, env))
 		exit_builtin(commands);
 	path = current->command;
