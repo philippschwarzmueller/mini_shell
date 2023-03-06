@@ -27,7 +27,7 @@ int	update_env(char **env, char *varname, char *value)
 	while (env && env[i] && i < ft_stra_len(env))
 	{
 		if (ft_strncmp(varname, env[i], ft_strlen(varname)) == 0)
-			env[i] = ft_strdup(value);
+			env[i] = ft_strjoin(varname, value);
 		i++;
 	}
 	if (env && env[i] && ft_strncmp(varname, env[i], ft_strlen(varname)))
