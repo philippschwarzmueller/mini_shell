@@ -1,7 +1,7 @@
 #include "shell.h"
 
 static char	**get_environment(void);
-static void	logic(char *input, char **env);
+static void	logic(char *input, char ***env);
 
 int	main(void)
 {
@@ -22,7 +22,7 @@ int	main(void)
 			ft_free_stra(env);
 			exit(EXIT_SUCCESS);
 		}
-		logic(input, env);
+		logic(input, &env);
 	}
 	ft_free_stra(env);
 	return (EXIT_SUCCESS);
@@ -47,7 +47,7 @@ static char	**get_environment(void)
 	return (res);
 }
 
-static void	logic(char *input, char **env)
+static void	logic(char *input, char ***env)
 {
 	t_list	*command_table;
 	t_list	*lexed_args;
