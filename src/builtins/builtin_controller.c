@@ -2,7 +2,7 @@
 
 static char	*lower_str(char *str);
 
-int	buildin_controller(t_command *cmd, char **env)
+int	builtin_controller(t_command *cmd, char **env)
 {
 	char	*str;
 
