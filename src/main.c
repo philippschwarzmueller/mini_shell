@@ -31,10 +31,10 @@ void	logic(char *input, char **env)
 	t_list	*lexed_args;
 
 	lexed_args = analyzer(input);
-	//print_lexed_lst(lexed_args);
+	print_lexed_lst(lexed_args);
 	command_table = parse(lexed_args);
 	ft_lstclear(&lexed_args, del_token);
-	//print_parsed_lst(command_table);
+	print_parsed_lst(command_table);
 	executor(command_table, env);
 	ft_lstclear(&command_table, &free_cmd);
 }
