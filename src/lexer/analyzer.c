@@ -28,7 +28,7 @@ t_list	*analyzer(char *str)
 		ft_putendl_fd("sigmashell: unclosed quote", 2);
 		return (free(str), NULL);
 	}
-	remove_val(&lst, NULL);
+	del_first(&lst);
 	return (free(str), lst);
 }
 
