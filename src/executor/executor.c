@@ -80,8 +80,8 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	char	**cmd;
 	char	*path;
 
-	if (!runs_in_parent(current) && buildin_controller(current, env))
-		exit_buildin(commands);
+	if (!runs_in_parent(current) && builtin_controller(current, env))
+		exit_builtin(commands);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0)

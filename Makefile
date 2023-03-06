@@ -14,7 +14,7 @@ WHITE		= \033[0m
 
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
-LEXER_SRC	= analyzer lexer_utils
+LEXER_SRC	= analyzer lexer_utils ft_decrustify_str
 LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## PARSER ############
@@ -23,9 +23,9 @@ PARSER_SRC	= parser parser_utils
 PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## BUILDINS ############
-BUILDINS_DIR	= src/buildins/
-BUILDINS_SRC	= buildin_controller echo pwd cd
-BUILDINS		= $(addprefix $(BUILDINS_DIR), $(addsuffix .c, $(BUILDINS_SRC)))
+BUILTINS_DIR	= src/builtins/
+BUILTINS_SRC	= builtin_controller echo pwd cd
+BUILTINS		= $(addprefix $(BUILTINS_DIR), $(addsuffix .c, $(BUILTINS_SRC)))
 
 ######## EXECUTOR ############
 EXECUTOR_DIR	= src/executor/
@@ -45,7 +45,7 @@ MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 ######## OBJ ###############
 SRC_DIR		= src/
 OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILDINS)
+SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)
