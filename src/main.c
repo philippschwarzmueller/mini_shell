@@ -1,6 +1,6 @@
 #include "shell.h"
 
-static char	**get_enviroment(void);
+static char	**get_environment(void);
 static void	logic(char *input, char **env);
 
 int	main(void)
@@ -8,7 +8,7 @@ int	main(void)
 	char	*input;
 	char	**env;
 
-	env = get_enviroment();
+	env = get_environment();
 	while (1)
 	{
 		init_signalhandlers();
@@ -28,7 +28,7 @@ int	main(void)
 	return (EXIT_SUCCESS);
 }
 
-static char	**get_enviroment(void)
+static char	**get_environment(void)
 {
 	size_t		i;
 	char		**res;
