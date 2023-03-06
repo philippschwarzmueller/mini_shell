@@ -18,24 +18,17 @@ void	executor(t_list	*commands, char **env)
 	tmp = commands;
 	while (tmp != NULL)
 	{
-		if (runs_in_parent(tmp->content))
+		dup_input(tmp, pip);
+		pipe(pip);
+		if (!builtin_controller_parent(tmp->content, env))
+			pid = fork();
+		if (pid == 0)
 		{
-			ft_printf("running in parent\n");
+			close(orig_in);
+			dup_output(tmp, orig_out, pip);
 			exec_cmd(commands, (t_command *)tmp->content, env);
 		}
-		else
-		{
-			dup_input(tmp, pip);
-			pipe(pip);
-			pid = fork();
-			if (pid == 0)
-			{
-				close(orig_in);
-				dup_output(tmp, orig_out, pip);
-				exec_cmd(commands, (t_command *)tmp->content, env);
-			}
-			waitpid(0, NULL, 0);
-		}
+		waitpid(0, NULL, 0);
 		tmp = tmp->next;
 	}
 	dup_back(orig_in, orig_out, pip);
@@ -80,7 +73,7 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	char	**cmd;
 	char	*path;
 
-	if (!runs_in_parent(current) && builtin_controller(current, env))
+	if (builtin_controller_child(current, env))
 		exit_builtin(commands);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
