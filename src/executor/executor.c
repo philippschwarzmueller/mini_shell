@@ -5,7 +5,7 @@ static void	dup_output(t_list *commands, int out, int *pip);
 static void	exec_cmd(t_list *commands, t_command *current, char **env);
 static char	*get_path(char **env, char *arg);
 
-void	executor(t_list	*commands, char **env)
+void	executor(t_list	*commands, char ***env)
 {
 	pid_t	pid;
 	t_list	*tmp;
@@ -26,7 +26,7 @@ void	executor(t_list	*commands, char **env)
 		{
 			close(orig_in);
 			dup_output(tmp, orig_out, pip);
-			exec_cmd(commands, (t_command *)tmp->content, env);
+			exec_cmd(commands, (t_command *)tmp->content, *env);
 		}
 		waitpid(0, NULL, 0);
 		tmp = tmp->next;
