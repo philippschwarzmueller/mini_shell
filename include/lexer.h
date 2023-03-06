@@ -28,8 +28,9 @@ typedef struct s_token
 }			t_token;
 
 void	del_token(void *content);
-void	remove_val(t_list **lst, void *content);
+//void	remove_val(t_list **lst, void *content);
 char	*ft_decrustify_str(char *str);
 void	set_type(t_token *new);
+void	del_first(t_list **lst);
 
 #endif
