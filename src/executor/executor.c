@@ -20,7 +20,7 @@ void	executor(t_list	*commands, char ***env)
 	{
 		dup_input(tmp, pip);
 		pipe(pip);
-		if (!builtin_controller_parent(tmp->content, env))
+		if (!builtin_controller_parent(commands, tmp->content, env))
 			pid = fork();
 		if (pid == 0)
 		{

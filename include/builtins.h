@@ -9,6 +9,7 @@ int		ft_unset(char ***env, char **options);
 int		ft_export(char ***env, char **options);
 char	**add_to_environment(char **env, char *varname, char *value);
 int		update_env(char ***env, char *varname, char *value);
+int		ft_exit(t_list *commands, char ***env);
 
 
 #endif
