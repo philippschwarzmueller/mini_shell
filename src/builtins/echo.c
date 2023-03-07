@@ -14,7 +14,7 @@ int	ft_echo(char **stra)
 	if (stra[i] != NULL)
 		printf("%s", stra[i]);
 	if (!ft_strncmp(stra[0], "-n", 3))
-		return (1);
+		return (EXIT_SUCCESS);
 	printf("\n");
 	return (EXIT_SUCCESS);
 }
