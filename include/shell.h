@@ -21,7 +21,7 @@ void	print_lexed_lst(t_list *lst);
 void	init_signalhandlers(void);
 t_list	*analyzer(char *str);
 t_list	*parse(t_list *lexed_args);
-int		builtin_controller_parent(t_command *cmd, char ***env);
+int		builtin_controller_parent(t_list *cmds, t_command *cmd, char ***env);
 int		builtin_controller_child(t_command *cmd, char **env);
 void	executor(t_list	*commands, char ***env);
 
