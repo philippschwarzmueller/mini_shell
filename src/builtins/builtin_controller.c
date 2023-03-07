@@ -63,10 +63,13 @@ int	update_env(char ***env, char *varname, char *value)
 	ev = *env;
 	while (ev && ev[i] && ft_strncmp(varname, ev[i], ft_strlen(varname)))
 		i++;
-	if (ev[i] != NULL && value != NULL)
+	if (ev[i] != NULL && ft_strchr(varname, '='))
 	{
 		free(ev[i]);
-		ev[i] = ft_strjoin(varname, value);
+		if (value == NULL)
+			ev[i] = ft_strdup(varname);
+		else
+			ev[i] = ft_strjoin(varname, value);
 	}
 	else if (ev[i] == NULL)
 		*env = add_to_environment(*env, varname, value);
