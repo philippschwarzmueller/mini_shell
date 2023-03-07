@@ -9,13 +9,13 @@ int	ft_export(char ***env, char **options)
 	char	*var_name;
 	char	*var_value;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	var_name = NULL;
 	var_value = NULL;
 	if (!(*env) || !options)
-		return (print_error(*env), 1);
-	while (options[i] != NULL)
+		return (print_error(*env), EXIT_FAILURE);
+	while (options[++i] != NULL)
 	{
 		while (options[i][j] && options[i][j] != '=')
 			j++;
@@ -27,9 +27,8 @@ int	ft_export(char ***env, char **options)
 		free(var_value);
 		var_value = NULL;
 		j = 0;
-		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static void	print_error(char **env)
