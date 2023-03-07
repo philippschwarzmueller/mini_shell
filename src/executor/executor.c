@@ -28,7 +28,7 @@ void	executor(t_list	*commands, char ***env)
 			dup_output(tmp, orig_out, pip);
 			exec_cmd(commands, (t_command *)tmp->content, *env);
 		}
-		waitpid(0, NULL, 0);
+		waitpid(pid, &exit_code, 0);
 		tmp = tmp->next;
 	}
 	dup_back(orig_in, orig_out, pip);

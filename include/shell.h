@@ -16,6 +16,8 @@
 # include "builtins.h"
 # include "executor.h"
 
+int	exit_code;
+
 void	print_parsed_lst(t_list *lst);
 void	print_lexed_lst(t_list *lst);
 void	init_signalhandlers(void);
