@@ -64,6 +64,8 @@ static void	logic(char *input, char ***env)
 	ft_printf("EXPANDED COMMAND TABLE\n");
 	print_parsed_lst(expanded_command_table);
 	executor(expanded_command_table, env);
+	executor(command_table, env);
+	printf("%d\n", exit_code);
 	ft_lstclear(&command_table, &free_cmd);
 }
 
