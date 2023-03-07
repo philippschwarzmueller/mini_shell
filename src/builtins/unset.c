@@ -6,12 +6,24 @@ static char	**realloc_env(char **env, size_t del);
 int	ft_unset(char ***env, char **options)
 {
 	size_t	i;
+	char	*error;
 
 	i = 0;
+	error = NULL;
 	if (!(*env) || !options)
 		return (1);
 	while (options[i] != NULL)
-		*env = remove_envvar(*env, options[i++]);
+	{
+		if (ft_strchr(options[i], '='))
+		{
+			error = ft_strjoin("sigmashell: unset: `", options[i++]);
+			error = ft_strjoin_f(error, "': not a valid identifier");
+			ft_putendl_fd(error, 2);
+			free(error);
+		}
+		else
+			*env = remove_envvar(*env, options[i++]);
+	}
 	return (0);
 }
 
