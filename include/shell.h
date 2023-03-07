@@ -13,7 +13,7 @@
 # include "../lib/libft/libft.h"
 # include "lexer.h"
 # include "parser.h"
-# include "buildins.h"
+# include "builtins.h"
 # include "executor.h"
 
 void	print_parsed_lst(t_list *lst);
@@ -22,8 +22,8 @@ void	init_signalhandlers(void);
 t_list	*analyzer(char *str);
 t_list	*parse(t_list *lexed_args);
 t_list	*expand(t_list *command_table, char **env);
-int		builtin_controller_parent(t_command *cmd, char **env);
+int		builtin_controller_parent(t_list *cmds, t_command *cmd, char ***env);
 int		builtin_controller_child(t_command *cmd, char **env);
-void	executor(t_list	*commands, char **env);
+void	executor(t_list	*commands, char ***env);
 
 #endif

@@ -15,11 +15,11 @@ int	builtin_controller_child(t_command *cmd, char **env)
 	if (!ft_strncmp(str, "pwd", 4))
 		return (free(str), ft_pwd(cmd->options), 1);
 	if (!ft_strncmp(str, "env", 4))
-		return (free(str), 1);
+		return (free(str), ft_env(env), 1);
 	return (free(str), 0);
 }
 
-int	builtin_controller_parent(t_command *cmd, char **env)
+int	builtin_controller_parent(t_list *cmds, t_command *cmd, char ***env)
 {
 	char	*str;
 
@@ -27,13 +27,13 @@ int	builtin_controller_parent(t_command *cmd, char **env)
 	if (str == NULL)
 		return (0);
 	if (!ft_strncmp(str, "cd", 3))
-		return (free(str), ft_cd(cmd->options, env), 1);
+		return (free(str), ft_cd(cmd->options, *env), 1);
 	if (!ft_strncmp(str, "export", 7))
-		return (free(str), 1);
+		return (free(str), ft_export(env, cmd->options), 1);
 	if (!ft_strncmp(str, "unset", 6))
-		return (free(str), 1);
+		return (free(str), ft_unset(env, cmd->options), 1);
 	if (!ft_strncmp(str, "exit", 5))
-		return (free(str), 1);
+		return (free(str), ft_exit(cmds, env), 1);
 	return (free(str), 0);
 }
 
@@ -51,5 +51,51 @@ static char	*lower_str(char *str)
 		res[i] = ft_tolower(str[i]);
 		i++;
 	}
+	return (res);
+}
+
+int	update_env(char ***env, char *varname, char *value)
+{
+	size_t	i;
+	char	**ev;
+
+	i = 0;
+	ev = *env;
+	while (ev && ev[i] && ft_strncmp(varname, ev[i], ft_strlen(varname)))
+		i++;
+	if (ev[i] != NULL && ft_strchr(varname, '='))
+	{
+		free(ev[i]);
+		if (value == NULL)
+			ev[i] = ft_strdup(varname);
+		else
+			ev[i] = ft_strjoin(varname, value);
+	}
+	else if (ev[i] == NULL)
+		*env = add_to_environment(*env, varname, value);
+	return (EXIT_SUCCESS);
+}
+
+char	**add_to_environment(char **env, char *varname, char *value)
+{
+	size_t		i;
+	char		**res;
+
+	i = 0;
+	if (env == NULL)
+		return (NULL);
+	res = malloc((ft_stra_len(env) + 2) * sizeof(char *));
+	while (env[i] != NULL)
+	{
+		res[i] = env[i];
+		i++;
+	}
+	if (value != NULL)
+		res[i] = ft_strjoin(varname, value);
+	else
+		res[i] = ft_strdup(varname);
+	i++;
+	res[i] = NULL;
+	free(env);
 	return (res);
 }

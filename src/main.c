@@ -1,7 +1,7 @@
 #include "shell.h"
 
 static char	**get_environment(void);
-static void	logic(char *input, char **env);
+static void	logic(char *input, char ***env);
 
 int	main(void)
 {
@@ -22,7 +22,7 @@ int	main(void)
 			ft_free_stra(env);
 			exit(EXIT_SUCCESS);
 		}
-		logic(input, env);
+		logic(input, &env);
 		system("leaks minishell");
 	}
 	ft_free_stra(env);
@@ -48,7 +48,7 @@ static char	**get_environment(void)
 	return (res);
 }
 
-static void	logic(char *input, char **env)
+static void	logic(char *input, char ***env)
 {
 	t_list	*command_table;
 	t_list	*lexed_args;
@@ -60,7 +60,7 @@ static void	logic(char *input, char **env)
 	ft_lstclear(&lexed_args, del_token);
 	ft_printf("COMMAND TABLE\n");
 	print_parsed_lst(command_table);
-	expanded_command_table = expand(command_table, env);
+	expanded_command_table = expand(command_table, *env);
 	//ft_lstclear(&command_table, free_cmd);
 	ft_printf("EXPANDED COMMAND TABLE\n");
 	print_parsed_lst(expanded_command_table);

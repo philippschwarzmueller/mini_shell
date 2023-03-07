@@ -29,7 +29,7 @@ PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## BUILDINS ############
 BUILTINS_DIR	= src/builtins/
-BUILTINS_SRC	= builtin_controller echo pwd cd
+BUILTINS_SRC	= builtin_controller echo pwd cd env unset export exit
 BUILTINS		= $(addprefix $(BUILTINS_DIR), $(addsuffix .c, $(BUILTINS_SRC)))
 
 ######## EXECUTOR ############
