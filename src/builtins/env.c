@@ -6,12 +6,12 @@ int	ft_env(char **env)
 
 	i = 0;
 	if (env == NULL)
-		return (1);
+		return (EXIT_FAILURE);
 	while (env[i] != NULL)
 	{
 		if (ft_strchr(env[i], '='))
 			printf("%s\n", env[i]);
 		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

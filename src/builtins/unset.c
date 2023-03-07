@@ -11,7 +11,7 @@ int	ft_unset(char ***env, char **options)
 	i = 0;
 	error = NULL;
 	if (!(*env) || !options)
-		return (1);
+		return (EXIT_FAILURE);
 	while (options[i] != NULL)
 	{
 		if (ft_strchr(options[i], '='))
@@ -24,7 +24,7 @@ int	ft_unset(char ***env, char **options)
 		else
 			*env = remove_envvar(*env, options[i++]);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 static char	**remove_envvar(char **env, char *option)
