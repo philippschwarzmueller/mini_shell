@@ -1,6 +1,6 @@
 #include "shell.h"
 
-static void	print_error(char **env)
+static void	print_error(char **env);
 
 int	ft_export(char ***env, char **options)
 {
@@ -17,11 +17,11 @@ int	ft_export(char ***env, char **options)
 		return (print_error(*env), 1);
 	while (options[i] != NULL)
 	{
-		while (options[i][j] != '=')
+		while (options[i][j] && options[i][j] != '=')
 			j++;
 		var_name = ft_substr(options[i], 0, j + 1);
-		if (ft_strlen(option[i]) > (j + 1))
-			var_value = ft_substr(options[i], j + 2, ft_strlen(option[i]));
+		if (ft_strlen(options[i]) > (j + 1))
+			var_value = ft_substr(options[i], j + 1, ft_strlen(options[i]));
 		update_env(env, var_name, var_value);
 		free(var_name);
 		free(var_value);
