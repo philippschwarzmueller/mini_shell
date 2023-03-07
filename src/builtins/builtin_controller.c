@@ -54,22 +54,24 @@ static char	*lower_str(char *str)
 	return (res);
 }
 
-int	update_env(char **env, char *varname, char *value)
+int	update_env(char ***env, char *varname, char *value)
 {
 	size_t	i;
+	char	**ev;
 
 	i = 0;
-	while (env && env[i] && i < ft_stra_len(env))
+	ev = *env;
+	while (ev && ev[i] && !ft_strncmp(varname, ev[i], ft_strlen(varname)))
 	{
-		if (ft_strncmp(varname, env[i], ft_strlen(varname)) == 0)
+		if (value != NULL)
 		{
-			free(env[i]);
-			env[i] = ft_strjoin(varname, value);
+			free(ev[i]);
+			ev[i] = ft_strjoin(varname, value);
 		}
 		i++;
 	}
-	if (env && env[i] && ft_strncmp(varname, env[i], ft_strlen(varname)))
-		env = add_to_environment(env, varname, value);
+	if (ev[i] == NULL)
+		*env = add_to_environment(env, varname, value);
 	return (EXIT_SUCCESS);
 }
 
@@ -87,7 +89,10 @@ char	**add_to_environment(char **env, char *varname, char *value)
 		res[i] = env[i];
 		i++;
 	}
-	res[i] = ft_strjoin(varname, value);
+	if (value != NULL)
+		res[i] = ft_strjoin(varname, value);
+	else
+		res[i] = ft_strdup(varname);
 	i++;
 	res[i] = NULL;
 	free(env);
