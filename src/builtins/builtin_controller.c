@@ -29,7 +29,7 @@ int	builtin_controller_parent(t_command *cmd, char ***env)
 	if (!ft_strncmp(str, "cd", 3))
 		return (free(str), ft_cd(cmd->options, *env), 1);
 	if (!ft_strncmp(str, "export", 7))
-		return (free(str), 1);
+		return (free(str), ft_export(env, cmd->options), 1);
 	if (!ft_strncmp(str, "unset", 6))
 		return (free(str), ft_unset(env, cmd->options), 1);
 	if (!ft_strncmp(str, "exit", 5))
@@ -61,17 +61,15 @@ int	update_env(char ***env, char *varname, char *value)
 
 	i = 0;
 	ev = *env;
-	while (ev && ev[i] && !ft_strncmp(varname, ev[i], ft_strlen(varname)))
-	{
-		if (value != NULL)
-		{
-			free(ev[i]);
-			ev[i] = ft_strjoin(varname, value);
-		}
+	while (ev && ev[i] && ft_strncmp(varname, ev[i], ft_strlen(varname)))
 		i++;
+	if (ev[i] != NULL && value != NULL)
+	{
+		free(ev[i]);
+		ev[i] = ft_strjoin(varname, value);
 	}
-	if (ev[i] == NULL)
-		*env = add_to_environment(env, varname, value);
+	else if (ev[i] == NULL)
+		*env = add_to_environment(*env, varname, value);
 	return (EXIT_SUCCESS);
 }
 
