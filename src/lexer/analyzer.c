@@ -22,7 +22,7 @@ t_list	*analyzer(char *str)
 			ft_lstadd_back(&lst, ft_lstnew(tokenize(str, i, &len)));
 		i++;
 	}
-	if (state.is_dquoted || state.is_squoted)
+	if (state.is_dquoted || state.is_squoted || state.is_escaped)
 	{
 		ft_lstclear(&lst, del_token);
 		ft_putendl_fd("sigmashell: unclosed quote", 2);
@@ -76,7 +76,7 @@ static void	change_state(char c, t_state_lex *state)
 
 static int	check_next_char(char c, t_state_lex *state)
 {
-	if (c == 0)
+	if (c == 0 && (state->is_word || state->is_operator))
 		return (1);
 	if (state->is_dquoted || state->is_squoted)
 		return (0);
