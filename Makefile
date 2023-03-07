@@ -12,6 +12,11 @@ GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
 
+######## EXPANDER #############
+EXPANDER_DIR	= src/expander/
+EXPANDER_SRC	= expander
+EXPANDER		= $(addprefix $(EXPANDER_DIR), $(addsuffix .c, $(EXPANDER_SRC)))
+
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
 LEXER_SRC	= analyzer lexer_utils ft_decrustify_str
@@ -45,7 +50,8 @@ MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 ######## OBJ ###############
 SRC_DIR		= src/
 OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS)
+SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS) \
+			  $(EXPANDER)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)
