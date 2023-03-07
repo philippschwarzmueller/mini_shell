@@ -23,6 +23,7 @@ int	main(void)
 			exit(EXIT_SUCCESS);
 		}
 		logic(input, env);
+		system("leaks minishell");
 	}
 	ft_free_stra(env);
 	return (EXIT_SUCCESS);
