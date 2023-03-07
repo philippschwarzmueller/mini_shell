@@ -4,13 +4,18 @@ CC			= cc
 LIBFT		= lib/libft/libft.a
 READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
-LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory -fsanitize=address
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory
 INCLUDE		= -I ./lib/readline/include -I include/
-CFLAGS		= -g -Wall -Werror -Wextra -fsanitize=address
+CFLAGS		= -g -Wall -Werror -Wextra
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
 WHITE		= \033[0m
+
+######## EXPANDER #############
+EXPANDER_DIR	= src/expander/
+EXPANDER_SRC	= expander
+EXPANDER		= $(addprefix $(EXPANDER_DIR), $(addsuffix .c, $(EXPANDER_SRC)))
 
 ######## LEXER #############
 LEXER_DIR	= src/lexer/
@@ -45,7 +50,8 @@ MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 ######## OBJ ###############
 SRC_DIR		= src/
 OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS)
+SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS) \
+			  $(EXPANDER)
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)
