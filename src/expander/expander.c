@@ -44,15 +44,17 @@ char	*expand_string(char *command, char **env)
 	char	*temp;
 
 	var = ft_strchr(command, '$');
-	if (!var)
+	if (var == 0)
 		return (command);
 	var++;
+	var = ft_strdup(var);
 	temp = command;
 	command = get_env_value(var, env);
-	if (command)
+	if (command != NULL)
 		free(temp);
 	else
 		command = temp;
+	free(var);
 	return (command);
 }
 
@@ -60,13 +62,15 @@ char	*get_env_value(char *varname, char **env)
 {
 	char	*res;
 	size_t	i;
+	char	*value;
 
 	i = 0;
 	while (env && env[i] && i < ft_stra_len(env))
 	{
 		if (ft_strncmp(varname, env[i], ft_strlen(varname)) == 0)
 		{
-			res = ft_strdup(ft_strchr(env[i], '=') + 1);
+			value = ft_strchr(env[i], '=') + 1;
+			res = ft_strdup(value);
 			return (res);
 		}
 		i++;

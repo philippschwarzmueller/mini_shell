@@ -59,8 +59,8 @@ static void	logic(char *input, char ***env)
 	command_table = parse(lexed_args);
 	ft_lstclear(&lexed_args, del_token);
 	ft_printf("COMMAND TABLE\n");
-	print_parsed_lst(command_table);
 	expanded_command_table = expand(command_table, *env);
+	print_parsed_lst(command_table);
 	//ft_lstclear(&command_table, free_cmd);
 	ft_printf("EXPANDED COMMAND TABLE\n");
 	print_parsed_lst(expanded_command_table);
