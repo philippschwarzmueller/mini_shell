@@ -18,14 +18,14 @@ EXPANDER_SRC	= expander
 EXPANDER		= $(addprefix $(EXPANDER_DIR), $(addsuffix .c, $(EXPANDER_SRC)))
 
 ######## LEXER #############
-LEXER_DIR	= src/lexer/
-LEXER_SRC	= analyzer lexer_utils ft_decrustify_str
-LEXER		= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
+LEXER_DIR		= src/lexer/
+LEXER_SRC		= analyzer lexer_utils ft_decrustify_str
+LEXER			= $(addprefix $(LEXER_DIR), $(addsuffix .c, $(LEXER_SRC)))
 
 ######## PARSER ############
-PARSER_DIR	= src/parser/
-PARSER_SRC	= parser parser_utils
-PARSER		= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
+PARSER_DIR		= src/parser/
+PARSER_SRC		= parser parser_utils
+PARSER			= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## BUILDINS ############
 BUILTINS_DIR	= src/builtins/
@@ -38,21 +38,21 @@ EXECUTOR_SRC	= executor exec_utils
 EXECUTOR		= $(addprefix $(EXECUTOR_DIR), $(addsuffix .c, $(EXECUTOR_SRC)))
 
 ######## SIGNAL ############
-SIGNAL_DIR	= src/signal/
-SIGNAL_SRC	= signal_handling
-SIGNAL		= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
+SIGNAL_DIR		= src/signal/
+SIGNAL_SRC		= signal_handling
+SIGNAL			= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
 
 ######## MAIN ##############
-MAIN_DIR	= src/
-MAIN_SRC	= main
-MAIN		= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
+MAIN_DIR		= src/
+MAIN_SRC		= main
+MAIN			= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 
 ######## OBJ ###############
-SRC_DIR		= src/
-OBJ_DIR		= obj/
-SRC			= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS) \
-			  $(EXPANDER)
-OBJ			= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
+SRC_DIR			= src/
+OBJ_DIR			= obj/
+SRC				= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS) \
+				  $(EXPANDER)
+OBJ				= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 all:		$(NAME)
 
