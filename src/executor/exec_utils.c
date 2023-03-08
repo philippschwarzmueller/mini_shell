@@ -15,7 +15,7 @@ void	err(char *mess, int e_code, t_list *commands)
 void	exit_builtin(t_list *commands)
 {
 	ft_lstclear(&commands, free_cmd);
-	exit(exit_code);
+	exit(g_exit_code);
 }
 
 char	**join_cmd(char *command, char **cmd)
