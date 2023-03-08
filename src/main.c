@@ -63,9 +63,8 @@ static void	logic(char *input, char ***env)
 	expanded_command_table = expand(command_table, *env);
 	ft_printf("EXPANDED COMMAND TABLE\n");
 	print_parsed_lst(expanded_command_table);
-	executor(expanded_command_table, env);
 	executor(command_table, env);
-	printf("%d\n", exit_code);
+	printf("\033[0;32mexit_code: \033[0m%d\n", exit_code);
 	ft_lstclear(&command_table, &free_cmd);
 }
 

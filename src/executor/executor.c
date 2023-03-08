@@ -24,11 +24,11 @@ void	executor(t_list	*commands, char ***env)
 			pid = fork();
 		if (pid == 0)
 		{
-			close(orig_in);
 			dup_output(tmp, orig_out, pip);
 			exec_cmd(commands, (t_command *)tmp->content, *env);
 		}
 		waitpid(pid, &exit_code, 0);
+		exit_code = WEXITSTATUS(exit_code);
 		tmp = tmp->next;
 	}
 	dup_back(orig_in, orig_out, pip);
