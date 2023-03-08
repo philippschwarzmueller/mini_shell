@@ -4,25 +4,19 @@ char	*expand_string(char *command, char **env);
 char	*get_env_value(char *var, char **env);
 char	**expand_options(char **options, char **env);
 
-t_list	*expand(t_list *command_table, char **env)
+void	expand(t_list **command_table, char **env)
 {
-	t_list		*res;
-	t_list		*del;
-	t_command	*temp;
+	t_list		*tmp;
+	t_command	*current;
 
-	res = ft_lstnew(NULL);
-	while (command_table != NULL)
+	tmp = *command_table;
+	while (tmp != NULL)
 	{
-		temp = command_table->content;
-		temp->command = expand_string(temp->command, env);
-		temp->options = expand_options(temp->options, env);
-		ft_lstadd_back(&res, ft_lstnew(temp));
-		command_table = command_table->next;
+		current = tmp->content;
+		current->command = expand_string(current->command, env);
+		current->options = expand_options(current->options, env);
+		tmp = tmp->next;
 	}
-	del = res;
-	res = res->next;
-	ft_lstdelone(del, free);
-	return (res);
 }
 
 char	**expand_options(char **options, char **env)
