@@ -38,17 +38,18 @@ static void	parse_token(t_token *token, struct s_state *state,
 	char		**helper;
 
 	update_state(token, state);
-	if (state->command && !state->pipe && !state->option && !state->pipe)
-		cmd = ft_strdup(token->token);
-	else if (state->option && !state->redirect_in && !state->redirect_out
-		&& !state->pipe && !state->append && !state->here_doc)
-		*opt = append_options(*opt, token->token);
 	if (!opt)
 	{
 		helper = NULL;
 		opt = &helper;
 	}
-	update_in_out(&in, &out, state, token->token);
+	if (state->pipe || state->redirect_in || state->redirect_out
+		|| state->append || state->here_doc)
+		update_in_out(&in, &out, state, token->token);
+	else if (state->command && !state->pipe && !state->option)
+		cmd = ft_strdup(token->token);
+	else if (state->option && !state->pipe)
+		*opt = append_options(*opt, token->token);
 	if (state->pipe == true || state->last == true)
 	{
 		ft_lstadd_back(&cmd_table, ft_lstnew(create_cmd(cmd, *opt, in, out)));
@@ -58,30 +59,13 @@ static void	parse_token(t_token *token, struct s_state *state,
 	}
 }
 
-static void	update_state(t_token *token, struct s_state *state)
+void	print_state(t_token *token, struct s_state *state)
 {
-	if (token->type == piping)
-		state->pipe = true;
-	else if (token->type == infile)
-		state->redirect_in = true;
-	else if (token->type == outfile)
-		state->redirect_out = true;
-	else if (token->type == here_doc)
-		state->here_doc = true;
-	else if (token->type == append)
-		state->append = true;
-	state->option = false;
-	if (state->command == true && !state->pipe && !state->redirect_in
-		&& !state->redirect_out && !state->here_doc && !state->append)
-	{
-		state->option = true;
-	}
-	else if (state->option == false && !state->pipe && !state->redirect_in
-		&& !state->redirect_out && !state->here_doc && !state->append)
-		state->command = true;
-	else if (state->option == false && state->command == false)
-		state->command = true;
-	ft_printf("%s\n", token->token);
+	ft_printf("--\n");
+	ft_printf("token: %s \n", token->token);
+	ft_printf("token_type: %d \n", token->type);
+	ft_printf("--\n");
+	ft_printf("-------------\n");
 	ft_printf("command: %d\n", state->command);
 	ft_printf("option: %d\n", state->option);
 	ft_printf("here_doc: %d\n", state->here_doc);
@@ -91,6 +75,35 @@ static void	update_state(t_token *token, struct s_state *state)
 	ft_printf("pipe: %d\n", state->pipe);
 	ft_printf("last: %d\n", state->last);
 	ft_printf("-------------\n");
+}
+
+static void	update_state(t_token *token, struct s_state *state)
+{
+	if (token->type == word)
+	{
+		if (!state->redirect_out && !state->redirect_in && !state->append && !state->here_doc)
+		{
+			if (state->command == true)
+				state->option = true;
+			else
+				state->command = true;
+		}
+	}
+	else if (token->type != syntax)
+	{
+		if (token->type == piping)
+			state->pipe = true;
+		else if (token->type == here_doc)
+			state->here_doc = true;
+		else if (token->type == infile)
+			state->redirect_in = true;
+		else if (token->type == outfile)
+			state->redirect_out = true;
+		else if (token->type == append)
+			state->append = true;
+		state->command = false;
+	}
+	print_state(token, state);
 }
 
 static char	**append_options(char **options, char *str)
@@ -139,6 +152,7 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 	}
 	else if (state->redirect_out == true)
 	{
+		ft_printf("I AM IN REDIRECT OUT\n");
 		*out = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		state->redirect_out = false;
 	}
@@ -147,10 +161,4 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 		*out = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		state->append = false;
 	}
-	else
-	{
-		*out = STDOUT_FILENO;
-		*in = STDIN_FILENO;
-	}
-	state->command = false;
 }
