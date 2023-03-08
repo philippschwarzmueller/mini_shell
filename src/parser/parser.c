@@ -71,10 +71,26 @@ static void	update_state(t_token *token, struct s_state *state)
 	else if (token->type == append)
 		state->append = true;
 	state->option = false;
-	if (state->command == true)
+	if (state->command == true && !state->pipe && !state->redirect_in
+		&& !state->redirect_out && !state->here_doc && !state->append)
+	{
 		state->option = true;
-	else
+	}
+	else if (state->option == false && !state->pipe && !state->redirect_in
+		&& !state->redirect_out && !state->here_doc && !state->append)
 		state->command = true;
+	else if (state->option == false && state->command == false)
+		state->command = true;
+	ft_printf("%s\n", token->token);
+	ft_printf("command: %d\n", state->command);
+	ft_printf("option: %d\n", state->option);
+	ft_printf("here_doc: %d\n", state->here_doc);
+	ft_printf("redirect_in: %d\n", state->redirect_in);
+	ft_printf("redirect_out: %d\n", state->redirect_out);
+	ft_printf("append: %d\n", state->append);
+	ft_printf("pipe: %d\n", state->pipe);
+	ft_printf("last: %d\n", state->last);
+	ft_printf("-------------\n");
 }
 
 static char	**append_options(char **options, char *str)
@@ -112,16 +128,29 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 		|| ft_strncmp(path, "<", 1) == 0 || ft_strncmp(path, ">", 1) == 0)
 		return ;
 	if (state->here_doc)
+	{
 		*in = ft_here_doc(path);
+		state->here_doc = false;
+	}
 	else if (state->redirect_in == true)
+	{
 		*in = open(path, O_RDONLY);
+		state->redirect_in = false;
+	}
 	else if (state->redirect_out == true)
+	{
 		*out = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		state->redirect_out = false;
+	}
 	else if (state->append == true)
+	{
 		*out = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		state->append = false;
+	}
 	else
 	{
 		*out = STDOUT_FILENO;
 		*in = STDIN_FILENO;
 	}
+	state->command = false;
 }
