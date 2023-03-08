@@ -55,14 +55,14 @@ static void	logic(char *input, char ***env)
 	t_list	*expanded_command_table;
 
 	lexed_args = analyzer(input);
-	print_lexed_lst(lexed_args);
+	//print_lexed_lst(lexed_args);
 	command_table = parse(lexed_args);
 	ft_lstclear(&lexed_args, del_token);
-	ft_printf("COMMAND TABLE\n");
-	print_parsed_lst(command_table);
+	// ft_printf("COMMAND TABLE\n");
+	// print_parsed_lst(command_table);
 	expanded_command_table = expand(command_table, *env);
-	ft_printf("EXPANDED COMMAND TABLE\n");
-	print_parsed_lst(expanded_command_table);
+	// ft_printf("EXPANDED COMMAND TABLE\n");
+	// print_parsed_lst(expanded_command_table);
 	executor(command_table, env);
 	printf("\033[0;32mexit_code: \033[0m%d\n", exit_code);
 	ft_lstclear(&command_table, &free_cmd);
