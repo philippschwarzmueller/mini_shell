@@ -6,7 +6,6 @@ int	builtin_controller_child(t_command *cmd, char **env)
 {
 	char	*str;
 
-	(void)env;
 	str = lower_str(cmd->command);
 	if (str == NULL)
 		return (0);
@@ -23,6 +22,8 @@ int	builtin_controller_parent(t_list *cmds, t_command *cmd, char ***env)
 {
 	char	*str;
 
+	if (ft_lstsize(cmds) > 1)
+		return (g_exit_code = 0, 0);
 	str = lower_str(cmd->command);
 	if (str == NULL)
 		return (0);
