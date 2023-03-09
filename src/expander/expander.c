@@ -26,9 +26,7 @@ static char	**expand_options(char **options, char **env)
 	while (options && options[i] && i < ft_stra_len(options))
 	{
 		options[i] = expand_string(options[i], env);
-		if (ft_strchr(options[i], '\"') || ft_strchr(options[i], '\'')
-			|| ft_strchr(options[i], '\\'))
-			options[i] = ft_decrustify_str(options[i]);
+		options[i] = ft_decrustify_str(options[i]);
 		i++;
 	}
 	return (options);
