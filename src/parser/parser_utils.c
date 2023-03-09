@@ -45,7 +45,7 @@ void	free_cmd(void *pointer)
 	free(command);
 }
 
-int	ft_here_doc(char *delimiter)
+int	ft_here_doc(char *delimiter, char **env)
 {
 	char	*str;
 	char	*delimit_signal;
@@ -57,6 +57,7 @@ int	ft_here_doc(char *delimiter)
 	delimit_signal = ft_strjoin(delimiter, "\n");
 	while (str && ft_strncmp(delimit_signal, str, ft_strlen(str) - 1))
 	{
+		str = expand_string(str, env);
 		ft_putstr_fd(str, src[1]);
 		free(str);
 		str = get_next_line(0);

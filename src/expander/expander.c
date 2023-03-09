@@ -1,7 +1,6 @@
 #include "shell.h"
 
 static char	**expand_options(char **options, char **env);
-static char	*expand_string(char *str, char **env);
 static char	*ft_decrustify_str(char *str);
 
 void	expand(t_list **command_table, char **env)
@@ -35,7 +34,7 @@ static char	**expand_options(char **options, char **env)
 	return (options);
 }
 
-static char	*expand_string(char *str, char **env)
+char	*expand_string(char *str, char **env)
 {
 	size_t		i;
 	size_t		j;
