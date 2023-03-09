@@ -102,9 +102,6 @@ static t_token	*tokenize(char *str, size_t i, size_t *len)
 	new->token = ft_substr(str, ((i + 1) - *len), *len);
 	new->type = word;
 	set_type(new);
-	if (ft_strchr(new->token, '\"') || ft_strchr(new->token, '\'')
-		|| ft_strchr(new->token, '\\'))
-		new->token = ft_decrustify_str(new->token);
 	*len = 0;
 	if (new->token[0] == 0)
 		return (del_token(new), NULL);

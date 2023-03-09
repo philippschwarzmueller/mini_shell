@@ -13,6 +13,7 @@
 # include "../lib/libft/libft.h"
 # include "lexer.h"
 # include "parser.h"
+# include "expander.h"
 # include "builtins.h"
 # include "executor.h"
 
