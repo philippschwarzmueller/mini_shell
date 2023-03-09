@@ -34,10 +34,16 @@ int	ft_export(char ***env, char **options)
 static void	print_error(char **env)
 {
 	size_t	i;
+	char	*str;
 
 	i = 0;
+	str = NULL;
 	if (env == NULL)
 		return ;
 	while (env[i] != NULL)
-		printf("declare -x %s\n", env[i++]);
+	{
+		str = ft_strjoin("declare -x", env[i++]);
+		ft_putendl_fd(str, 2);
+		free(str);
+	}
 }

@@ -1,6 +1,6 @@
 #include "shell.h"
 
-void	err(char *mess, int exit_code, t_list *commands)
+void	err(char *mess, int e_code, t_list *commands)
 {
 	char	*err;
 
@@ -9,13 +9,13 @@ void	err(char *mess, int exit_code, t_list *commands)
 	ft_putendl_fd(err, 2);
 	free(mess);
 	free(err);
-	exit(exit_code);
+	exit(e_code);
 }
 
 void	exit_builtin(t_list *commands)
 {
 	ft_lstclear(&commands, free_cmd);
-	exit(1);
+	exit(g_exit_code);
 }
 
 char	**join_cmd(char *command, char **cmd)
