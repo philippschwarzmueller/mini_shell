@@ -30,11 +30,13 @@ struct s_state	init_state(void)
 	state.pipe = false;
 	state.option = false;
 	state.command = false;
-	state.redirect_in = false;
-	state.redirect_out = false;
+	state.redir_in = false;
+	state.redir_out = false;
 	state.append = false;
 	state.last = false;
 	state.here_doc = false;
+	state.in_set = false;
+	state.out_set = false;
 	return (state);
 }
 
