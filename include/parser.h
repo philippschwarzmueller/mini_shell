@@ -36,5 +36,7 @@ void			reset_cmd(char **command, char ***options, int *in, int *out);
 struct s_state	init_state(void);
 int				ft_here_doc(char *delimiter);
 void			default_in_out(int *in, int *out, struct s_state *state);
+void			update_state(t_token *token, struct s_state *state, char *cmd);
+void			update_in_out_state(struct s_state *state, t_type type);
 
 #endif
