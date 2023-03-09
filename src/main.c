@@ -16,8 +16,9 @@ int	main(void)
 		add_history(input);
 		if (input == NULL)
 		{
-			rl_replace_line("TEST", 0);
-			rl_redisplay();
+			ft_putstr_fd("\x1b[1A", STDOUT_FILENO);
+			ft_putstr_fd("\033[12C", STDOUT_FILENO);
+			ft_putendl_fd(" exit", STDOUT_FILENO);
 			clear_history();
 			ft_free_stra(env);
 			exit(EXIT_SUCCESS);
