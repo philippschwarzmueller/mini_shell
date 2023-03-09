@@ -1,8 +1,8 @@
 #include "shell.h"
 
-char	*expand_string(char *command, char **env);
-char	*get_env_value(char *var, char **env);
-char	**expand_options(char **options, char **env);
+static char	**expand_options(char **options, char **env);
+static char	*expand_string(char *str, char **env);
+static char	*ft_decrustify_str(char *str);
 
 void	expand(t_list **command_table, char **env)
 {
@@ -19,7 +19,7 @@ void	expand(t_list **command_table, char **env)
 	}
 }
 
-char	**expand_options(char **options, char **env)
+static char	**expand_options(char **options, char **env)
 {
 	size_t	i;
 
@@ -27,47 +27,64 @@ char	**expand_options(char **options, char **env)
 	while (options && options[i] && i < ft_stra_len(options))
 	{
 		options[i] = expand_string(options[i], env);
+		if (ft_strchr(options[i], '\"') || ft_strchr(options[i], '\'')
+			|| ft_strchr(options[i], '\\'))
+			options[i] = ft_decrustify_str(options[i]);
 		i++;
 	}
 	return (options);
 }
 
-char	*expand_string(char *command, char **env)
+static char	*expand_string(char *str, char **env)
 {
-	char	*var;
-	char	*temp;
-
-	var = ft_strchr(command, '$');
-	if (var == 0)
-		return (command);
-	var++;
-	var = ft_strdup(var);
-	temp = command;
-	command = get_env_value(var, env);
-	if (command != NULL)
-		free(temp);
-	else
-		command = temp;
-	free(var);
-	return (command);
-}
-
-char	*get_env_value(char *varname, char **env)
-{
-	char	*res;
-	size_t	i;
-	char	*value;
+	size_t		i;
+	size_t		j;
+	char		*res;
+	t_state_lex	state;
 
 	i = 0;
-	while (env && env[i] && i < ft_stra_len(env))
+	j = 0;
+	res = NULL;
+	state = (t_state_lex){0, 0, 0, 0, 0};
+	while (str[i])
 	{
-		if (ft_strncmp(varname, env[i], ft_strlen(varname)) == 0)
+		if (str[i] == '$' && !state.is_squoted && !state.is_escaped)
 		{
-			value = ft_strchr(env[i], '=') + 1;
-			res = ft_strdup(value);
-			return (res);
+			res = append_str(str, res, i, j);
+			j = i + 1;
+			while (str[j] && !find_var_end(str[j]))
+				j++;
+			res = append_value(res, ft_substr(str, i + 1, j - i - 1), env);
+			i = j - 1;
 		}
+		state_change(str[i], &state);
 		i++;
 	}
-	return (NULL);
+	return (free(str), append_str(str, res, i, j));
+}
+
+static char	*ft_decrustify_str(char *str)
+{
+	size_t		i;
+	size_t		j;
+	t_state_lex	state;
+	char		*res;
+
+	i = 0;
+	j = 0;
+	state = (t_state_lex){0, 0, 0, 0, 0};
+	res = ft_calloc(ft_strlen(str), sizeof(char));
+	while (str[i])
+	{
+		if ((str[i] != '\"' || state.is_squoted || state.is_escaped)
+			&& (str[i] != '\'' || state.is_dquoted || state.is_escaped)
+			&& (str[i] != '\\' || state.is_escaped))
+			res[j++] = str[i];
+		state_change(str[i], &state);
+		i++;
+	}
+	free(str);
+	str = res;
+	res = ft_strdup(str);
+	return (free(str), res);
 }
