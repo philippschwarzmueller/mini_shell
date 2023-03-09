@@ -21,6 +21,8 @@ t_command	*create_cmd(char *command, char **options, int in, int out)
 {
 	t_command	*cmd;
 
+	if (!command)
+		return (NULL);
 	cmd = malloc(sizeof(*cmd));
 	if (!cmd)
 		return (NULL);
@@ -36,8 +38,12 @@ void	free_cmd(void *pointer)
 	t_command	*command;
 
 	command = (t_command *)pointer;
-	free(command->command);
-	ft_free_stra(command->options);
+	if (!command)
+		return ;
+	if (command->command)
+		free(command->command);
+	if (command->options)
+		ft_free_stra(command->options);
 	if (command->in > 2)
 		close(command->in);
 	if (command->out > 2)
