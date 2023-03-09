@@ -1,18 +1,18 @@
 #include "shell.h"
 
-static void		parse_token(t_token *token, struct s_state *state,
-					t_list *command_table);
+static void		parse_token(t_token *token, struct s_state *s,
+					t_list *cmd_table);
 static char		**append_options(char **options, char *str);
 static void		update_in_out(int *in, int *out, struct s_state *state,
 					char *path);
 
-t_list	*parse(t_list *lexed_arg)
+t_list	*parse(t_list *lexed_arg, char **env)
 {
 	t_list			*command_table;
 	t_list			*del;
 	struct s_state	state;
 
-	state = init_state();
+	state = init_state(env);
 	command_table = ft_lstnew(NULL);
 	while (lexed_arg != NULL)
 	{
@@ -58,7 +58,7 @@ static void	parse_token(t_token *token, struct s_state *s, t_list *cmd_table)
 		ft_lstadd_back(&cmd_table, ft_lstnew(create_cmd(cmd, *opt, in, out)));
 		reset_cmd(&cmd, opt, &in, &out);
 		opt = NULL;
-		*s = init_state();
+		*s = init_state(s->env);
 	}
 }
 
@@ -98,7 +98,7 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 		return ;
 	if (state->here_doc)
 	{
-		*in = ft_here_doc(path);
+		*in = ft_here_doc(path, state->env);
 		update_in_out_state(state, here_doc);
 	}
 	else if (state->redir_in == true)
