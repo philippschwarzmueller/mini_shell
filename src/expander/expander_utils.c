@@ -16,7 +16,15 @@ char	*append_value(char *to_append, char *name, char **env)
 {
 	char	*value;
 
-	value = get_env_value(name, env);
+	if (!ft_strncmp(name, "?", 1))
+	{
+		value = ft_itoa(g_exit_code);
+		if (ft_strlen(name) > 1)
+			value = ft_strjoin_f(value, name + 1);
+		free(name);
+	}
+	else
+		value = get_env_value(name, env);
 	if (value == NULL)
 		return (to_append);
 	if (to_append == NULL)
