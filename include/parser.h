@@ -1,11 +1,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-typedef enum s_bool
-{
-	false,
-	true,
-}	t_bool;
+
 
 struct s_state
 {

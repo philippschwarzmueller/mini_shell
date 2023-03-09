@@ -16,7 +16,15 @@ char	*append_value(char *to_append, char *name, char **env)
 {
 	char	*value;
 
-	value = get_env_value(name, env);
+	if (!ft_strncmp(name, "?", 1))
+	{
+		value = ft_itoa(g_exit_code);
+		if (ft_strlen(name) > 1)
+			value = ft_strjoin_f(value, name + 1);
+		free(name);
+	}
+	else
+		value = get_env_value(name, env);
 	if (value == NULL)
 		return (to_append);
 	if (to_append == NULL)
@@ -52,18 +60,18 @@ void	state_change(char c, t_state_lex *state)
 {
 	if (c == '\"' && !(state->is_escaped)
 		&& !(state->is_squoted) && !(state->is_dquoted))
-		return ((void)(state->is_dquoted = 1));
+		return ((void)(state->is_dquoted = true));
 	if (c == '\'' && !(state->is_escaped)
 		&& !(state->is_dquoted) && !(state->is_squoted))
-		return ((void)(state->is_squoted = 1));
+		return ((void)(state->is_squoted = true));
 	if ((c == '\'' && !(state->is_escaped) && !(state->is_dquoted)))
-		state->is_squoted = 0;
+		state->is_squoted = false;
 	if ((c == '\"' && !(state->is_escaped) && !(state->is_squoted)))
-		state->is_dquoted = 0;
+		state->is_dquoted = false;
 	if (state->is_escaped)
-		state->is_escaped = 0;
+		state->is_escaped = false;
 	else if (c == '\\')
-		state->is_escaped = 1;
+		state->is_escaped = true;
 }
 
 int	find_var_end(char c)

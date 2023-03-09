@@ -36,9 +36,9 @@ static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
 {
 	change_state(str[i], state);
 	if (state->is_escaped)
-		state->is_escaped = 0;
+		state->is_escaped = false;
 	else if (str[i] == '\\')
-		state->is_escaped = 1;
+		state->is_escaped = true;
 	if (!(str[i] == 32 || (str[i] >= 8 && str[i] <= 13))
 		|| (state->is_squoted) || (state->is_dquoted))
 		*len += 1;
@@ -49,28 +49,28 @@ static void	change_state(char c, t_state_lex *state)
 {
 	if (c == '\"' && !(state->is_escaped)
 		&& !(state->is_squoted) && !(state->is_dquoted))
-		return ((void)(state->is_dquoted = 1));
+		return ((void)(state->is_dquoted = true));
 	if (c == '\'' && !(state->is_escaped)
 		&& !(state->is_dquoted) && !(state->is_squoted))
-		return ((void)(state->is_squoted = 1));
+		return ((void)(state->is_squoted = true));
 	if ((c == '\'' && !(state->is_escaped) && !(state->is_dquoted)))
-		state->is_squoted = 0;
+		state->is_squoted = false;
 	if ((c == '\"' && !(state->is_escaped) && !(state->is_squoted)))
-		state->is_dquoted = 0;
+		state->is_dquoted = false;
 	if ((c == '|' || c == '<' || c == '>') && !(state->is_escaped))
 	{
-		state->is_operator = 1;
-		state->is_word = 0;
+		state->is_operator = true;
+		state->is_word = false;
 	}
 	if (!(c == 32 || (c >= 8 && c <= 13)) && (c != '|' && c != '<' && c != '>'))
 	{
-		state->is_operator = 0;
-		state->is_word = 1;
+		state->is_operator = false;
+		state->is_word = true;
 	}
 	if ((c == 32 || (c >= 8 && c <= 13)))
 	{
-		state->is_operator = 0;
-		state->is_word = 0;
+		state->is_operator = false;
+		state->is_word = false;
 	}
 }
 

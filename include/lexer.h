@@ -1,6 +1,12 @@
 #ifndef LEXER_H
 # define LEXER_H
 
+typedef enum s_bool
+{
+	false,
+	true,
+}	t_bool;
+
 typedef enum e_type
 {
 	word,
@@ -14,11 +20,11 @@ typedef enum e_type
 
 typedef struct s_state_lex
 {
-	int	is_word;
-	int	is_squoted;
-	int	is_dquoted;
-	int	is_escaped;
-	int	is_operator;
+	t_bool	is_word;
+	t_bool	is_squoted;
+	t_bool	is_dquoted;
+	t_bool	is_escaped;
+	t_bool	is_operator;
 }		t_state_lex;
 
 typedef struct s_token

@@ -31,18 +31,16 @@ static char	**remove_envvar(char **env, char *option)
 {
 	size_t	i;
 	size_t	len;
-	char	*var;
 
 	i = 0;
-	var = ft_strjoin(option, "=");
-	len = ft_strlen(var);
+	len = ft_strlen(option);
 	while (env[i] != NULL)
 	{
-		if (!ft_strncmp(env[i], var, len))
-			return (free(var), realloc_env(env, i));
+		if (!ft_strncmp(env[i], option, len) && env[i][len - 1]
+			&& (env[i][len] == '=' || env[i][len] == 0))
+			return (realloc_env(env, i));
 		i++;
 	}
-	free(var);
 	return (env);
 }
 
