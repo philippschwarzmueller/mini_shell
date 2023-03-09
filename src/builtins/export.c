@@ -42,7 +42,7 @@ static void	print_error(char **env)
 		return ;
 	while (env[i] != NULL)
 	{
-		str = ft_strjoin("declare -x", env[i++]);
+		str = ft_strjoin("declare -x ", env[i++]);
 		ft_putendl_fd(str, 2);
 		free(str);
 	}

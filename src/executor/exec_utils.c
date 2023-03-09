@@ -42,23 +42,3 @@ void	dup_back(int orig_in, int orig_out, int *pip)
 	close(orig_in);
 	close(orig_out);
 }
-
-t_bool	runs_in_parent(t_command *command)
-{
-	int	res;
-
-	res = false;
-	if (command == NULL)
-		return (res);
-	else if (!ft_strncmp(command->command, "cd", 3))
-		res = true;
-	else if (!ft_strncmp(command->command, "export", 7))
-		res = true;
-	else if (!ft_strncmp(command->command, "unset", 6))
-		res = true;
-	else if (!ft_strncmp(command->command, "env", 4))
-		res = true;
-	else if (!ft_strncmp(command->command, "exit", 5))
-		res = true;
-	return (res);
-}
