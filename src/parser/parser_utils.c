@@ -12,7 +12,7 @@ void	reset_cmd(char **command, char ***options, int *in, int *out)
 {
 	command[0] = NULL;
 	if (options != NULL)
-		options = NULL;
+		free(options);
 	*in = 0;
 	*out = 0;
 }

@@ -27,26 +27,31 @@ t_list	*parse(t_list *lexed_arg)
 	return (command_table);
 }
 
+void	init_empty_opts(char ****opts)
+{
+	char	***helper;
+
+	helper = malloc(sizeof(char ***));
+	*helper = NULL;
+	*opts = helper;
+}
+
 static void	parse_token(t_token *token, struct s_state *s, t_list *cmd_table)
 {
 	static char	*cmd;
-	static char	***opt;
+	static char	***opt = NULL;
 	static int	in;
 	static int	out;
-	char		**helper;
 
 	update_state(token, s, cmd);
-	if (!opt)
-	{
-		helper = NULL;
-		opt = &helper;
-	}
 	if (s->pipe || s->redir_in || s->redir_out || s->append || s->here_doc)
 		update_in_out(&in, &out, s, token->token);
 	else if (s->command && !s->pipe && !s->option)
 		cmd = ft_strdup(token->token);
 	else if (s->option && !s->pipe)
 		*opt = append_options(*opt, token->token);
+	if (!opt)
+		init_empty_opts(&opt);
 	if (s->pipe == true || s->last == true)
 	{
 		default_in_out(&in, &out, s);
