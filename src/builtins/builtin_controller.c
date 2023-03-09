@@ -58,13 +58,16 @@ static char	*lower_str(char *str)
 int	update_env(char ***env, char *varname, char *value)
 {
 	size_t	i;
+	size_t	len;
 	char	**ev;
 
 	i = 0;
 	ev = *env;
-	while (ev && ev[i] && ft_strncmp(varname, ev[i], ft_strlen(varname)))
+	len = ft_strlen(varname);
+	while (ev && ev[i] && ft_strncmp(varname, ev[i], len)
+		&& (ev[i][len] != 0 && ev[i][len] != '='))
 		i++;
-	if (ev[i] != NULL && ft_strchr(varname, '='))
+	if (ev[i] != NULL)
 	{
 		free(ev[i]);
 		if (value == NULL)
