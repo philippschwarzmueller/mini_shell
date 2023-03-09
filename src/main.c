@@ -48,6 +48,23 @@ static char	**get_environment(void)
 	return (res);
 }
 
+static int	check_syntax_error(t_list *command_table)
+{
+	t_command	*temp;
+
+	while (command_table != NULL)
+	{
+		temp = (t_command *) command_table->content;
+		if (!temp)
+		{
+			ft_printf("Syntax error, missing a command\n");
+			return (EXIT_FAILURE);
+		}
+		command_table = command_table->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
 static void	logic(char *input, char ***env)
 {
 	t_list	*command_table;
@@ -55,8 +72,10 @@ static void	logic(char *input, char ***env)
 
 	lexed_args = analyzer(input);
 	print_lexed_lst(lexed_args);
-	command_table = parse(lexed_args);
+	command_table = parse(lexed_args, *env);
 	ft_lstclear(&lexed_args, del_token);
+	if (check_syntax_error(command_table) == EXIT_FAILURE)
+		return (ft_lstclear(&command_table, &free_cmd));
 	ft_printf("COMMAND TABLE\n");
 	print_parsed_lst(command_table);
 	expand(&command_table, *env);
@@ -77,6 +96,8 @@ void	print_parsed_lst(t_list *command_table)
 	{
 		temp = (t_command *)command_table->content;
 		ft_printf("------------------\n");
+		if (!temp->command)
+			return ;
 		ft_printf("Command: %s\n", temp->command);
 		ft_printf("Options: ");
 		while (temp && temp->options != NULL && temp->options[i] != NULL)
@@ -91,28 +112,5 @@ void	print_parsed_lst(t_list *command_table)
 		ft_printf("------------------\n");
 		command_table = command_table->next;
 		i = 0;
-	}
-}
-
-void	print_lexed_lst(t_list *lst)
-{
-	while (lst != NULL)
-	{
-		if (((t_token *)(lst->content))->type == word)
-			printf("\033[0;94mword\033[0m\t");
-		if (((t_token *)(lst->content))->type == piping)
-			printf("\033[0;94mpipe\033[0m\t");
-		if (((t_token *)(lst->content))->type == infile)
-			printf("\033[0;94minfile\033[0m\t");
-		if (((t_token *)(lst->content))->type == outfile)
-			printf("\033[0;94moutfile\033[0m\t");
-		if (((t_token *)(lst->content))->type == here_doc)
-			printf("\033[0;94mheredoc\033[0m\t");
-		if (((t_token *)(lst->content))->type == append)
-			printf("\033[0;94mappend\033[0m\t");
-		if (((t_token *)(lst->content))->type == syntax)
-			printf("\033[0;94msyntax\033[0m\t");
-		printf("%s\n", ((t_token *)(lst->content))->token);
-		lst = lst->next;
 	}
 }

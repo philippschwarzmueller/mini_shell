@@ -1,6 +1,6 @@
 #include "shell.h"
 
-struct s_state	init_state(void)
+struct s_state	init_state(char **env)
 {
 	struct s_state	state;
 
@@ -14,6 +14,7 @@ struct s_state	init_state(void)
 	state.here_doc = false;
 	state.in_set = false;
 	state.out_set = false;
+	state.env = env;
 	return (state);
 }
 
