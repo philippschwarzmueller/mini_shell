@@ -38,7 +38,7 @@ static char	**remove_envvar(char **env, char *option)
 	{
 		if (!ft_strncmp(env[i], option, len) && env[i][len - 1]
 			&& (env[i][len] == '=' || env[i][len] == 0))
-			return (printf("test\n"), realloc_env(env, i));
+			return (realloc_env(env, i));
 		i++;
 	}
 	return (env);
