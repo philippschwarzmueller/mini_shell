@@ -35,5 +35,6 @@ int				ft_here_doc(char *delimiter, char **env);
 void			default_in_out(int *in, int *out, struct s_state *state);
 void			update_state(t_token *token, struct s_state *state, char *cmd);
 void			update_in_out_state(struct s_state *state, t_type type);
+int				open_files(char *path, int flag);
 
 #endif
