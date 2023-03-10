@@ -2,6 +2,7 @@
 
 static char	**get_environment(void);
 static void	logic(char *input, char ***env, t_bool debug);
+static int	check_syntax_error(t_list *command_table);
 
 int	main(int argc, char **argv)
 {
@@ -24,6 +25,35 @@ int	main(int argc, char **argv)
 	}
 	ft_free_stra(env);
 	return (EXIT_SUCCESS);
+}
+
+static void	logic(char *input, char ***env, t_bool debug)
+{
+	t_list	*command_table;
+	t_list	*lexed_args;
+
+	lexed_args = analyzer(input);
+	if (debug)
+		print_lexed_lst(lexed_args);
+	command_table = parse(lexed_args, *env);
+	ft_lstclear(&lexed_args, del_token);
+	if (check_syntax_error(command_table) == EXIT_FAILURE)
+		return (ft_lstclear(&command_table, &free_cmd));
+	if (debug)
+	{
+		ft_printf("COMMAND TABLE\n");
+		print_parsed_lst(command_table);
+	}
+	expand(&command_table, *env);
+	if (debug)
+	{
+		ft_printf("EXPANDED COMMAND TABLE\n");
+		print_parsed_lst(command_table);
+	}
+	executor(command_table, env);
+	if (debug)
+		printf("\033[0;32mexit_code: \033[0m%d\n", g_exit_code);
+	ft_lstclear(&command_table, &free_cmd);
 }
 
 static char	**get_environment(void)
@@ -60,62 +90,4 @@ static int	check_syntax_error(t_list *command_table)
 		command_table = command_table->next;
 	}
 	return (EXIT_SUCCESS);
-}
-
-static void	logic(char *input, char ***env, t_bool debug)
-{
-	t_list	*command_table;
-	t_list	*lexed_args;
-
-	lexed_args = analyzer(input);
-	if (debug)
-		print_lexed_lst(lexed_args);
-	command_table = parse(lexed_args, *env);
-	ft_lstclear(&lexed_args, del_token);
-	if (check_syntax_error(command_table) == EXIT_FAILURE)
-		return (ft_lstclear(&command_table, &free_cmd));
-	if (debug)
-	{
-		ft_printf("COMMAND TABLE\n");
-		print_parsed_lst(command_table);
-	}
-	expand(&command_table, *env);
-	if (debug)
-	{
-		ft_printf("EXPANDED COMMAND TABLE\n");
-		print_parsed_lst(command_table);
-	}
-	executor(command_table, env);
-	if (debug)
-		printf("\033[0;32mexit_code: \033[0m%d\n", g_exit_code);
-	ft_lstclear(&command_table, &free_cmd);
-}
-
-void	print_parsed_lst(t_list *command_table)
-{
-	t_command	*temp;
-	int			i;
-
-	i = 0;
-	while (command_table != NULL)
-	{
-		temp = (t_command *)command_table->content;
-		ft_printf("------------------\n");
-		if (!temp->command)
-			return ;
-		ft_printf("Command: %s\n", temp->command);
-		ft_printf("Options: ");
-		while (temp && temp->options != NULL && temp->options[i] != NULL)
-		{
-			ft_printf("%d: ", i);
-			ft_printf("%s ", temp->options[i]);
-			i++;
-		}
-		ft_printf("\n");
-		ft_printf("In: %d\n", temp->in);
-		ft_printf("Out: %d\n", temp->out);
-		ft_printf("------------------\n");
-		command_table = command_table->next;
-		i = 0;
-	}
 }

@@ -70,3 +70,32 @@ void	update_state(t_token *token, struct s_state *state, char *cmd)
 		state->command = false;
 	}
 }
+
+void	print_parsed_lst(t_list *command_table)
+{
+	t_command	*temp;
+	int			i;
+
+	i = 0;
+	while (command_table != NULL)
+	{
+		temp = (t_command *)command_table->content;
+		ft_printf("------------------\n");
+		if (!temp->command)
+			return ;
+		ft_printf("Command: %s\n", temp->command);
+		ft_printf("Options: ");
+		while (temp && temp->options != NULL && temp->options[i] != NULL)
+		{
+			ft_printf("%d: ", i);
+			ft_printf("%s ", temp->options[i]);
+			i++;
+		}
+		ft_printf("\n");
+		ft_printf("In: %d\n", temp->in);
+		ft_printf("Out: %d\n", temp->out);
+		ft_printf("------------------\n");
+		command_table = command_table->next;
+		i = 0;
+	}
+}
