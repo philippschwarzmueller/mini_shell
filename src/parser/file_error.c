@@ -4,7 +4,6 @@ static int	get_error_message(char *path, int flag);
 
 int	open_files(char *path, int flag)
 {
-
 	if (flag == 0 && access(path, F_OK) < 0)
 		return (get_error_message(path, 0));
 	if (flag == 0 && access(path, R_OK) < 0)
