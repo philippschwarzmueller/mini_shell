@@ -34,7 +34,7 @@ int	builtin_controller_parent(t_list *cmds, t_command *cmd, char ***env)
 	if (!ft_strncmp(str, "unset", 6))
 		return (free(str), g_exit_code = ft_unset(env, cmd->options), 1);
 	if (!ft_strncmp(str, "exit", 5))
-		return (free(str), g_exit_code = ft_exit(cmds, env), 1);
+		return (free(str), g_exit_code = ft_exit(cmd, cmds, env), 1);
 	return (free(str), 0);
 }
 
