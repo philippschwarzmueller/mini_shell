@@ -2,7 +2,6 @@
 
 static char	**get_environment(void);
 static void	logic(char *input, char ***env);
-static char	*ft_readline(void);
 
 int	main(void)
 {
@@ -13,7 +12,7 @@ int	main(void)
 	while (1)
 	{
 		init_signalhandlers();
-		input = ft_readline();
+		input = readline("sigmashell");
 		add_history(input);
 		if (input == NULL)
 		{
@@ -65,27 +64,6 @@ static int	check_syntax_error(t_list *command_table)
 		command_table = command_table->next;
 	}
 	return (EXIT_SUCCESS);
-}
-
-static char	*ft_readline(void)
-{
-	char	*path;
-	char	*dir;
-	char	*prompt;
-	char	*res;
-
-	path = NULL;
-	path = getcwd(path, 1);
-	dir = ft_strrchr(path, '/');
-	prompt = ft_strjoin("\033[0;31msigmashell\033[0;35m grinding@", dir);
-	if (g_exit_code)
-		prompt = ft_strjoin_f(prompt, " \033[0;31m> \033[0;37m");
-	else
-		prompt = ft_strjoin_f(prompt, " \033[0;32m> \033[0;37m");
-	res = readline(prompt);
-	free(path);
-	free(prompt);
-	return (res);
 }
 
 static void	logic(char *input, char ***env)
