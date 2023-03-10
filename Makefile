@@ -44,7 +44,7 @@ SIGNAL			= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
 
 ######## MAIN ##############
 MAIN_DIR		= src/
-MAIN_SRC		= main
+MAIN_SRC		= main input
 MAIN			= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 
 ######## OBJ ###############
@@ -102,5 +102,8 @@ fclean:		clean
 
 re:			fclean all
 			@echo "$(GREEN)Cleaned and rebuilt everything for minishell!$(WHITE)"
+
+test:		$(NAME)
+			cd tests && ./tester.sh m
 
 .PHONY:		all clean fclean re
