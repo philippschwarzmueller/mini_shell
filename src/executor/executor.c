@@ -39,6 +39,12 @@ static void	dup_input(t_list *commands, int *pip)
 	t_command	*current;
 
 	current = (t_command *)commands->content;
+	if (current->in == -1)
+	{
+		close(pip[0]);
+		close(pip[1]);
+		return ;
+	}
 	if (current->in == 0)
 		dup2(pip[0], 0);
 	else
@@ -54,6 +60,11 @@ static void	dup_output(t_list *commands, int out, int *pip)
 	t_command	*current;
 
 	current = (t_command *)commands->content;
+	if (current->out == -1 || current->in == -1)
+	{
+		ft_lstclear(&commands, free_cmd);
+		exit(1);
+	}
 	if (current->out == 1 && commands->next)
 		dup2(pip[1], 1);
 	else if (current->out == 1 && !commands->next)
