@@ -80,6 +80,6 @@ int	find_var_end(char c)
 	int	is_symbol;
 
 	is_whitespace = (c == 32 || (c > 8 && c < 13));
-	is_symbol = (c == '$' || c == '\'' || c == '\"' || c == '\\');
+	is_symbol = (c == '$' || c == '\'' || c == '\"' || c == '\\' || c == '/');
 	return (is_whitespace || is_symbol);
 }
