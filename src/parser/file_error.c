@@ -8,7 +8,7 @@ int	open_files(char *path, int flag)
 		return (get_error_message(path, 0));
 	if (flag == 0 && access(path, R_OK) < 0)
 		return (get_error_message(path, 1));
-	if (flag > 0 && access(path, W_OK) < 0)
+	if (flag > 0 && (!access(path, F_OK) && access(path, W_OK) < 0))
 		return (get_error_message(path, 1));
 	if (flag == 0)
 		return (open(path, O_RDONLY));
