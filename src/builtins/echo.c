@@ -6,7 +6,7 @@ int	ft_echo(char **stra)
 
 	i = 0;
 	if (stra == NULL)
-		return (printf("\n"));
+		return (printf("\n"), EXIT_SUCCESS);
 	while (stra[i] && !ft_strncmp(stra[i], "-n", 3))
 		i++;
 	while (stra && stra[i + 1] != NULL)
