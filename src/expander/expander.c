@@ -71,7 +71,7 @@ static char	*ft_decrustify_str(char *str)
 	i = 0;
 	j = 0;
 	state = (t_state_lex){0, 0, 0, 0, 0};
-	res = ft_calloc(ft_strlen(str), sizeof(char));
+	res = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	while (str[i])
 	{
 		if ((str[i] != '\"' || state.is_squoted || state.is_escaped)
