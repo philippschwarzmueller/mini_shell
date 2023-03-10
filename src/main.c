@@ -1,30 +1,26 @@
 #include "shell.h"
 
 static char	**get_environment(void);
-static void	logic(char *input, char ***env);
+static void	logic(char *input, char ***env, t_bool debug);
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	char	*input;
 	char	**env;
+	t_bool	debug;
 
+	if (argc > 2)
+		exit(EXIT_FAILURE);
+	if (argc == 2 && argv[1][0] == 'd')
+		debug = true;
+	else
+		debug = false;
 	env = get_environment();
 	while (1)
 	{
 		init_signalhandlers();
-		input = readline("\033[0;31msigmashell \033[0;32m> \033[0;37m");
-		add_history(input);
-		if (input == NULL)
-		{
-			ft_putstr_fd("\x1b[1A", STDOUT_FILENO);
-			ft_putstr_fd("\033[13C", STDOUT_FILENO);
-			ft_putendl_fd("exit", STDOUT_FILENO);
-			clear_history();
-			ft_free_stra(env);
-			exit(EXIT_SUCCESS);
-		}
-		logic(input, &env);
-		system("leaks minishell");
+		input = get_input(env);
+		logic(input, &env, debug);
 	}
 	ft_free_stra(env);
 	return (EXIT_SUCCESS);
@@ -58,7 +54,7 @@ static int	check_syntax_error(t_list *command_table)
 		temp = (t_command *) command_table->content;
 		if (!temp)
 		{
-			ft_printf("Syntax error, missing a command\n");
+			ft_putstr_fd("Syntax error, missing a command\n", STDERR_FILENO);
 			return (EXIT_FAILURE);
 		}
 		command_table = command_table->next;
@@ -66,24 +62,32 @@ static int	check_syntax_error(t_list *command_table)
 	return (EXIT_SUCCESS);
 }
 
-static void	logic(char *input, char ***env)
+static void	logic(char *input, char ***env, t_bool debug)
 {
 	t_list	*command_table;
 	t_list	*lexed_args;
 
 	lexed_args = analyzer(input);
-	print_lexed_lst(lexed_args);
+	if (debug)
+		print_lexed_lst(lexed_args);
 	command_table = parse(lexed_args, *env);
 	ft_lstclear(&lexed_args, del_token);
 	if (check_syntax_error(command_table) == EXIT_FAILURE)
 		return (ft_lstclear(&command_table, &free_cmd));
-	ft_printf("COMMAND TABLE\n");
-	print_parsed_lst(command_table);
+	if (debug)
+	{
+		ft_printf("COMMAND TABLE\n");
+		print_parsed_lst(command_table);
+	}
 	expand(&command_table, *env);
-	ft_printf("EXPANDED COMMAND TABLE\n");
-	print_parsed_lst(command_table);
+	if (debug)
+	{
+		ft_printf("EXPANDED COMMAND TABLE\n");
+		print_parsed_lst(command_table);
+	}
 	executor(command_table, env);
-	printf("\033[0;32mexit_code: \033[0m%d\n", g_exit_code);
+	if (debug)
+		printf("\033[0;32mexit_code: \033[0m%d\n", g_exit_code);
 	ft_lstclear(&command_table, &free_cmd);
 }
 
