@@ -103,17 +103,17 @@ static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
 	}
 	else if (state->redir_in == true)
 	{
-		*in = open(path, O_RDONLY);
+		*in = open_files(path, 0);
 		update_in_out_state(state, infile);
 	}
 	else if (state->redir_out == true)
 	{
-		*out = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		*out = open_files(path, O_TRUNC);
 		update_in_out_state(state, outfile);
 	}
 	else if (state->append == true)
 	{
-		*out = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		*out = open_files(path, O_APPEND);
 		update_in_out_state(state, append);
 	}
 }
