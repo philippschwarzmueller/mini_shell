@@ -13,6 +13,7 @@ void	expand(t_list **command_table, char **env)
 	{
 		current = tmp->content;
 		current->command = expand_string(current->command, env);
+		current->command = ft_decrustify_str(current->command);
 		current->options = expand_options(current->options, env);
 		tmp = tmp->next;
 	}
