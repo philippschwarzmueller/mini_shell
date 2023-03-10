@@ -38,7 +38,7 @@ static void	logic(char *input, char ***env, t_bool debug)
 	command_table = parse(lexed_args, *env);
 	ft_lstclear(&lexed_args, del_token);
 	if (check_syntax_error(command_table) == EXIT_FAILURE)
-		return (ft_lstclear(&command_table, &free_cmd));
+		return (ft_lstclear(&command_table, &free_cmd), exit(2));
 	if (debug)
 	{
 		ft_printf("COMMAND TABLE\n");
