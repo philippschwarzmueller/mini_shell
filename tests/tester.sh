@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Change if you store the tester in another PATH
-export MINISHELL_PATH=~/projects/minishell/
+export MINISHELL_PATH=../
 export EXECUTABLE=minishell
 
 NL=$'\n'
