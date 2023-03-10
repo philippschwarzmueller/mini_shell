@@ -4,8 +4,7 @@ int	ft_pwd(char **options)
 {
 	char	*cwd;
 
-	if (ft_stra_len(options) > 0)
-		return (ft_printf("pwd: too many arguments\n"), EXIT_FAILURE);
+	(void) options;
 	cwd = NULL;
 	cwd = getcwd(cwd, 1);
 	if (cwd == NULL)
