@@ -26,7 +26,7 @@ static int	get_error_message(char *path, int flag)
 	char	*error;
 
 	if (!flag)
-		tmp = ft_strjoin(path, " : No such file or directory");
+		tmp = ft_strjoin(path, ": No such file or directory");
 	else
 		tmp = ft_strjoin("permission denied: ", path);
 	error = ft_strjoin("sigmashell: ", tmp);
