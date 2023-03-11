@@ -1,5 +1,7 @@
 #include "shell.h"
 
+char	*remove_whitespaces(char *str);
+
 char	*append_str(char *str, char *to_append, size_t i, size_t j)
 {
 	char	*append;
@@ -24,11 +26,11 @@ char	*append_value(char *to_append, char *name, char **env)
 		free(name);
 	}
 	else
-		value = get_env_value(name, env);
+		value = remove_whitespaces(get_env_value(name, env));
 	if (value == NULL)
 		return (to_append);
-	if (to_append == NULL)
-		return (value);
+	if (to_append == NULL || *to_append == 0)
+		return (trim_front(value, " \t\n\v"));
 	to_append = ft_strjoin_f(to_append, value);
 	return (free(value), to_append);
 }
@@ -72,14 +74,4 @@ void	state_change(char c, t_state_lex *state)
 		state->is_escaped = false;
 	else if (c == '\\')
 		state->is_escaped = true;
-}
-
-int	find_var_end(char c)
-{
-	int	is_whitespace;
-	int	is_symbol;
-
-	is_whitespace = (c == 32 || (c > 8 && c < 13));
-	is_symbol = (c == '$' || c == '\'' || c == '\"' || c == '\\');
-	return (is_whitespace || is_symbol);
 }

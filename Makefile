@@ -24,7 +24,7 @@ PARSER			= $(addprefix $(PARSER_DIR), $(addsuffix .c, $(PARSER_SRC)))
 
 ######## EXPANDER #############
 EXPANDER_DIR	= src/expander/
-EXPANDER_SRC	= expander expander_utils
+EXPANDER_SRC	= expander expander_utils whitespcs_utils
 EXPANDER		= $(addprefix $(EXPANDER_DIR), $(addsuffix .c, $(EXPANDER_SRC)))
 
 ######## BUILDINS ############
