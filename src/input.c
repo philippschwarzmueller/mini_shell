@@ -23,7 +23,7 @@ char	*get_input(char **env)
 	{
 		clear_history();
 		ft_free_stra(env);
-		exit(EXIT_SUCCESS);
+		exit(g_exit_code);
 	}
 	return (input);
 }
