@@ -33,34 +33,6 @@ static char	**expand_options(char **options, char **env)
 	return (options);
 }
 
-char	*expand_string(char *str, char **env)
-{
-	size_t		i;
-	size_t		j;
-	char		*res;
-	t_state_lex	state;
-
-	i = 0;
-	j = 0;
-	res = NULL;
-	state = (t_state_lex){0, 0, 0, 0, 0};
-	while (str[i])
-	{
-		if (str[i] == '$' && !state.is_squoted && !state.is_escaped)
-		{
-			res = append_str(str, res, i, j);
-			j = i + 1;
-			while (str[j] && !find_var_end(str[j]))
-				j++;
-			res = append_value(res, ft_substr(str, i + 1, j - i - 1), env);
-			i = j - 1;
-		}
-		state_change(str[i], &state);
-		i++;
-	}
-	return (free(str), append_str(str, res, i, j));
-}
-
 static char	*ft_decrustify_str(char *str)
 {
 	size_t		i;
