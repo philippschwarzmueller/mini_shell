@@ -8,7 +8,7 @@ char	*remove_whitespaces(char *str)
 
 	i = 0;
 	j = 0;
-	if (str == NULL)
+	if (str == NULL || *str == 0)
 		return (NULL);
 	res = ft_calloc(ft_strlen(str), sizeof(char *));
 	while (str[i])
