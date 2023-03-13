@@ -31,7 +31,7 @@ char	*expand_string(char *str, char **env)
 		}
 		state_change(str[i++], &state);
 	}
-	return (free(str), append_str(str, res, i, j));
+	return (res = append_str(str, res, i, j), free(str), res);
 }
 
 static char	*append_str(char *str, char *to_append, size_t i, size_t j)
