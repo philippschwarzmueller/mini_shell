@@ -31,7 +31,7 @@ char	*expand_string(char *str, char **env)
 		}
 		state_change(str[i++], &state);
 	}
-	return (free(str), append_str(str, res, i, j));
+	return (res = append_str(str, res, i, j), free(str), res);
 }
 
 static char	*append_str(char *str, char *to_append, size_t i, size_t j)
@@ -62,7 +62,7 @@ static char	*append_value(char *to_append, char *name, char **env)
 	if (value == NULL)
 		return (to_append);
 	if (to_append == NULL || *to_append == 0)
-		return (trim_front(value, " \t\n\v"));
+		return (free(to_append), trim_front(value, " \t\n\v"));
 	to_append = ft_strjoin_f(to_append, value);
 	return (free(value), to_append);
 }
