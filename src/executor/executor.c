@@ -27,11 +27,10 @@ void	executor(t_list	*commands, char ***env)
 			dup_output(tmp, orig_out, pip);
 			exec_cmd(commands, (t_command *)tmp->content, *env);
 		}
-		waitpid(pid, &g_exit_code, 0);
-		g_exit_code = WEXITSTATUS(g_exit_code);
 		tmp = tmp->next;
 	}
 	dup_back(orig_in, orig_out, pip);
+	wait_for_processes(pid, commands);
 }
 
 static void	dup_input(t_list *commands, int *pip)
@@ -77,6 +76,7 @@ static void	dup_output(t_list *commands, int out, int *pip)
 	if (current->out > 1)
 		close(current->out);
 	close(pip[1]);
+	close(pip[0]);
 }
 
 static void	exec_cmd(t_list *commands, t_command *current, char **env)

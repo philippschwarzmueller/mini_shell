@@ -1,8 +1,6 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-
-
 struct s_state
 {
 	t_bool	pipe;
