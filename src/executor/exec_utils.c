@@ -45,6 +45,9 @@ void	dup_back(int orig_in, int orig_out, int *pip)
 
 void	wait_for_processes(pid_t last_pid, t_list *commands)
 {
+	if (ft_lstsize(commands) == 1
+		&& runs_in_parent((t_command *) commands->content))
+		return ;
 	waitpid(last_pid, &g_exit_code, 0);
 	g_exit_code = WEXITSTATUS(g_exit_code);
 	while (commands && commands->next)
