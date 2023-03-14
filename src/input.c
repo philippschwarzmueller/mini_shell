@@ -28,6 +28,33 @@ char	*get_input(char **env)
 	return (input);
 }
 
+int	check_token_syntax(t_list *token_list)
+{
+	t_token	*temp_t;
+	t_token	*temp_next_t;
+
+	while (token_list != NULL)
+	{
+		temp_t = (t_token *) token_list->content;
+		if (token_list->next)
+			temp_next_t = (t_token *) token_list->next->content;
+		if ((temp_t->type == infile || temp_t->type == outfile)
+			&& (!temp_next_t || temp_next_t->type != word))
+		{
+			ft_putstr_fd("syntax error near unexpected token `", STDERR_FILENO);
+			if (!temp_next_t)
+				ft_putstr_fd("newline", STDERR_FILENO);
+			else
+				ft_putstr_fd(temp_t->token, STDERR_FILENO);
+			ft_putstr_fd("'", STDERR_FILENO);
+			return (EXIT_FAILURE);
+		}
+		token_list = token_list->next;
+		temp_next_t = NULL;
+	}
+	return (EXIT_SUCCESS);
+}
+
 static char	*ft_readline(void)
 {
 	char	*path;
