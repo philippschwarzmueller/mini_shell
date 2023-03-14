@@ -19,7 +19,7 @@ int	ft_exit(t_command *cmd, t_list *cmds, char ***env)
 		else if (ft_stra_len(cmd->options) > 1)
 		{
 			ft_putendl_fd("exit: too many arguments", STDERR_FILENO);
-			e_code = ft_strtol(cmd->options[0]);
+			e_code = 1;
 		}
 		else
 			e_code = ft_strtol(cmd->options[0]);
