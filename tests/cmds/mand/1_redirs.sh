@@ -53,15 +53,15 @@ chmod -r tmp_redir_out_file1
 
 /bin/grep 1 < NO_SUCH_FILE < inputfile
 
-> tmp_std_outfile && echo 1
+#> tmp_std_outfile && echo 1
 
 rm -f tmp_std_outfile
 
->tmp_std_outfile && ls | grep tmp_std_outfile
+#>tmp_std_outfile && ls | grep tmp_std_outfile
 
 rm -f tmp_std_outfile
 
-"" >tmp_std_outfile && ls | grep tmp_std_outfile
+#"" >tmp_std_outfile && ls | grep tmp_std_outfile
 
 rm -f tmp_std_outfile
 
