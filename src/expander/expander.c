@@ -9,19 +9,24 @@ void	expand(t_list **command_table, char **env)
 	t_list		*tmp;
 	t_command	*current;
 	char		**expanded_cmd;
+	char		*check;
 
 	tmp = *command_table;
 	while (tmp != NULL)
 	{
 		current = tmp->content;
+		check = ft_strdup(current->command);
 		current->command = expand_string(current->command, env);
 		current->command = ft_decrustify_str(current->command);
+		check = ft_decrustify_str(check);
 		expanded_cmd = ft_split(current->command, ' ');
-		if (ft_stra_len(expanded_cmd) > 1)
+		if (ft_stra_len(expanded_cmd) > 1
+			&& ft_strncmp(current->command, check, ft_strlen(current->command)))
 			restruct_opts(&current, expanded_cmd);
 		else
 			ft_free_stra(expanded_cmd);
 		current->options = expand_options(current->options, env);
+		free(check);
 		tmp = tmp->next;
 	}
 }
