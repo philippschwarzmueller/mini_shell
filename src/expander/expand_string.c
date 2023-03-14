@@ -77,7 +77,7 @@ static int	is_variable(char *str, size_t i, t_state_lex state)
 	is_var = (str[i] == '$' && !state.is_squoted && !state.is_escaped);
 	is_whitespcs = (str[i + 1] == 32 || (str[i + 1] > 8 && str[i + 1] < 13));
 	is_cut = (str[i + 1] == '\\');
-	is_aboarted = (!(is_whitespcs || is_cut) && !state.is_dquoted);
+	is_aboarted = (!(is_whitespcs || is_cut)); //&& !state.is_dquoted);
 	return (is_var && is_aboarted && str[i + 1]);
 }
 
