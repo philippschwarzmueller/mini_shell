@@ -1,7 +1,7 @@
 #include "shell.h"
 
 static char	**expand_options(char **options, char **env);
-static char	*ft_decrustify_str(char *str);
+char		*ft_decrustify_str(char *str);
 static void	restruct_opts(t_command **current, char **spl);
 
 void	expand(t_list **command_table, char **env)
@@ -40,7 +40,7 @@ static char	**expand_options(char **options, char **env)
 	return (options);
 }
 
-static char	*ft_decrustify_str(char *str)
+char	*ft_decrustify_str(char *str)
 {
 	size_t		i;
 	size_t		j;
