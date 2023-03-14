@@ -1,6 +1,8 @@
 #include "shell.h"
 
 static void	print_error(char **env);
+static void	reset_loop(char *var_name, char **var_value, size_t *j);
+static int	premature_exit(char *var_name, char *var_value);
 
 int	ft_export(char ***env, char **options)
 {
@@ -20,17 +22,34 @@ int	ft_export(char ***env, char **options)
 		while (options[i][j] && options[i][j] != '=')
 			j++;
 		var_name = ft_substr(options[i], 0, j + 1);
-		if (ft_strncmp(var_name, "?", 1) == 0 || ft_strncmp(var_name, "=", 1) == 0)
-			return (ft_putendl_fd(ft_strjoin(var_name, " : not a valid identifier"), STDERR_FILENO), EXIT_FAILURE);
+		if (ft_strncmp(var_name, "?", 1) == 0 || !ft_strncmp(var_name, "=", 1))
+			return (premature_exit(var_name, var_value));
 		if (ft_strlen(options[i]) > (j + 1))
 			var_value = ft_substr(options[i], j + 1, ft_strlen(options[i]));
 		update_env(env, var_name, var_value);
-		free(var_name);
-		free(var_value);
-		var_value = NULL;
-		j = 0;
+		reset_loop(var_name, &var_value, &j);
 	}
 	return (EXIT_SUCCESS);
+}
+
+static int	premature_exit(char *var_name, char *var_value)
+{
+	char	*error_msg;
+
+	error_msg = ft_strjoin(var_name, " : not a valid identifier");
+	ft_putendl_fd(error_msg, STDERR_FILENO);
+	free(error_msg);
+	free(var_name);
+	free(var_value);
+	return (EXIT_FAILURE);
+}
+
+static void	reset_loop(char *var_name, char **var_value, size_t *j)
+{
+	free(var_name);
+	free(*var_value);
+	var_value = NULL;
+	*j = 0;
 }
 
 static void	print_error(char **env)
