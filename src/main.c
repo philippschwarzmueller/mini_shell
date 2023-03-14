@@ -2,7 +2,7 @@
 
 static char	**get_environment(void);
 static void	logic(char *input, char ***env, t_bool debug);
-static int	check_syntax_error(t_list *command_table);
+static int	check_parsed_syntax(t_list *command_table);
 
 int	main(int argc, char **argv)
 {
@@ -33,23 +33,19 @@ static void	logic(char *input, char ***env, t_bool debug)
 	t_list	*lexed_args;
 
 	lexed_args = analyzer(input);
+	if (check_token_syntax(lexed_args) == EXIT_FAILURE)
+		return (ft_lstclear(&lexed_args, del_token), exit(2));
 	if (debug)
 		print_lexed_lst(lexed_args);
 	command_table = parse(lexed_args, *env);
 	ft_lstclear(&lexed_args, del_token);
-	if (check_syntax_error(command_table) == EXIT_FAILURE)
+	if (check_parsed_syntax(command_table) == EXIT_FAILURE)
 		return (ft_lstclear(&command_table, &free_cmd), exit(2));
 	if (debug)
-	{
-		ft_printf("COMMAND TABLE\n");
 		print_parsed_lst(command_table);
-	}
 	expand(&command_table, *env);
 	if (debug)
-	{
-		ft_printf("EXPANDED COMMAND TABLE\n");
 		print_parsed_lst(command_table);
-	}
 	executor(command_table, env);
 	if (debug)
 		printf("\033[0;32mexit_code: \033[0m%d\n", g_exit_code);
@@ -75,14 +71,14 @@ static char	**get_environment(void)
 	return (res);
 }
 
-static int	check_syntax_error(t_list *command_table)
+static int	check_parsed_syntax(t_list *command_table)
 {
-	t_command	*temp;
+	t_command	*temp_c;
 
 	while (command_table != NULL)
 	{
-		temp = (t_command *) command_table->content;
-		if (!temp)
+		temp_c = (t_command *) command_table->content;
+		if (!temp_c)
 		{
 			ft_putstr_fd("Syntax error, missing a command\n", STDERR_FILENO);
 			return (EXIT_FAILURE);
