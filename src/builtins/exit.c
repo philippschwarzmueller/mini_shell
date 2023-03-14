@@ -10,7 +10,7 @@ int	ft_exit(t_command *cmd, t_list *commands, char ***env)
 		return (EXIT_SUCCESS);
 	if (cmd->options)
 	{
-		if ((cmd->options[0] && !is_num(cmd->options[0])))
+		if ((cmd->options[0] && !is_num(cmd->options[0])) || !ft_strlen(cmd->options[0]))
 		{
 			ft_putendl_fd("exit: numeric argument required", STDERR_FILENO);
 			exit_code = 255;
@@ -23,6 +23,8 @@ int	ft_exit(t_command *cmd, t_list *commands, char ***env)
 		else
 			exit_code = ft_strtol(cmd->options[0]);
 	}
+	else if (ft_stra_len(cmd->options) == 0)
+		exit_code = 0;
 	else
 		exit_code = 1;
 	ft_lstclear(&commands, free_cmd);
