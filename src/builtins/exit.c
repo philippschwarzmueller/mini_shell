@@ -2,34 +2,33 @@
 
 static t_bool	is_num(char *s);
 
-int	ft_exit(t_command *cmd, t_list *commands, char ***env)
+int	ft_exit(t_command *cmd, t_list *cmds, char ***env)
 {
-	long	exit_code;
+	long	e_code;
 
-	if (ft_lstsize(commands) > 1)
+	if (ft_lstsize(cmds) > 1)
 		return (EXIT_SUCCESS);
 	if (cmd->options)
 	{
-		if ((cmd->options[0] && !is_num(cmd->options[0])) || !ft_strlen(cmd->options[0]))
+		if ((cmd->options[0] && !is_num(cmd->options[0]))
+			|| !ft_strlen(cmd->options[0]))
 		{
 			ft_putendl_fd("exit: numeric argument required", STDERR_FILENO);
-			exit_code = 255;
+			e_code = 255;
 		}
 		else if (ft_stra_len(cmd->options) > 1)
 		{
 			ft_putendl_fd("exit: too many arguments", STDERR_FILENO);
-			exit_code = ft_strtol(cmd->options[0]);
+			e_code = ft_strtol(cmd->options[0]);
 		}
 		else
-			exit_code = ft_strtol(cmd->options[0]);
+			e_code = ft_strtol(cmd->options[0]);
 	}
 	else if (ft_stra_len(cmd->options) == 0)
-		exit_code = 0;
+		e_code = 0;
 	else
-		exit_code = 1;
-	ft_lstclear(&commands, free_cmd);
-	ft_free_stra(*env);
-	exit(exit_code);
+		e_code = 1;
+	return (ft_lstclear(&cmds, free_cmd), ft_free_stra(*env), exit(e_code), 0);
 }
 
 static int	checkoffset(const char *str)
