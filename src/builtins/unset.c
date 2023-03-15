@@ -10,12 +10,13 @@ int	ft_unset(char ***env, char **options)
 
 	i = 0;
 	error = NULL;
-	if (!(*env) || !options)
+	if (!(*env))
 		return (EXIT_FAILURE);
-	while (options[i] != NULL)
+	while (options && options[i] != NULL)
 	{
 		if (ft_strlen(options[i]) < 1 || ft_strchr(options[i], '=')
-			|| ft_strchr(options[i], '?') || ft_strchr(options[i], '$'))
+			|| ft_strchr(options[i], '?') || ft_strchr(options[i], '$')
+			|| ft_strchr(options[i], '/'))
 		{
 			error = ft_strjoin("sigmashell: unset: `", options[i++]);
 			error = ft_strjoin_f(error, "': not a valid identifier");
