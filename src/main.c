@@ -34,13 +34,13 @@ static void	logic(char *input, char ***env, t_bool debug)
 
 	lexed_args = analyzer(input);
 	if (check_token_syntax(lexed_args) == EXIT_FAILURE)
-		return (ft_lstclear(&lexed_args, del_token), exit(2));
+		return (g_exit_code = 2, ft_lstclear(&lexed_args, del_token));
 	if (debug)
 		print_lexed_lst(lexed_args);
 	command_table = parse(lexed_args, *env);
 	ft_lstclear(&lexed_args, del_token);
 	if (check_parsed_syntax(command_table) == EXIT_FAILURE)
-		return (ft_lstclear(&command_table, &free_cmd), exit(2));
+		return (g_exit_code = 2, ft_lstclear(&command_table, &free_cmd));
 	if (debug)
 		print_parsed_lst(command_table);
 	expand(&command_table, *env);
