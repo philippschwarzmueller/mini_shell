@@ -65,7 +65,7 @@ int	update_env(char ***env, char *varname, char *value)
 	ev = *env;
 	len = ft_strlen(varname);
 	while (ev && ev[i] && (ft_strncmp(varname, ev[i], len)
-		&& (ev[i][len] != 0 && ev[i][len] != '=')))
+			&& (ev[i][len] != 0 && ev[i][len] != '=')))
 		i++;
 	if (ev[i] != NULL)
 	{
