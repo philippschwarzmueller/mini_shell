@@ -82,8 +82,8 @@ int	update_env(char ***env, char *varname, char *value)
 
 char	**add_to_environment(char **env, char *varname, char *value)
 {
-	size_t		i;
-	char		**res;
+	size_t	i;
+	char	**res;
 
 	i = 0;
 	if (env == NULL)
