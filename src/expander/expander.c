@@ -60,7 +60,8 @@ char	*ft_decrustify_str(char *str)
 	{
 		if ((str[i] != '\"' || state.is_squoted || state.is_escaped)
 			&& (str[i] != '\'' || state.is_dquoted || state.is_escaped)
-			&& (str[i] != '\\' || state.is_escaped))
+			&& (str[i] != '\\' || state.is_escaped
+				|| state.is_dquoted || state.is_squoted))
 			res[j++] = str[i];
 		state_change(str[i], &state);
 		i++;
