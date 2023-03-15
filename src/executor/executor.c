@@ -90,7 +90,9 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 		exit_builtin(commands);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
-	if (access(path, X_OK | F_OK) < 0)
+	if (access(path, X_OK | F_OK) < 0
+		&& ft_strncmp(current->command, "./", 2)
+		&& ft_strncmp(current->command, "/", 1))
 		path = get_path(env, path);
 	if (execve(path, cmd, env) == -1)
 	{
