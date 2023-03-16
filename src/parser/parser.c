@@ -4,7 +4,7 @@ static void		parse_token(t_token *token, struct s_state *s,
 					t_list *cmd_table);
 static char		**append_options(char **options, char *str);
 static void		update_in_out(int *in, int *out, struct s_state *state,
-					char *path);
+					char **path);
 
 t_list	*parse(t_list *lexed_arg, char **env)
 {
@@ -45,7 +45,7 @@ static void	parse_token(t_token *token, struct s_state *s, t_list *cmd_table)
 
 	update_state(token, s, cmd);
 	if (s->pipe || s->redir_in || s->redir_out || s->append || s->here_doc)
-		update_in_out(&in, &out, s, token->token);
+		update_in_out(&in, &out, s, &token->token);
 	else if (s->command && !s->pipe && !s->option)
 		cmd = ft_strdup(token->token);
 	else if (s->option && !s->pipe)
@@ -91,29 +91,30 @@ static char	**append_options(char **options, char *str)
 	return (free(old_options), new_options);
 }
 
-static void	update_in_out(int *in, int *out, struct s_state *state, char *path)
+static void	update_in_out(int *in, int *out, struct s_state *state, char **path)
 {
-	if (ft_strncmp(path, "<<", 2) == 0 || ft_strncmp(path, ">>", 2) == 0
-		|| ft_strncmp(path, "<", 1) == 0 || ft_strncmp(path, ">", 1) == 0)
+	if (ft_strncmp(*path, "<<", 2) == 0 || ft_strncmp(*path, ">>", 2) == 0
+		|| ft_strncmp(*path, "<", 1) == 0 || ft_strncmp(*path, ">", 1) == 0)
 		return ;
+	*path = expand_string(*path, state->env);
 	if (state->here_doc)
 	{
-		*in = ft_here_doc(path, state->env);
+		*in = ft_here_doc(*path, state->env);
 		update_in_out_state(state, here_doc);
 	}
 	else if (state->redir_in == true)
 	{
-		*in = open_files(path, 0);
+		*in = open_files(*path, 0);
 		update_in_out_state(state, infile);
 	}
 	else if (state->redir_out == true)
 	{
-		*out = open_files(path, O_TRUNC);
+		*out = open_files(*path, O_TRUNC);
 		update_in_out_state(state, outfile);
 	}
 	else if (state->append == true)
 	{
-		*out = open_files(path, O_APPEND);
+		*out = open_files(*path, O_APPEND);
 		update_in_out_state(state, append);
 	}
 }
