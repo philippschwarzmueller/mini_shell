@@ -34,7 +34,7 @@ BUILTINS		= $(addprefix $(BUILTINS_DIR), $(addsuffix .c, $(BUILTINS_SRC)))
 
 ######## EXECUTOR ############
 EXECUTOR_DIR	= src/executor/
-EXECUTOR_SRC	= executor exec_utils exec_builtin_utils
+EXECUTOR_SRC	= executor exec_utils
 EXECUTOR		= $(addprefix $(EXECUTOR_DIR), $(addsuffix .c, $(EXECUTOR_SRC)))
 
 ######## SIGNAL ############

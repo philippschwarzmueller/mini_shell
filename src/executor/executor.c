@@ -85,7 +85,10 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 	if (builtin_controller_child(current, env)
 		|| ft_strncmp(current->command, "unset", 6) == 0
 		|| ft_strncmp(current->command, "export", 7) == 0)
-		exit_builtin(ct);
+	{
+		ft_lstclear(&ct, free_cmd);
+		exit(g_exit_code);
+	}
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0
