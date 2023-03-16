@@ -1,7 +1,7 @@
 #include "shell.h"
 
 static void	dup_input(t_list *commands, t_list *cmp, int *pip);
-static void	dup_output(t_list *commands, int out, int *pip);
+static void	dup_output(t_list *commands, int out, int *pip, char **env);
 static void	exec_cmd(t_list *commands, t_command *current, char **env);
 static char	*get_path(char **env, char *arg);
 
@@ -25,7 +25,7 @@ void	executor(t_list	*commands, char ***env)
 			pid = fork();
 		if (pid == 0)
 		{
-			dup_output(tmp, orig_out, pip);
+			dup_output(tmp, orig_out, pip, *env);
 			exec_cmd(commands, (t_command *)tmp->content, *env);
 		}
 		tmp = tmp->next;
@@ -54,13 +54,14 @@ static void	dup_input(t_list *commands, t_list *cmp, int *pip)
 	}
 }
 
-static void	dup_output(t_list *commands, int out, int *pip)
+static void	dup_output(t_list *commands, int out, int *pip, char **env)
 {
 	t_command	*current;
 
 	current = (t_command *)commands->content;
 	if (current->out == -1 || current->in == -1)
 	{
+		ft_free_stra(env);
 		ft_lstclear(&commands, free_cmd);
 		exit(EXIT_FAILURE);
 	}
@@ -86,6 +87,7 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 		|| ft_strncmp(current->command, "unset", 6) == 0
 		|| ft_strncmp(current->command, "export", 7) == 0)
 	{
+		ft_free_stra(env);
 		ft_lstclear(&ct, free_cmd);
 		exit(g_exit_code);
 	}
@@ -98,6 +100,7 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 	if (execve(path, cmd, env) == -1)
 	{
 		free(cmd);
+		ft_free_stra(env);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
 			err(ft_strjoin(current->command, ": permission denied"), 126, ct);
 		err(ft_strjoin(current->command, ": command not found"), 127, ct);
