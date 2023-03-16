@@ -62,24 +62,22 @@ static void	dup_output(t_list *commands, int out, int *pip)
 	if (current->out == -1 || current->in == -1)
 	{
 		ft_lstclear(&commands, free_cmd);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	if (current->out == 1 && commands->next)
 		dup2(pip[1], 1);
 	else if (current->out == 1 && !commands->next)
-	{
 		dup2(out, 1);
-		close(out);
-	}
 	else
 		dup2(current->out, 1);
 	if (current->out > 1)
 		close(current->out);
 	close(pip[1]);
 	close(pip[0]);
+	close(out);
 }
 
-static void	exec_cmd(t_list *commands, t_command *current, char **env)
+static void	exec_cmd(t_list *ct, t_command *current, char **env)
 {
 	char	**cmd;
 	char	*path;
@@ -87,7 +85,7 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	if (builtin_controller_child(current, env)
 		|| ft_strncmp(current->command, "unset", 6) == 0
 		|| ft_strncmp(current->command, "export", 7) == 0)
-		exit_builtin(commands);
+		exit_builtin(ct);
 	path = current->command;
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0
@@ -97,7 +95,9 @@ static void	exec_cmd(t_list *commands, t_command *current, char **env)
 	if (execve(path, cmd, env) == -1)
 	{
 		free(cmd);
-		err(ft_strjoin(current->command, ": command not found"), 127, commands);
+		if (!access(path, F_OK) && access(path, X_OK) < 0)
+			err(ft_strjoin(current->command, ": permission denied"), 126, ct);
+		err(ft_strjoin(current->command, ": command not found"), 127, ct);
 	}
 }
 
