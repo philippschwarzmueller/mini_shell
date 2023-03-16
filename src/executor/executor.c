@@ -41,20 +41,17 @@ static void	dup_input(t_list *commands, t_list *cmp, int *pip)
 	current = (t_command *)commands->content;
 	if (current->in == 0 && commands == cmp)
 		return ;
-	if (current->in == -1)
-	{
-		close(pip[0]);
-		close(pip[1]);
-		return ;
-	}
 	if (current->in == 0)
 		dup2(pip[0], 0);
 	else if (current->in > 1)
 		dup2(current->in, 0);
 	if (current->in > 2)
 		close(current->in);
-	close(pip[0]);
-	close(pip[1]);
+	if (!(commands == cmp))
+	{
+		close(pip[0]);
+		close(pip[1]);
+	}
 }
 
 static void	dup_output(t_list *commands, int out, int *pip)
