@@ -67,7 +67,7 @@ int	update_env(char ***env, char *varname, char *value)
 	while (ev && ev[i] && (ft_strncmp(varname, ev[i], len)
 			&& (ev[i][len] != 0 && ev[i][len] != '=')))
 		i++;
-	if (ev[i] != NULL)
+	if (ev[i] != NULL && ft_strchr(varname, '='))
 	{
 		free(ev[i]);
 		if (value == NULL)

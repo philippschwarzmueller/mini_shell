@@ -1,6 +1,6 @@
 #include "shell.h"
 
-static void	dup_input(t_list *commands, int *pip);
+static void	dup_input(t_list *commands, t_list *cmp, int *pip);
 static void	dup_output(t_list *commands, int out, int *pip);
 static void	exec_cmd(t_list *commands, t_command *current, char **env);
 static char	*get_path(char **env, char *arg);
@@ -16,9 +16,10 @@ void	executor(t_list	*commands, char ***env)
 	orig_in = dup(0);
 	orig_out = dup(1);
 	tmp = commands;
+	pid = 1;
 	while (tmp != NULL)
 	{
-		dup_input(tmp, pip);
+		dup_input(tmp, commands, pip);
 		pipe(pip);
 		if (!builtin_controller_parent(commands, tmp->content, env))
 			pid = fork();
@@ -33,11 +34,13 @@ void	executor(t_list	*commands, char ***env)
 	wait_for_processes(pid, commands);
 }
 
-static void	dup_input(t_list *commands, int *pip)
+static void	dup_input(t_list *commands, t_list *cmp, int *pip)
 {
 	t_command	*current;
 
 	current = (t_command *)commands->content;
+	if (current->in == 0 && commands == cmp)
+		return ;
 	if (current->in == -1)
 	{
 		close(pip[0]);
@@ -46,9 +49,9 @@ static void	dup_input(t_list *commands, int *pip)
 	}
 	if (current->in == 0)
 		dup2(pip[0], 0);
-	else
+	else if (current->in > 1)
 		dup2(current->in, 0);
-	if (current->in > 1)
+	if (current->in > 2)
 		close(current->in);
 	close(pip[0]);
 	close(pip[1]);
@@ -112,7 +115,7 @@ static char	*get_path(char **env, char *arg)
 	while (*env && ft_strncmp(*env, "PATH=", 5))
 		env++;
 	if (*env == NULL)
-		return (NULL);
+		return (arg);
 	paths = ft_split(*env + 5, ':');
 	while (paths && paths[i])
 	{
@@ -122,5 +125,5 @@ static char	*get_path(char **env, char *arg)
 			return (ft_free_stra(paths), res);
 		free(res);
 	}
-	return (ft_free_stra(paths), NULL);
+	return (ft_free_stra(paths), arg);
 }
