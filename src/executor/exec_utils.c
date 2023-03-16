@@ -12,12 +12,6 @@ void	err(char *mess, int e_code, t_list *commands)
 	exit(e_code);
 }
 
-void	exit_builtin(t_list *commands)
-{
-	ft_lstclear(&commands, free_cmd);
-	exit(g_exit_code);
-}
-
 char	**join_cmd(char *command, char **cmd)
 {
 	char	**res;
@@ -55,4 +49,22 @@ void	wait_for_processes(pid_t last_pid, t_list *commands)
 		wait(NULL);
 		commands = commands->next;
 	}
+}
+
+t_bool	runs_in_parent(t_command *command)
+{
+	char	*str;
+
+	str = command->command;
+	if (str == NULL)
+		return (0);
+	if (!ft_strncmp(str, "cd", 3))
+		return (true);
+	if (!ft_strncmp(str, "export", 7))
+		return (true);
+	if (!ft_strncmp(str, "unset", 6))
+		return (true);
+	if (!ft_strncmp(str, "exit", 5))
+		return (true);
+	return (false);
 }
