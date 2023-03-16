@@ -9,6 +9,41 @@ static char	*ft_readline(void);
  * ft_putendl_fd("exit", STDOUT_FILENO);
  * to the input == NULL statement
  */
+char	*str_append(char *s1, char c)
+{
+	char	*ret;
+
+	if (!c)
+		return (s1);
+	if (!s1)
+		return (ret = ft_calloc(2, sizeof(char)), ret[0] = c, ret);
+	ret = ft_calloc(ft_strlen(s1) + 1 + 1, sizeof(char));
+	ft_memcpy(ret, s1, ft_strlen(s1));
+	ret[ft_strlen(s1)] = c;
+	free(s1);
+	return (ret);
+}
+
+char	*read_input(int fd)
+{
+	char	*input;
+	char	buf;
+	int		bytes;
+
+	input = NULL;
+	buf = 0;
+	bytes = read(fd, &buf, 1);
+	if (bytes < 1)
+		return (NULL);
+	while (bytes && buf != '\n')
+	{
+		input = str_append(input, buf);
+		bytes = read(fd, &buf, 1);
+		if (bytes < 0)
+			return (free(input), NULL);
+	}
+	return (input);
+}
 
 char	*get_input(char **env)
 {
@@ -17,7 +52,7 @@ char	*get_input(char **env)
 	if (isatty(STDIN_FILENO))
 		input = ft_readline();
 	else
-		input = get_next_line(STDIN_FILENO);
+		input = read_input(STDIN_FILENO);
 	add_history(input);
 	if (input == NULL)
 	{
