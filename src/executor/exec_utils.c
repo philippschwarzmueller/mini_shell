@@ -46,8 +46,18 @@ void	wait_for_processes(pid_t last_pid, t_list *commands)
 	if ((runs_in_parent((t_command *)commands->content)
 			&& ft_lstsize(commands) == 1) || ft_lstsize(commands) == 0)
 		return ;
+	signal(SIGINT, SIG_IGN);
 	waitpid(last_pid, &g_exit_code, 0);
-	g_exit_code = WEXITSTATUS(g_exit_code);
+	if (WIFSIGNALED(g_exit_code))
+	{
+		g_exit_code = WTERMSIG(g_exit_code);
+		if (g_exit_code == 2)
+			g_exit_code = 130;
+		else
+			g_exit_code = 131;
+	}
+	else
+		g_exit_code = WEXITSTATUS(g_exit_code);
 	while (commands && commands->next)
 	{
 		wait(NULL);
