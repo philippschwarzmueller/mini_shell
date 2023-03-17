@@ -4,9 +4,9 @@ CC			= cc
 LIBFT		= lib/libft/libft.a
 READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
-LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory -fsanitize=address
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory #-fsanitize=address
 INCLUDE		= -I ./lib/readline/include -I include/
-CFLAGS		= -g -Wall -Werror -Wextra -fsanitize=address
+CFLAGS		= -g -Wall -Werror -Wextra #-fsanitize=address
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
