@@ -60,6 +60,16 @@ $(NAME):	$(READLINE) $(LIBFT) $(OBJ_DIR) $(OBJ)
 			@$(CC) $(LIBFT) $(OBJ) $(LINK_FLAGS) -o $(NAME)
 			@echo "$(GREEN)minishell compiled!$(WHITE)"
 
+LSANLIB = /LeakSanitizer/liblsan.a
+lsan: CFLAGS += -ILeakSanitizer -Wno-gnu-include-next
+lsan: LINK_FLAGS += -LLeakSanitizer -llsan -lc++
+lsan: fclean $(LSANLIB)
+lsan: all
+
+$(LSANLIB):
+	@if [ ! -d "LeakSanitizer" ]; then git clone https://github.com/mhahnFr/LeakSanitizer.git; fi
+	@$(MAKE) -C LeakSanitizer
+
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 			@echo "$(CYAN)Compiling $(WHITE): $<"
 			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

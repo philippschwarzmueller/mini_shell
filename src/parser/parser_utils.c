@@ -54,26 +54,27 @@ void	free_cmd(void *pointer)
 int	ft_here_doc(char *delim, char **env)
 {
 	char	*str;
-	char	*trimmed_delim;
 	char	*delimiter;
 	int		src[2];
 
 	if (pipe(src))
 		ft_printf("here doc failed, errorcodes not yet existent\n");
-	str = get_next_line(STDIN_FILENO);
-	trimmed_delim = ft_decrustify_str(ft_strdup(delim));
-	delimiter = ft_strjoin(trimmed_delim, "\n");
-	while (str && ft_strncmp(str, delimiter, ft_strlen(delimiter)))
+	if (isatty(STDIN_FILENO))
+		str = readline(" > ");
+	else
+		str = read_input(STDIN_FILENO);
+	delimiter = ft_decrustify_str(ft_strdup(delim));
+	while (str && ft_strncmp(str, delimiter, ft_strlen(delimiter) + 1))
 	{
 		if (ft_strchr(delim, 39) == NULL && ft_strchr(delim, 34) == NULL)
 			str = expand_string(str, env);
 		ft_putstr_fd(str, src[1]);
+		ft_putstr_fd("\n", src[1]);
 		free(str);
-		str = get_next_line(STDIN_FILENO);
+		if (isatty(STDIN_FILENO))
+			str = readline(" > ");
+		else
+			str = read_input(STDIN_FILENO);
 	}
-	free(delimiter);
-	if (str != NULL)
-		free(str);
-	close(src[1]);
-	return (src[0]);
+	return (free(delimiter), free(str), close(src[1]), src[0]);
 }
