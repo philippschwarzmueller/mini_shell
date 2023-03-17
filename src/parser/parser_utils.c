@@ -59,7 +59,10 @@ int	ft_here_doc(char *delim, char **env)
 
 	if (pipe(src))
 		ft_printf("here doc failed, errorcodes not yet existent\n");
-	str = read_input(STDIN_FILENO);
+	if (isatty(STDIN_FILENO))
+		str = readline(" > ");
+	else
+		str = read_input(STDIN_FILENO);
 	delimiter = ft_decrustify_str(ft_strdup(delim));
 	while (str && ft_strncmp(str, delimiter, ft_strlen(delimiter) + 1))
 	{
@@ -68,10 +71,10 @@ int	ft_here_doc(char *delim, char **env)
 		ft_putstr_fd(str, src[1]);
 		ft_putstr_fd("\n", src[1]);
 		free(str);
-		str = read_input(STDIN_FILENO);
+		if (isatty(STDIN_FILENO))
+			str = readline(" > ");
+		else
+			str = read_input(STDIN_FILENO);
 	}
-	free(delimiter);
-	free(str);
-	close(src[1]);
-	return (src[0]);
+	return (free(delimiter), free(str), close(src[1]), src[0]);
 }
