@@ -23,6 +23,18 @@ void	print_lexed_lst(t_list *lst)
 	}
 }
 
+void	quotation_error(t_list *lst, char *str)
+{
+	free(str);
+	ft_lstclear(&lst, del_token);
+	ft_putstr_fd("May I interject for a moment, but twenty ", STDERR_FILENO);
+	ft_putstr_fd("years\nafter the publication of the first ", STDERR_FILENO);
+	ft_putstr_fd("Posix shell\nstandard, members of the ", STDERR_FILENO);
+	ft_putstr_fd("standards working group\nare still debating", STDERR_FILENO);
+	ft_putendl_fd(" the proper behavior of obscure quoting.", STDERR_FILENO);
+	g_exit_code = 1;
+}
+
 void	del_first(t_list **lst)
 {
 	t_list	*del;

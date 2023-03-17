@@ -30,7 +30,7 @@ void	executor(t_list	*commands, char ***env)
 		}
 		tmp = tmp->next;
 	}
-	dup_back(orig_in, orig_out, pip);
+	dup_back(orig_in, orig_out, pip, ft_lstsize(commands));
 	wait_for_processes(pid, commands);
 }
 

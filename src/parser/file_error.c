@@ -29,7 +29,7 @@ static int	get_error_message(char *path, int flag)
 	else
 		tmp = ft_strjoin("permission denied: ", path);
 	error = ft_strjoin("sigmashell: ", tmp);
-	ft_putendl_fd(error, 2);
+	ft_putendl_fd(error, STDERR_FILENO);
 	free(tmp);
 	free(error);
 	return (-1);
