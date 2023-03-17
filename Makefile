@@ -4,9 +4,9 @@ CC			= cc
 LIBFT		= lib/libft/libft.a
 READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
-LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory #-fsanitize=address
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory -fsanitize=address
 INCLUDE		= -I ./lib/readline/include -I include/
-CFLAGS		= -g -Wall -Werror -Wextra #-fsanitize=address
+CFLAGS		= -g -Wall -Werror -Wextra -fsanitize=address
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
@@ -59,6 +59,16 @@ all:		$(NAME)
 $(NAME):	$(READLINE) $(LIBFT) $(OBJ_DIR) $(OBJ)
 			@$(CC) $(LIBFT) $(OBJ) $(LINK_FLAGS) -o $(NAME)
 			@echo "$(GREEN)minishell compiled!$(WHITE)"
+
+LSANLIB = /LeakSanitizer/liblsan.a
+lsan: CFLAGS += -ILeakSanitizer -Wno-gnu-include-next
+lsan: LINK_FLAGS += -LLeakSanitizer -llsan -lc++
+lsan: fclean $(LSANLIB)
+lsan: all
+
+$(LSANLIB):
+	@if [ ! -d "LeakSanitizer" ]; then git clone https://github.com/mhahnFr/LeakSanitizer.git; fi
+	@$(MAKE) -C LeakSanitizer
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 			@echo "$(CYAN)Compiling $(WHITE): $<"

@@ -4,6 +4,7 @@
 .vscode/
 obj/
 lib/readline/
+LeakSanitizer/
 
 # Prerequisites
 *.d
