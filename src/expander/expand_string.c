@@ -3,7 +3,7 @@
 static char	*append_value(char *to_append, char *name, char **env);
 static char	*append_str(char *str, char *to_append, size_t i, size_t j);
 static int	is_variable(char *str, size_t i, t_state_lex state);
-static int	find_var_end(char c);
+static int	find_var_end(char c, size_t i, size_t j);
 
 char	*expand_string(char *str, char **env)
 {
@@ -22,7 +22,7 @@ char	*expand_string(char *str, char **env)
 		{
 			res = append_str(str, res, i, j);
 			j = i + 1;
-			while (str[j] && !find_var_end(str[j]))
+			while (str[j] && !find_var_end(str[j], i, j))
 				j++;
 			res = append_value(res, ft_substr(str, i + 1, j - i - 1), env);
 			i = j - 1;
@@ -83,12 +83,14 @@ static int	is_variable(char *str, size_t i, t_state_lex state)
 	return (is_var && !is_single && is_aboarted && str[i + 1]);
 }
 
-static int	find_var_end(char c)
+static int	find_var_end(char c, size_t i, size_t j)
 {
 	int	is_whitespace;
 	int	is_symbol;
+	int	is_question_mark;
 
 	is_whitespace = (c == 32 || (c > 8 && c < 13));
 	is_symbol = (c == '$' || c == '\'' || c == '\"' || c == '\\' || c == '/');
-	return (is_whitespace || is_symbol);
+	is_question_mark = (c == '?' && j != i + 1);
+	return (is_whitespace || is_symbol || is_question_mark);
 }
