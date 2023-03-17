@@ -16,7 +16,7 @@ t_list	*analyzer(char *str)
 	len = 0;
 	state = (t_state_lex){0, 0, 0, 0, 0};
 	lst = ft_lstnew(NULL);
-	while (str[i])
+	while (str && str[i])
 	{
 		if (is_token(str, i, &state, &len))
 			ft_lstadd_back(&lst, ft_lstnew(tokenize(str, i, &len)));
