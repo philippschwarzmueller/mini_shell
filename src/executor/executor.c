@@ -83,9 +83,9 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 	char	**cmd;
 	char	*path;
 
-	if (builtin_controller_child(current, env)
-		|| ft_strncmp(current->command, "unset", 6) == 0
-		|| ft_strncmp(current->command, "export", 7) == 0)
+	init_child_sig_handler();
+	if (builtin_controller_child(current, env) || ft_strncmp(current->command,
+			"unset", 6) == 0 || ft_strncmp(current->command, "export", 7) == 0)
 	{
 		ft_free_stra(env);
 		ft_lstclear(&ct, free_cmd);

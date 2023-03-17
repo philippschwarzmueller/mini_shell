@@ -41,6 +41,8 @@ void	dup_back(int orig_in, int orig_out, int *pip, int size)
 
 void	wait_for_processes(pid_t last_pid, t_list *commands)
 {
+	if (!commands)
+		return ;
 	if ((runs_in_parent((t_command *)commands->content)
 			&& ft_lstsize(commands) == 1) || ft_lstsize(commands) == 0)
 		return ;

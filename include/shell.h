@@ -22,6 +22,7 @@ int	g_exit_code;
 void	print_parsed_lst(t_list *lst);
 void	print_lexed_lst(t_list *lst);
 void	init_signalhandlers(void);
+void	init_child_sig_handler(void);
 t_list	*analyzer(char *str);
 t_list	*parse(t_list *lexed_arg, char **env);
 void	expand(t_list **command_table, char **env);
