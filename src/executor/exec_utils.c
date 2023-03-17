@@ -27,20 +27,23 @@ char	**join_cmd(char *command, char **cmd)
 	return (res);
 }
 
-void	dup_back(int orig_in, int orig_out, int *pip)
+void	dup_back(int orig_in, int orig_out, int *pip, int size)
 {
-	close(pip[0]);
-	close(pip[1]);
 	dup2(orig_in, 0);
 	dup2(orig_out, 1);
 	close(orig_in);
 	close(orig_out);
+	if (size == 0)
+		return ;
+	close(pip[1]);
+	close(pip[0]);
 }
 
 void	wait_for_processes(pid_t last_pid, t_list *commands)
 {
-	if (ft_lstsize(commands) == 1
+	if ((ft_lstsize(commands) == 1
 		&& runs_in_parent((t_command *) commands->content))
+		|| ft_lstsize(commands) == 0)
 		return ;
 	waitpid(last_pid, &g_exit_code, 0);
 	g_exit_code = WEXITSTATUS(g_exit_code);

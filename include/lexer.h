@@ -37,5 +37,6 @@ void	del_token(void *content);
 void	set_type(t_token *new);
 void	del_first(t_list **lst);
 void	print_lexed_lst(t_list *lst);
+void	quotation_error(t_list *lst, char *str);
 
 #endif

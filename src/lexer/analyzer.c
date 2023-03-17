@@ -23,14 +23,7 @@ t_list	*analyzer(char *str)
 		i++;
 	}
 	if (state.is_dquoted || state.is_squoted || state.is_escaped)
-	{
-		ft_lstclear(&lst, del_token);
-		ft_putstr_fd("May I interject for a moment, but twenty years\naf", 2);
-		ft_putstr_fd("ter the publication of the first Posix shell\nstanda", 2);
-		ft_putstr_fd("rd, members of the standards working group\nare stil", 2);
-		ft_putendl_fd("l debating the proper behavior of obscure quoting.", 2);
-		return (free(str), NULL);
-	}
+		return (quotation_error(lst, str), NULL);
 	return (del_first(&lst), free(str), lst);
 }
 
