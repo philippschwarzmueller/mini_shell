@@ -38,19 +38,19 @@ EXECUTOR_SRC	= executor exec_utils
 EXECUTOR		= $(addprefix $(EXECUTOR_DIR), $(addsuffix .c, $(EXECUTOR_SRC)))
 
 ######## SIGNAL ############
-SIGNAL_DIR		= src/signal/
-SIGNAL_SRC		= signal_handling
-SIGNAL			= $(addprefix $(SIGNAL_DIR), $(addsuffix .c, $(SIGNAL_SRC)))
+UTIL_DIR		= src/utils/
+UTIL_SRC		= signal_handling input
+UTIL			= $(addprefix $(UTIL_DIR), $(addsuffix .c, $(UTIL_SRC)))
 
 ######## MAIN ##############
 MAIN_DIR		= src/
-MAIN_SRC		= main input
+MAIN_SRC		= main
 MAIN			= $(addprefix $(MAIN_DIR), $(addsuffix .c, $(MAIN_SRC)))
 
 ######## OBJ ###############
 SRC_DIR			= src/
 OBJ_DIR			= obj/
-SRC				= $(MAIN) $(LEXER) $(SIGNAL) $(PARSER) $(EXECUTOR) $(BUILTINS) \
+SRC				= $(MAIN) $(LEXER) $(UTIL) $(PARSER) $(EXECUTOR) $(BUILTINS) \
 				  $(EXPANDER)
 OBJ				= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
