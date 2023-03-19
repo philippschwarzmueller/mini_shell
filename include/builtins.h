@@ -11,5 +11,4 @@ char	**add_to_environment(char **env, char *varname, char *value);
 int		update_env(char ***env, char *varname, char *value);
 int		ft_exit(t_command *command, t_list *commands, char ***env);
 
-
 #endif
