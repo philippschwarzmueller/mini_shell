@@ -1,6 +1,6 @@
 #include "shell.h"
 
-static char	*get_prompt(void);
+static char	*get_prompt(size_t	*prompt_size);
 
 /*
  * for bash replication add
@@ -13,22 +13,20 @@ static char	*get_prompt(void);
 char	*get_input(char **env)
 {
 	char	*input;
+	size_t	prompt_size;
 
+	prompt_size = 0;
 	if (isatty(STDIN_FILENO))
-		input = get_prompt();
+		input = get_prompt(&prompt_size);
 	else
 		input = read_input(STDIN_FILENO);
 	add_history(input);
 	if (input == NULL)
-	{
-		clear_history();
-		ft_free_stra(env);
-		exit(g_exit_code);
-	}
+		control_exit(prompt_size, env);
 	return (input);
 }
 
-static char	*get_prompt(void)
+static char	*get_prompt(size_t	*prompt_size)
 {
 	char	*path;
 	char	*dir;
@@ -38,6 +36,7 @@ static char	*get_prompt(void)
 	path = NULL;
 	path = getcwd(path, 1);
 	dir = ft_strrchr(path, '/');
+	*prompt_size = 23 + ft_strlen(dir);
 	prompt = ft_strjoin("\033[0;31msigmashell\033[0;35m grinding@", dir);
 	if (g_exit_code)
 		prompt = ft_strjoin_f(prompt, " \033[0;31m> \033[0;37m");

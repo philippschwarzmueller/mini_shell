@@ -34,5 +34,6 @@ char	*expand_string(char *str, char **env);
 char	*read_input(int fd);
 char	*str_append(char *s1, char c);
 char	**get_environment(void);
+void	control_exit(size_t prompt_size, char **env);
 
 #endif
