@@ -24,6 +24,8 @@ t_list	*parse(t_list *lexed_arg, char **env)
 	del = command_table;
 	command_table = command_table->next;
 	ft_lstdelone(del, free);
+	if (check_parsed_syntax(command_table) == EXIT_FAILURE)
+		return (g_exit_code = 2, ft_lstclear(&command_table, &free_cmd), NULL);
 	return (command_table);
 }
 

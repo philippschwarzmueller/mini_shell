@@ -30,10 +30,9 @@ int		builtin_controller_parent(t_list *cmds, t_command *cmd, char ***env);
 int		builtin_controller_child(t_command *cmd, char **env);
 void	executor(t_list	*commands, char ***env);
 char	*get_input(char **env);
-
 char	*expand_string(char *str, char **env);
-int		check_token_syntax(t_list *token_list);
 char	*read_input(int fd);
 char	*str_append(char *s1, char c);
+char	**get_environment(void);
 
 #endif

@@ -1,28 +1,5 @@
 #include "shell.h"
 
-void	print_lexed_lst(t_list *lst)
-{
-	while (lst != NULL)
-	{
-		if (((t_token *)(lst->content))->type == word)
-			printf("\033[0;94mword\033[0m\t");
-		if (((t_token *)(lst->content))->type == piping)
-			printf("\033[0;94mpipe\033[0m\t");
-		if (((t_token *)(lst->content))->type == infile)
-			printf("\033[0;94minfile\033[0m\t");
-		if (((t_token *)(lst->content))->type == outfile)
-			printf("\033[0;94moutfile\033[0m\t");
-		if (((t_token *)(lst->content))->type == here_doc)
-			printf("\033[0;94mheredoc\033[0m\t");
-		if (((t_token *)(lst->content))->type == append)
-			printf("\033[0;94mappend\033[0m\t");
-		if (((t_token *)(lst->content))->type == syntax)
-			printf("\033[0;94msyntax\033[0m\t");
-		printf("%s\n", ((t_token *)(lst->content))->token);
-		lst = lst->next;
-	}
-}
-
 void	quotation_error(t_list *lst, char *str)
 {
 	free(str);
@@ -33,6 +10,33 @@ void	quotation_error(t_list *lst, char *str)
 	ft_putstr_fd("standards working group\nare still debating", STDERR_FILENO);
 	ft_putendl_fd(" the proper behavior of obscure quoting.", STDERR_FILENO);
 	g_exit_code = 1;
+}
+
+int	check_token_syntax(t_list *token_list)
+{
+	t_token	*temp_t;
+	t_token	*temp_next_t;
+
+	while (token_list != NULL)
+	{
+		temp_t = (t_token *) token_list->content;
+		if (token_list->next)
+			temp_next_t = (t_token *) token_list->next->content;
+		if ((temp_t->type == infile || temp_t->type == outfile)
+			&& (!temp_next_t || temp_next_t->type != word))
+		{
+			ft_putstr_fd("syntax error near unexpected token `", STDERR_FILENO);
+			if (!temp_next_t)
+				ft_putstr_fd("newline", STDERR_FILENO);
+			else
+				ft_putstr_fd(temp_t->token, STDERR_FILENO);
+			ft_putstr_fd("'", STDERR_FILENO);
+			return (EXIT_FAILURE);
+		}
+		token_list = token_list->next;
+		temp_next_t = NULL;
+	}
+	return (EXIT_SUCCESS);
 }
 
 void	del_first(t_list **lst)

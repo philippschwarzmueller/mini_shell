@@ -24,7 +24,11 @@ t_list	*analyzer(char *str)
 	}
 	if (state.is_dquoted || state.is_squoted || state.is_escaped)
 		return (quotation_error(lst, str), NULL);
-	return (del_first(&lst), free(str), lst);
+	del_first(&lst);
+	free(str);
+	if (check_token_syntax(lst) == EXIT_FAILURE)
+		return (g_exit_code = 2, ft_lstclear(&lst, del_token), NULL);
+	return (lst);
 }
 
 static int	is_token(char *str, size_t i, t_state_lex *state, size_t *len)
