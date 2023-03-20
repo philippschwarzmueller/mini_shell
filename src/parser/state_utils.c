@@ -1,8 +1,8 @@
 #include "shell.h"
 
-struct s_state	init_state(char **env)
+t_state_parse	init_state(char **env)
 {
-	struct s_state	state;
+	t_state_parse	state;
 
 	state.pipe = false;
 	state.option = false;
@@ -18,7 +18,7 @@ struct s_state	init_state(char **env)
 	return (state);
 }
 
-void	update_in_out_state(struct s_state *state, t_type type)
+void	update_in_out_state(t_state_parse *state, t_type type)
 {
 	if (type == here_doc)
 	{
@@ -42,7 +42,7 @@ void	update_in_out_state(struct s_state *state, t_type type)
 	}
 }
 
-void	update_state(t_token *token, struct s_state *state, char *cmd)
+void	update_state(t_token *token, t_state_parse *state, char *cmd)
 {
 	if (token->type == word)
 	{
