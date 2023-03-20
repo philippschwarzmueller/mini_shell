@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-struct s_state
+typedef struct s_state_parse
 {
 	t_bool	pipe;
 	t_bool	option;
@@ -14,7 +14,7 @@ struct s_state
 	t_bool	in_set;
 	t_bool	out_set;
 	char	**env;
-};
+}	t_state_parse;
 
 typedef struct s_command
 {
@@ -25,14 +25,13 @@ typedef struct s_command
 }	t_command;
 
 void			free_cmd(void *pointer);
-void			ft_freestra(char **str_arr);
 t_command		*create_cmd(char *command, char **options, int in, int out);
 void			reset_cmd(char **command, char ***options, int *in, int *out);
-struct s_state	init_state(char **env);
+t_state_parse	init_state(char **env);
 int				ft_here_doc(char *delimiter, char **env);
-void			default_in_out(int *in, int *out, struct s_state *state);
-void			update_state(t_token *token, struct s_state *state, char *cmd);
-void			update_in_out_state(struct s_state *state, t_type type);
+void			default_in_out(int *in, int *out, t_state_parse *state);
+void			update_state(t_token *token, t_state_parse *state, char *cmd);
+void			update_in_out_state(t_state_parse *state, t_type type);
 int				open_files(char *path, int flag);
 int				check_parsed_syntax(t_list *command_table);
 

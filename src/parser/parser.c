@@ -1,16 +1,16 @@
 #include "shell.h"
 
-static void		parse_token(t_token *token, struct s_state *s,
+static void		parse_token(t_token *token, t_state_parse *s,
 					t_list *cmd_table);
 static char		**append_options(char **options, char *str);
-static void		update_in_out(int *in, int *out, struct s_state *state,
+static void		update_in_out(int *in, int *out, t_state_parse *state,
 					char **path);
 
 t_list	*parse(t_list *lexed_arg, char **env)
 {
 	t_list			*command_table;
 	t_list			*del;
-	struct s_state	state;
+	t_state_parse	state;
 
 	state = init_state(env);
 	command_table = ft_lstnew(NULL);
@@ -38,7 +38,7 @@ void	init_empty_opts(char ****opts)
 	*opts = helper;
 }
 
-static void	parse_token(t_token *token, struct s_state *s, t_list *cmd_table)
+static void	parse_token(t_token *token, t_state_parse *s, t_list *cmd_table)
 {
 	static char	*cmd;
 	static char	***opt = NULL;
@@ -93,7 +93,7 @@ static char	**append_options(char **options, char *str)
 	return (free(old_options), new_options);
 }
 
-static void	update_in_out(int *in, int *out, struct s_state *state, char **path)
+static void	update_in_out(int *in, int *out, t_state_parse *state, char **path)
 {
 	if (ft_strncmp(*path, "<<", 2) == 0 || ft_strncmp(*path, ">>", 2) == 0
 		|| ft_strncmp(*path, "<", 1) == 0 || ft_strncmp(*path, ">", 1) == 0)

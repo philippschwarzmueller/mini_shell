@@ -1,6 +1,6 @@
 #include "shell.h"
 
-void	default_in_out(int *in, int *out, struct s_state *state)
+void	default_in_out(int *in, int *out, t_state_parse *state)
 {
 	if (!state->in_set)
 		*in = 0;
