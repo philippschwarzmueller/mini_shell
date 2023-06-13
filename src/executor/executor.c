@@ -91,7 +91,7 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 		ft_lstclear(&ct, free_cmd);
 		exit(g_exit_code);
 	}
-	path = current->command;
+	path = ft_strdup(current->command);
 	cmd = join_cmd(current->command, current->options);
 	if (access(path, X_OK | F_OK) < 0 && ft_strncmp(current->command, "./", 2)
 		&& ft_strncmp(current->command, "/", 1))
@@ -99,6 +99,7 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 	if (execve(path, cmd, env) == -1)
 	{
 		free(cmd);
+		free(path);
 		ft_free_stra(env);
 		if (!access(path, F_OK) && access(path, X_OK) < 0)
 			err(ft_strjoin(current->command, ": permission denied"), 126, ct);

@@ -48,7 +48,7 @@ static void	reset_loop(char *var_name, char **var_value, size_t *j)
 {
 	free(var_name);
 	free(*var_value);
-	var_value = NULL;
+	*var_value = NULL;
 	*j = 0;
 }
 
