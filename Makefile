@@ -4,9 +4,9 @@ CC			= cc
 LIBFT		= lib/libft/libft.a
 READLINE	= lib/readline/lib/libreadline.a
 RL_VERSION	= readline-8.1.2
-LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory #-fsanitize=address
+LINK_FLAGS	= -L ./lib/readline/lib -lreadline -lhistory -L lib/libft -lft
 INCLUDE		= -I ./lib/readline/include -I include/
-CFLAGS		= -g -Wall -Werror -Wextra #-fsanitize=address
+CFLAGS		= -g -Wall -Werror -Wextra
 
 GREEN		= \033[0;32m
 CYAN		= \033[0;36m
@@ -57,7 +57,7 @@ OBJ				= $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 all:		$(NAME)
 
 $(NAME):	$(READLINE) $(LIBFT) $(OBJ_DIR) $(OBJ)
-			@$(CC) $(LIBFT) $(OBJ) $(LINK_FLAGS) -o $(NAME)
+			@$(CC) $(OBJ) $(LINK_FLAGS) -o $(NAME)
 			@echo "$(GREEN)minishell compiled!$(WHITE)"
 
 LSANLIB = /LeakSanitizer/liblsan.a

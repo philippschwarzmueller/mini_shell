@@ -14,7 +14,7 @@ int	ft_cd(char **options, char ***env)
 			return (free(old_pwd), EXIT_FAILURE);
 		update_env(env, "OLDPWD=", old_pwd);
 		update_env(env, "PWD=", new_pwd);
-		return (free(old_pwd), EXIT_SUCCESS);
+		return (free(old_pwd), free(new_pwd), EXIT_SUCCESS);
 	}
 	else if (chdir(options[0]) != 0)
 	{
