@@ -1,3 +1,6 @@
+# Mammutmap, feel free to remove this line to share the map via Git
+map/
+
 # fs stuff
 .ccls-cache/
 .ccls

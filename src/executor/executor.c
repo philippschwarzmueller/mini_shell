@@ -85,7 +85,7 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 
 	init_child_sig_handler();
 	if (builtin_controller_child(current, env) || ft_strncmp(current->command,
-			"unset", 6) == 0 || ft_strncmp(current->command, "export", 7) == 0)
+		"unset", 6) == 0 || ft_strncmp(current->command, "export", 7) == 0)
 	{
 		ft_free_stra(env);
 		ft_lstclear(&ct, free_cmd);
@@ -96,15 +96,13 @@ static void	exec_cmd(t_list *ct, t_command *current, char **env)
 	if (access(path, X_OK | F_OK) < 0 && ft_strncmp(current->command, "./", 2)
 		&& ft_strncmp(current->command, "/", 1))
 		path = get_path(env, path);
-	if (execve(path, cmd, env) == -1)
-	{
-		free(cmd);
-		free(path);
-		ft_free_stra(env);
-		if (!access(path, F_OK) && access(path, X_OK) < 0)
-			err(ft_strjoin(current->command, ": permission denied"), 126, ct);
-		err(ft_strjoin(current->command, ": command not found"), 127, ct);
-	}
+	execve(path, cmd, env);
+	free(cmd);
+	free(path);
+	ft_free_stra(env);
+	if (!access(path, F_OK) && access(path, X_OK) < 0)
+		err(ft_strjoin(current->command, ": permission denied"), 126, ct);
+	err(ft_strjoin(current->command, ": command not found"), 127, ct);
 }
 
 static char	*get_path(char **env, char *arg)
